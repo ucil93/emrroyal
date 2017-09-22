@@ -189,7 +189,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                     <i class="fa fa-angle-down"></i>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-default">
-                                    <li>
+                                    <!--<li>
                                         <a data-target="#ubahpassword" data-toggle="modal">
                                         <i class="icon-user"></i> Rubah Password </a>
 
@@ -228,7 +228,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                               </div>
                                           </div>
                                         </div>
-                                    </li>
+                                    </li>-->
                                     <li>
                                         <a data-target="#modalLogout" data-toggle="modal">
                                         <i class="icon-key"></i> Log Out </a>
@@ -271,137 +271,6 @@ License: You must have a valid license purchased only from themeforest(the above
                                         Lihat Data Pemeriksaan </a>
 
                                         <div id="datapemeriksaan" class="modal fade modalInput" tabindex="-1"  data-backdrop="static" data-width="80%" data-keyboard="false" style="width:90%">
-                                          <?php
-                                          $bpjs = 0;
-                                          $umum = 0;
-                                          $bpjs2 = 0;
-                                          $umum2 = 0;
-                                          foreach ($dataTabledokter as $dx)
-                                          {
-                                            if($dx->CUSTNO == '0005' || $dx->CUSTNO == '7326' || $dx->CUSTNO == '7327' || $dx->CUSTNO == '0003')
-                                            {
-                                              $bpjs = $bpjs + 1;
-                                            }
-                                            else
-                                            {
-                                              $umum = $umum + 1;
-                                            }
-                                          }
-                                          foreach ($dataTabledokter2 as $dz)
-                                          {
-                                            if($dz->CUSTNO == '0005' || $dz->CUSTNO == '7326' || $dz->CUSTNO == '7327' || $dz->CUSTNO == '0003')
-                                            {
-                                              $bpjs2 = $bpjs2 + 1;
-                                            }
-                                            else
-                                            {
-                                              $umum2 = $umum2 + 1;
-                                            }
-                                          }
-                                          ?>
-                                          <div class="row">
-                                            <div class="col-md-4">
-                                              <div class="btn-group btn-group btn-group-justified" style="width:100%">
-                                                <button disable type="button" class="btn white" style="height:55px; width:30%">
-                                                  <span style="font-size:8px; color:#BFBFBF"><b>Kode Dokter :</b></span><br>
-                                                  <span style="font-size:14px" name><b><?php echo $kodedokter ?></b></span>
-                                                </button>
-                                                <button disable type="button" class="btn white" style="height:55px; width:70%">
-                                                  <span style="font-size:8px; color:#BFBFBF"><b>Nama Dokter :</b></span><br>
-                                                  <span style="font-size:14px"><b><?php echo $namadokter; ?></b></span><br>
-                                                </button>
-                                              </div>
-                                            </div>
-                                            <div class="modal-header bg-blue bg-font-blue col-md-4">
-                                              <h4 class="modal-title"><center><b>Data Pemeriksaan</b></center></h4>
-                                            </div>
-                                            <div class="col-md-4 bg-blue">
-                                              <div class="btn-group btn-group btn-group-justified" style="width:100%">
-                                                <a type="button" id="EMR_btnLihatPeriksaDokterHari" class="btn disabled white" style="height:55px; width:50%; font-size:12px"><b>Histori </br> Hari Ini</b></a>
-                                                <a type="button" id="EMR_btnLihatPeriksaDokterBulan" class="btn blue" style="height:55px; width:50%; font-size:12px"><b>Lihat Histori </br> Bulan Ini</b></a>
-                                              </div>
-                                            </div>
-                                            <div class="col-md-12" id="EMR_ketLihatPeriksaDokterHari">
-                                              <div class="btn-group btn-group btn-group-justified" style="width:100%">
-                                                <a disable type="button" class="btn green" style="height:35px; width:100%">
-                                                  <span style="font-size:14px"><b>Jumlah Pasien BPJS hari ini tanggal <?php echo date('d-M-Y'); ?> adalah : <?php echo $bpjs; ?> </b></span>
-                                                </a>
-                                                <a disable type="button" class="btn blue" style="height:35px; width:100%">
-                                                  <span style="font-size:14px"><b>Jumlah Pasien UMUM hari ini tanggal <?php echo date('d-M-Y'); ?> adalah : <?php echo $umum; ?> </b></span>
-                                                </a>
-                                              </div>
-                                            </div>
-                                            <div class="col-md-12 collapse" id="EMR_ketLihatPeriksaDokterBulan">
-                                              <div class="btn-group btn-group btn-group-justified" style="width:100%">
-                                                <a disable type="button" class="btn green" style="height:35px; width:100%">
-                                                  <span style="font-size:14px"><b>Jumlah Pasien BPJS bulan <?php echo date('M'); ?> adalah : <?php echo $bpjs2; ?> </b></span>
-                                                </a>
-                                                <a disable type="button" class="btn blue" style="height:35px; width:100%">
-                                                  <span style="font-size:14px"><b>Jumlah Pasien UMUM bulan <?php echo date('M'); ?> adalah : <?php echo $umum2; ?> </b></span>
-                                                </a>
-                                              </div>
-                                            </div>
-                                          </div>
-                                          <input type="hidden" id="EMR_LihatPeriksaDokterStatTXT" value="hari">
-                                          <div class="modal-body" id="EMR_LihatPeriksaDokter_Harian">
-                                            <table class="table table-striped table-bordered table-hover order-column" id="sample_6">
-                                              <thead class="btn-success">
-                                                <tr>
-                                                  <th><center> Tanggal </center></th>
-                                                  <th><center> Klinik </center></th>
-                                                  <th><center> Diagnosis </center></th>
-                                                  <th><center> Nama Pasien </center></th>
-                                                  <th><center> Jenis Pasien </center></th>
-                                                </tr>
-                                              </thead>
-                                              <tbody>
-                                                <?php
-                                                  foreach($dataTabledokter as $dt)
-                                                  {
-                                                    ?>
-                                                    <tr class="odd gradeX">
-                                                      <td width="10%"><center><?php echo $dt->TANGGAL_PERIKSA; ?></center></td>
-                                                      <td width="20%"><center><?php echo $dt->KODEUNIT; ?></center></td>
-                                                      <td width="30%"><center><?php echo $dt->DIAGNOSIS; ?></center></td>
-                                                      <td width="20%"><center><?php echo $dt->NAMAPASIEN; ?></center></td>
-                                                      <td width="20%"><center><?php echo $dt->NMCUST; ?></center></td>
-                                                    </tr>
-                                                    <?php
-                                                  }
-                                                ?>
-                                              </tbody>
-                                            </table>
-                                          </div>
-                                          <div class="modal-body collapse" id="EMR_LihatPeriksaDokter_Bulanan">
-                                            <table class="table table-striped table-bordered table-hover order-column" id="sample_8">
-                                              <thead class="btn-success">
-                                                <tr>
-                                                  <th><center> Tanggal </center></th>
-                                                  <th><center> Klinik </center></th>
-                                                  <th><center> Diagnosis </center></th>
-                                                  <th><center> Nama Pasien </center></th>
-                                                  <th><center> Jenis Pasien </center></th>
-                                                </tr>
-                                              </thead>
-                                              <tbody>
-                                                <?php
-                                                  foreach($dataTabledokter2 as $dt)
-                                                  {
-                                                    ?>
-                                                    <tr class="odd gradeX">
-                                                      <td width="10%"><center><?php echo $dt->TANGGAL_PERIKSA; ?></center></td>
-                                                      <td width="20%"><center><?php echo $dt->KODEUNIT; ?></center></td>
-                                                      <td width="30%"><center><?php echo $dt->DIAGNOSIS; ?></center></td>
-                                                      <td width="20%"><center><?php echo $dt->NAMAPASIEN; ?></center></td>
-                                                      <td width="20%"><center><?php echo $dt->NMCUST; ?></center></td>
-                                                    </tr>
-                                                    <?php
-
-                                                  }
-                                                ?>
-                                              </tbody>
-                                            </table>
-                                          </div>
                                           <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
                                           </div>
@@ -409,48 +278,6 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </li>
                                 </ul>
                             </li>
-                            <!--<li class="dropdown dropdown-user">
-                                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <i class="icon-feed"></i>
-                                    <span class="username username-hide-on-mobile"> Radio </span>
-                                    <i class="fa fa-angle-down"></i>
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-default">
-                                    <li>
-                                        <a alt="listen now" onclick="return streaming('http://s2.viastreaming.net/mobile.php?port=6445')" target="blank">
-                                        <i class="fa fa-volume-up"></i> Suara Surabaya </a>
-                                    </li>
-                                    <li>
-                                        <a alt="listen now" onclick="return streaming('http://tunein.com/radio/Gen-FM-Surabaya-1031-s189829/')" target="_blank">
-                                        <i class="fa fa-volume-up"></i> Gen FM Surabaya </a>
-                                    </li>
-                                    <li>
-                                        <a alt="listen now" onclick="return streaming('http://mtbfm.co.id/')" target="_blank">
-                                        <i class="fa fa-volume-up"></i> MTB FM Surabaya </a>
-                                    </li>
-                                    <li>
-                                        <a alt="listen now" onclick="return streaming('http://tunein.com/radio/Life-Radio-Surabaya-971-s143650/')" target="_blank">
-                                        <i class="fa fa-volume-up"></i> Life FM Surabaya </a>
-                                    </li>
-                                    <li>
-                                        <a alt="listen now" onclick="return streaming('http://tunein.com/radio/Prambors-1022-893-s89413/')" target="_blank">
-                                        <i class="fa fa-volume-up"></i> Prambors Surabaya </a>
-                                    </li>
-                                    <li>
-                                        <a alt="listen now" onclick="return streaming('http://tunein.com/radio/Wijaya-FM-1035-s132128/')" target="_blank">
-                                        <i class="fa fa-volume-up"></i> Wijaya Surabaya </a>
-                                    </li>
-                                    <li>
-                                        <a onclick="return closewin()">
-                                        <i class="fa fa-volume-off"></i> Matikan Radio </a>
-                                    </li>
-
-                                </ul>
-                            </li>-->
-                            <!-- END USER LOGIN DROPDOWN -->
-                            <!-- BEGIN QUICK SIDEBAR TOGGLER -->
-                            <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
-                            <!-- END QUICK SIDEBAR TOGGLER -->
                         </ul>
                     </div>
                     <!-- END TOP NAVIGATION MENU -->

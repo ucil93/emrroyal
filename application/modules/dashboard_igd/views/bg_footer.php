@@ -127,20 +127,8 @@
         <!-- END THEME LAYOUT SCRIPTS -->
 
         <!-- Script Data Master -->
-        <script src="<?php echo base_url(); ?>assets/scripts/emr.js" type="text/javascript" ></script>
-        <!--<script src="<?php echo base_url(); ?>assets/scripts/emr_poli_gigi.js" type="text/javascript" ></script>-->
         <script src="<?php echo base_url(); ?>assets/scripts/header.js" type="text/javascript" ></script>
-        <!--<script src="<?php echo base_url(); ?>assets/scripts/emr_poli_tulang.js" type="text/javascript" ></script>
-        <script src="<?php echo base_url(); ?>assets/scripts/perawat.js" type="text/javascript" ></script>
-        <script src="<?php echo base_url(); ?>assets/scripts/emr_rajal.js" type="text/javascript" ></script>
-        <script src="<?php echo base_url(); ?>assets/scripts/emr_asesmen_dokter.js" type="text/javascript" ></script>-->
         <script src="<?php echo base_url(); ?>assets/scripts/asesmen_awal.js" type="text/javascript" ></script>
-        <script src="<?php echo base_url(); ?>assets/scripts/asesmen_awal_gigi.js" type="text/javascript" ></script>
-        <script src="<?php echo base_url(); ?>assets/scripts/asesmen_awal_bidan.js" type="text/javascript" ></script>
-        <script src="<?php echo base_url(); ?>assets/scripts/asesmen_ulang.js" type="text/javascript" ></script>
-        <!--<script src="<?php echo base_url(); ?>assets/scripts/asesmen_ulang_gigi.js" type="text/javascript" ></script>-->
-        <script src="<?php echo base_url(); ?>assets/scripts/emr_sidebar.js" type="text/javascript" ></script>
-        <!--<script src="<?php echo base_url(); ?>assets/scripts/rangeSlider2.js" type="text/javascript" ></script>-->
 
         <script src="<?php echo base_url(); ?>assets/scripts/dashboard_igd.js" type="text/javascript" ></script>
 

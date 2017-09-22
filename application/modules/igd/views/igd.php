@@ -4,7 +4,7 @@
   <!-- BEGIN CONTENT BODY -->
   <div class="page-content" style="background-color:#BFBFBF;">
     <input type="hidden" id="EMR_ASESMEN_AWAL_NamaDokter" name="EMR_ASESMEN_AWAL_NamaDokter" value="<?php echo $namadokter; ?>" class="form-control">
-    <input type="hidden" id="EMR_ASESMEN_AWAL_KodeDokter" name="EMR_ASESMEN_AWAL_KodeDokter" value="<?php echo $kodedokter; ?>" class="form-control">
+    <input type="hidden" id="EMR_ASESMEN_AWAL_KodeDokter" name="EMR_ASESMEN_AWAL_KodeDokter" value="" class="form-control">
     <input type="hidden" id="EMR_ASESMEN_umur" name="EMR_ASESMEN_PERAWAT_umur" value="<?php echo $Utahun ?>" class="form-control">
     <div class="row">
       <div class="col-md-8">

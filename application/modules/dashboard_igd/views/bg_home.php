@@ -65,9 +65,7 @@
                                                       <td><?php echo $dt->norm; ?></td>
                                                       <td><?php echo $dt->nama; ?></td>
                                                       <td class="bg-grey-gallery bg-font-yellow-casablanca"><center>Status</center></td>
-                                                      <!--td><?php echo $dt->NAMAUNIT; ?></td>-->
                                                       <td><a href="<?php echo base_url(); ?>igd/pasien/<?=$dt->noreg;?>" class="btn green btn-xs active" style="width:100%"><i class="fa fa-edit"> Pilih</i></a></td>
-                                                      <!--<td><a href="<?php echo base_url(); ?>emr/pasien/<?=$dt->NOREG;?>" class="btn green btn-xs active" style="width:100%"><i class="fa fa-edit"> Pilih</i></a></td>-->
                                                     </tr>
                                                   <?php
                                                 }
