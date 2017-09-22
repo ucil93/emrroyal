@@ -1,3 +1,4 @@
+<!--ini home igd-->
                 <!-- BEGIN CONTENT -->
                 <div class="page-content-wrapper">
                     <!-- BEGIN CONTENT BODY -->
