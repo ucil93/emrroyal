@@ -1,5 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
+//ini igd
 class igd extends CI_Controller {
 
 	function index()
