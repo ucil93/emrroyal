@@ -142,6 +142,8 @@
         <script src="<?php echo base_url(); ?>assets/scripts/emr_sidebar.js" type="text/javascript" ></script>
         <!--<script src="<?php echo base_url(); ?>assets/scripts/rangeSlider2.js" type="text/javascript" ></script>-->
 
+        <script src="<?php echo base_url(); ?>assets/scripts/dashboard_igd.js" type="text/javascript" ></script>
+
     <script type="text/javascript">
         var base_url = "<?php echo base_url(); ?>";
     </script>

@@ -85,7 +85,7 @@ class dashboard_igd extends CI_Controller {
 			//$this->load->view('dashboard/bg_header1', $d);
 			$this->load->view('dashboard_igd/bg_header', $d);
 			$this->load->view('dashboard_igd/bg_navigation', $d);
-			$this->load->view('dashboard_igd/bg_home', $d);
+			$this->load->view('dashboard_igd/content', $d);
 			$this->load->view('dashboard_igd/bg_footer', $d);
 		}
 		else

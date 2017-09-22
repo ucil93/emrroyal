@@ -145,7 +145,7 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => '.\SQLEXPRESS',
+	'hostname' => 'UCIL',
 	'username' => '',
 	'password' => '',
 	'database' => 'RSPGENTRY',
@@ -167,7 +167,7 @@ $db['default'] = array(
 
 $db['second'] = array(
 	'dsn'	=> '',
-	'hostname' => '.\SQLEXPRESS',
+	'hostname' => 'UCIL',
 	'username' => '',
 	'password' => '',
 	'database' => 'ROYAL',
@@ -189,7 +189,7 @@ $db['second'] = array(
 
 $db['royaldb'] = array(
 	'dsn'	=> '',
-	'hostname' => '.\SQLEXPRESS',
+	'hostname' => 'UCIL',
 	'username' => '',
 	'password' => '',
 	'database' => 'ROYAL',
