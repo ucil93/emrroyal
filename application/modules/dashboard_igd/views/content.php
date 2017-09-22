@@ -1,4 +1,4 @@
-<!-- BEGIN CONTENT -->
+<!-- BEGIN CONTENT coba-->
 <div class="page-content-wrapper">
     <!-- BEGIN CONTENT BODY -->
     <div class="page-content" style="background-color:#BFBFBF;">
