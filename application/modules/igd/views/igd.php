@@ -1,10 +1,11 @@
 
 <!-- BEGIN CONTENT -->
 <div class="page-content-wrapper">
+  <?php $Utahun = '20' ; ?>
   <!-- BEGIN CONTENT BODY -->
   <div class="page-content" style="background-color:#BFBFBF;">
     <input type="hidden" id="EMR_ASESMEN_AWAL_NamaDokter" name="EMR_ASESMEN_AWAL_NamaDokter" value="<?php echo $namadokter; ?>" class="form-control">
-    <input type="hidden" id="EMR_ASESMEN_AWAL_KodeDokter" name="EMR_ASESMEN_AWAL_KodeDokter" value="" class="form-control">
+    <input type="hidden" id="EMR_ASESMEN_AWAL_KodeDokter" name="EMR_ASESMEN_AWAL_KodeDokter" value="<?php echo $kodedokter; ?>" class="form-control">
     <input type="hidden" id="EMR_ASESMEN_umur" name="EMR_ASESMEN_PERAWAT_umur" value="<?php echo $Utahun ?>" class="form-control">
     <div class="row">
       <div class="col-md-8">
@@ -13,7 +14,7 @@
             <center><span id="EMR_ASESMEN_AWAL_judulHalaman" class="caption-subject bold uppercase" style="display: block; margin-top: 0em; margin-bottom: 0em;">ASESMEN AWAL KEPERAWATAN PASIEN IGD</span></center>
           </div>
         </div>
-        <div class="portlet light bordered" id="EMR_ASESMEN_AWAL_HalamanTriase">
+        <div class="portlet light bordered collapse" id="EMR_ASESMEN_AWAL_HalamanTriase">
           <div class="caption font-red-sunglo">
             <center>
               <span id="EMR_ASESMEN_AWAL_judulHalaman" class="caption-subject bold uppercase" style="display: block; margin-top: 0em; margin-bottom: 0em;">TRIASE : </span>
@@ -25,7 +26,7 @@
             </center>
           </div>
         </div>
-        <div class="collapse" id="EMR_ASESMEN_AWAL_HalamanPerawat">
+        <div class="" id="EMR_ASESMEN_AWAL_HalamanPerawat">
           <div class="row">
             <div class="col-md-12">
               <button type="button" id="EMR_ASESMEN_PERAWAT_btnHalaman1" class="btn white col-md-7">1. Catatan Waktu</button>
@@ -82,8 +83,9 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-12 collapse" id="EMR_ASESMEN_PERAWAT_Halaman2">
+                  <div class="col-md-12" id="EMR_ASESMEN_PERAWAT_Halaman2">
                     <div class="col-md-12">
+                      p2
                       <div class="portlet light bordered">
                         <div class="portlet-title tabbable-line">
                           <div class="caption">
@@ -398,8 +400,9 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-12 collapse" id="EMR_ASESMEN_PERAWAT_Halaman3">
+                  <div class="col-md-12" id="EMR_ASESMEN_PERAWAT_Halaman3">
                     <div class="col-md-12">
+                      P3
                       <div class="portlet light bordered">
                         <div class="portlet-body">
                           <div class="tab-content">
@@ -506,8 +509,9 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-12 collapse" id="EMR_ASESMEN_PERAWAT_Halaman4">
+                  <div class="col-md-12" id="EMR_ASESMEN_PERAWAT_Halaman4">
                     <div class="col-md-12">
+                      P4
                       <div class="col-md-12 portlet light bordered">
                         <span>Apakah Pasien Memiliki Keluhan Nyeri?</span>
                         <div class="form-group">
@@ -1158,8 +1162,9 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-12 collapse" id="EMR_ASESMEN_PERAWAT_Halaman5">
+                  <div class="col-md-12" id="EMR_ASESMEN_PERAWAT_Halaman5">
                     <div class="col-md-6">
+                      P5
                       <div class="portlet light portlet-fit bordered">
                         <div class="portlet-title">
                           <span><b>Alergi Obat</b></span>
@@ -1224,8 +1229,9 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-12 collapse" id="EMR_ASESMEN_PERAWAT_Halaman6">
+                  <div class="col-md-12" id="EMR_ASESMEN_PERAWAT_Halaman6">
                     <div class="col-md-12 portlet light bordered">
+                      P6
                       <div class="portlet-body">
                         <div class="tab-content">
                           <h5>Rencana / Intervensi Keperawatan</h5>
@@ -3138,11 +3144,6 @@
         </div>
       </div>
       <!--LOKALIS GAMBAR BADAN END-->
-
-      <input type="hidden" id="EMR_ASESMEN_AWAL_Norm" name="EMR_ASESMEN_AWAL_Norm" value="<?php echo $norm; ?>">
-      <input type="hidden" id="EMR_ASESMEN_AWAL_Noreg" name="EMR_ASESMEN_AWAL_Noreg" value="<?php echo $noreg; ?>">
-      <!--input type="hidden" id="EMR_ASESMEN_AWAL_kodeunit" name="EMR_ASESMEN_AWAL_kodeunit" value="<?php echo $KodeUnit; ?>">
-      <input type="hidden" id="EMR_ASESMEN_AWAL_nmcust" name="EMR_ASESMEN_AWAL_nmcust" value="<?php echo $nmcust; ?>"-->
 
 
     </div>

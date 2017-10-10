@@ -9,18 +9,16 @@ class login extends CI_Controller {
 			$this->session->sess_destroy();
 
 			$this->load->model('/app_load_data_table');
-			$d['dataDokter'] = $this->app_load_data_table->getAllDataDokter();
 
- 			$this->load->view('login/login', $d);
+ 			$this->load->view('login/login');
 		}
 		else
 		{
 			$this->session->sess_destroy();
 
 			$this->load->model('/app_load_data_table');
-			$d['dataDokter'] = $this->app_load_data_table->getAllDataDokter();
 
-			$this->load->view('login/login', $d);
+			$this->load->view('login/login');
 		}
 	}
 
@@ -31,18 +29,16 @@ class login extends CI_Controller {
 			$this->session->sess_destroy();
 
 			$this->load->model('/app_load_data_table');
-			$d['dataDokter'] = $this->app_load_data_table->getAllDataDokter();
 
-			$this->load->view('login/login', $d);
+			$this->load->view('login/login');
 		}
 		else
 		{
 			$this->session->sess_destroy();
 
 			$this->load->model('/app_load_data_table');
-			$d['dataDokter'] = $this->app_load_data_table->getAllDataDokter();
 
-			$this->load->view('login/login', $d);
+			$this->load->view('login/login');
 		}
 	}
 
@@ -52,8 +48,6 @@ class login extends CI_Controller {
 		{
  			$dt['username'] = $_POST['username'];
  			$dt['password'] = $_POST['password'];
- 			//$dt['dataDokter'] = $_POST['dataDokter'];
- 			$dt['dataDokter'] = $this->input->post('dataDokter');
 			$this->app_user_login_model->cekUserLogin($dt);
 		}
 		else
@@ -61,9 +55,8 @@ class login extends CI_Controller {
 			$this->session->sess_destroy();
 
 			$this->load->model('/app_load_data_table');
-			$d['dataDokter'] = $this->app_load_data_table->getAllDataDokter();
 
-			$this->load->view('login/login', $d);
+			$this->load->view('login/login');
 		}
 	}
 }

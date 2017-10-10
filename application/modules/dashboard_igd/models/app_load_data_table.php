@@ -11,13 +11,20 @@ class app_load_data_table extends CI_Model {
 											FROM rd_reg INNER JOIN
                       PAsien ON rd_reg.norm = Pasien.norm
 											WHERE rd_reg.tgldatang = '2016-01-27'");
+		return $query->result();
+	}
 
-		/*$royaldb_db->select('*');
-		$royaldb_db->from('rd_reg');
-		$royaldb_db->join('Pasien', 'rd_reg.norm = Pasien.norm');
-		$royaldb_db->where('rd_reg.tgldatang','2016-01-27');
+	public function getAllDataDok2($tgl)
+	{
+		$tgl_ubah = date('Y-m-d', strtotime($tgl));
+		$royaldb_db = $this->load->database('royaldb', TRUE);
 
-		$query = $royaldb_db->get();*/
+		$query  = $royaldb_db->query("SELECT *
+											FROM rd_reg INNER JOIN
+                      PAsien ON rd_reg.norm = Pasien.norm
+											WHERE rd_reg.tgldatang = '$tgl_ubah'");
+
+		$query = $royaldb_db->get();
 		return $query->result();
 	}
 }

@@ -28,138 +28,13 @@
                   <i class="icon-user"></i>
                 </div>
                 <span style="font-size:10px; color:#BFBFBF"><b>Status Alergi Obat Pasien :</b></span><br>
-                <?php
-                $alergiobat = '';
-                if($alergiobat != "")
-                {
-                  ?>
-                  <div class="bg-red bg-font-red" style="margin-bottom: -1.5em;">
-                    <div style="text-align:center">
-                      <span style="font-size:12px"><b>
-                        <a class="bg-font-red" data-toggle="modal" href="#ModalLihatAlergi"> Memiliki Alergi Obat </a>
-                      </b></span><br>
-
-                      <!--<div id="ModalLihatAlergi" class="modal fade modalInput" tabindex="-1" data-backdrop="static" data-keyboard="false">
-                          <div class="modal-dialog">
-                              <div class="modal-content">
-                                  <div class="modal-header">
-                                    <div class="col-md-6">
-                                      <div class="btn-group btn-group btn-group-justified">
-                                        <div class="col-md-6">
-                                          <button disable type="button" class="btn white">
-                                            <span style="font-size:8px; color:#BFBFBF"><b>Nomer Rekam Medik :</b></span><br>
-                                            <span style="font-size:14px" name><b><?php echo $norm?></b></span>
-                                          </button>
-                                        </div>
-                                        <div class="col-md-6">
-                                          <button disable type="button" class="btn white">
-                                            <span style="font-size:8px; color:#BFBFBF"><b>Nama Pasien :</b></span><br>
-                                            <span style="font-size:14px"><b><?php echo $nama?></b></span><br>
-                                          </button>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="bg-blue bg-font-blue col-md-6">
-                                      <h4><center><b>Daftar Alergi Obat Pasien</b></center></h4>
-                                    </div>
-                                  </div>
-                                  <div class="modal-body">
-                                    <div class="row">
-                                      <div class="col-md-12">
-                                        <span style="font-size:14px;"><b><?php echo $alergiobat ?></b></span><br>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="modal-footer">
-                                    <button type="button" data-dismiss="modal" class="btn dark btn-outline">Close</button>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>-->
-                      <div id="ModalLihatAlergi" class="modal fade modalInput" tabindex="-1" data-backdrop="static" data-keyboard="false">
-                        <div class="row">
-                          <div class="col-md-6">
-                            <div class="btn-group btn-group btn-group-justified">
-                              <div class="col-md-6">
-                                <button disable type="button" class="btn white">
-                                  <span style="font-size:8px; color:#BFBFBF"><b>Nomer Rekam Medik :</b></span><br>
-                                  <span style="font-size:14px"><b><?php echo $norm?></b></span>
-                                </button>
-                              </div>
-                              <div class="col-md-6">
-                                <button disable type="button" class="btn white">
-                                  <span style="font-size:8px; color:#BFBFBF"><b>Nama Pasien :</b></span><br>
-                                  <span style="font-size:14px"><b><?php echo $nama?></b></span><br>
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="modal-header bg-blue bg-font-blue col-md-6">
-                            <h4 class="modal-title"><center><b>Daftar Alergi Obat Pasien</b></center></h4>
-                          </div>
-                        </div>
-                        <div class="modal-body">
-                          <div class="row">
-                            <div class="col-md-12">
-                              <span style="font-size:14px;"><?php echo $alergiobat ?></span><br>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" data-dismiss="modal" class="btn blue">Tutup</button>
-                        </div>
-                      </div>
-
-                    </div>
+                <div class="bg-white bg-font-black" style="margin-bottom: -1.5em;">
+                  <div style="text-align:center">
+                    <span style="font-size:12px"><b>
+                      Tidak Memiliki Alergi Obat
+                    </b></span><br>
                   </div>
-                  <?php
-                  //echo "Pasien Memiliki Alergi Obat";
-                }
-                else
-                {
-                  ?>
-                  <div class="bg-white bg-font-black" style="margin-bottom: -1.5em;">
-                    <div style="text-align:center">
-                      <span style="font-size:12px"><b>
-                        Tidak Memiliki Alergi Obat
-                      </b></span><br>
-                    </div>
-                  </div>
-                  <?php
-                  //echo "Pasien Tidak Memiliki Alergi Obat";
-                }
-                ?>
-                <br>
-                <hr color="yellow" style="display: block; margin-top: 0.2em; margin-bottom: 0em; margin-left: auto; margin-right: auto; border-style: inset; border-width: 1px; height:1px; width:100%">
-                <span style="font-size:10px; color:#BFBFBF"><b>Tanggal Kontrol Pasien :</b></span><br>
-                <span style="font-size:12px"><b>Tidak Ada</b></span><br>
-                <!--
-                <?php
-                if($alergiobat != "")
-                {
-                  ?>
-                  <div class="bg-red bg-font-red" style="margin-bottom: -1.5em;">
-                    <div style="text-align:center">
-                      <span style="font-size:12px"><b>
-                        Tidak Memiliki Alergi Obat
-                      </b></span><br>
-                    </div>
-                  </div>
-                  <?php
-                }
-                else
-                {
-                  ?>
-                  <div class="bg-white bg-font-black" style="margin-bottom: -1.5em;">
-                    <div style="text-align:center">
-                      <span style="font-size:12px"><b>
-                        Tidak Memiliki Alergi Obat
-                      </b></span><br>
-                    </div>
-                  </div>
-                  <?php
-                }
-                ?>-->
+                </div>
                 <br>
                 <hr color="yellow" style="display: block; margin-top: -1em; margin-bottom: 0.2em; margin-left: auto; margin-right: auto; border-style: inset; border-width: 1px; height:1px; width:100%">
                 <span style="font-size:10px; color:#BFBFBF"><b>Nomer Rekam Medik :</b></span><br>
@@ -171,20 +46,16 @@
                 <span style="font-size:12px"><b><?php echo $noreg?></b></span><br>
                 <span style="font-size:10px; color:#BFBFBF"><b>Nama Pasien :</b></span><br>
                 <span style="font-size:12px"><b><?php echo $nama?></b></span><br>
-                <span style="font-size:10px; color:#BFBFBF"><b>Tempat, Tanggal Lahir Pasien :</b></span><br>
-                <span style="font-size:12px"><b><?php echo $Tlahir,$Tgllahir?></b></span><br>
+                <span style="font-size:10px; color:#BFBFBF"><b>Tahun Lahir Pasien :</b></span><br>
+                <span style="font-size:12px"><b><?php echo $ttl?></b></span><br>
                 <span style="font-size:10px; color:#BFBFBF"><b>Usia Pasien :</b></span><br>
-                <span style="font-size:12px"><b><?php echo $Utahun?> Tahun, <?php echo $Ubulan?> Bulan</b></span><br>
-                <span style="font-size:10px; color:#BFBFBF"><b>Jenis Kelamin Pasien :</b></span><br>
-                <span style="font-size:12px"><b><?php echo $jk?></b></span><br>
-                <span style="font-size:10px; color:#BFBFBF"><b>Alamat Pasien :</b></span><br>
-                <span style="font-size:12px"><b><?php echo $alamat?></b></span><br>
+                <span style="font-size:12px"><b><?php echo abs(date('Y')-$ttl)?> Tahun</b></span><br>
                 <hr color="yellow" style="display: block; margin-top: 0em; margin-bottom: -1.3em; margin-left: auto; margin-right: auto; border-style: inset; border-width: 1px; height:1px; width:100%">
               </div>
               <span style="font-size:10px; color:#BFBFBF"><b>Customer :</b></span><br>
               <div class="bg-blue bg-font-blue" style="margin-bottom: -1.5em;">
                 <div style="text-align:center">
-                  <span style="font-size:12px"><b>Jenis Pasien</b></span><br>
+                  <span style="font-size:12px"><b>Pasien umum</b></span><br>
                 </div>
               </div>
             </div>
@@ -982,7 +853,7 @@
                       <center>
                         <div class="btn-group btn-group btn-group-justified" style="width:50%">
                             <a type="button" class="btn blue" data-dismiss="modal" style="width:50%">Tidak</a>
-                            <a type="button" class="btn red" href="<?php echo site_url('dashboard_igd') ?>" style="width:50%">Ya (keluar)</a>
+                            <a type="button" class="btn red" href="<?php echo site_url('dashboard') ?>" style="width:50%">Ya (keluar)</a>
                         </div>
                       </center>
                     </div>

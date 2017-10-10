@@ -80,20 +80,6 @@ License: You must have a valid license purchased only from themeforest(the above
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-sm-8">
-                                  <div class="form-group">
-                                      <select class="bs-select form-control" name="dataDokter" id="dataDokter" data-live-search="true" data-size="8">
-                                      <option value='' disabled selected>Pilih Dokter</option>
-                                      <?php
-                                      foreach($dataDokter as $row)
-                                      {
-                                          echo '<option value="'.$row->KODEDOKTER.'">'.$row->KODEDOKTER.' - '.$row->NAMA.'</option>';
-                                      }
-                                      ?>
-
-                                      </select>
-                                  </div>
-                                </div>
                                 <div class="col-sm-4 text-right">
                                     <button class="btn blue" type="submit">Log In</button>
                                 </div>

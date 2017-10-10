@@ -11,4 +11,14 @@ class app_load_data_table extends CI_Model {
 
 		return $hasil;
 	}
+
+	public function tabel_data_detil2($id_param2)
+	{
+
+		$config['base_url'] = base_url() . 'emr/pasien/"' .$id_param2. '"';
+		$config['uri_segment'] = 3;
+		$hasil = $this->pagination->initialize($config);
+
+		return $hasil;
+	}
 }

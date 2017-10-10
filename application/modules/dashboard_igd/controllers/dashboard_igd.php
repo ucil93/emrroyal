@@ -98,4 +98,46 @@ class dashboard_igd extends CI_Controller {
 			redirect("login");
 		}
   }
+
+	function kode_inc_IGD($kode)
+	{
+		$code = 'GD-';
+		$code .= date('d');
+		$code .= date('m');
+		$code .= date('Y');
+		$code .= '-';
+		$code .= sprintf("%06s", $kode);
+		return $code;
+	}
+
+	function btnsimpanawalIGDunk()
+	{
+		date_default_timezone_set('Asia/Jakarta');
+		if($this->session->userdata("logged_in")!="")
+		{
+			$tgltdy = 'GD-';
+			$tgltdy .= date('d');
+			$tgltdy .= date('m');
+			$tgltdy .= date('Y');
+			$kode = $this->db->query("select left(ID_PEMERIKSAAN,11) from EMR_UTAMA_PERIKSA where ID_PEMERIKSAAN LIKE '%$tgltdy%'")->num_rows();
+			$kode = $kode + 1;
+
+			$per1['NAMA_ALIAS'] = $this->input->post("IGD_namaAlias");
+			$per1['TTL_ALIAS'] = $this->input->post("IGD_tahunAlias");
+
+			$id_pemeriksaan = $this->kode_inc_IGD($kode);
+			$per['ID_PEMERIKSAAN'] = $id_pemeriksaan;
+			$per1['ID_PEMERIKSAAN'] = $id_pemeriksaan;
+
+			$this->db->insert("EMR_UTAMA_PERIKSA",$per);
+			$this->db->insert("EMR_IGD_MRX",$per1);
+
+			echo "TERUJI";
+		}
+		else
+		{
+			$this->session->sess_destroy();
+			redirect("login");
+		}
+	}
 }
