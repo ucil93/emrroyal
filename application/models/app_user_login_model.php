@@ -27,7 +27,22 @@ class app_user_login_model extends CI_Model {
 				$sess_data['pass'] = $qad->Password;
 				$this->session->set_userdata($sess_data);
 			}
-			redirect("dashboard_igd");
+			if ($this->session->userdata('level') == "IGD")
+			{
+				redirect("dashboard_igd");
+			}
+			else if ($this->session->userdata('level') == "RAD")
+			{
+				redirect("dashboard_radio");
+			}
+			else if ($this->session->userdata('level') == "KPLLAB")
+			{
+				redirect("dashboard_laboratorium");
+			}
+			else
+			{
+				redirect("dashboard_igd");
+			}
 		}
 		else
 		{

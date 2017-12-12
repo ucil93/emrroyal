@@ -42,8 +42,8 @@ License: You must have a valid license purchased only from themeforest(the above
         <script type="text/javascript" src="<?php echo base_url().'assets/new/js/jquery-1.11.3.js'; ?>"></script>
         <script type="text/javascript" src="<?php echo base_url().'assets/new/js/1.10.3/jquery-ui.js'; ?>"></script>
         <link href="<?php echo base_url().'assets/new/multiselect/css/ui-lightness/jquery-ui.css'; ?>" rel="stylesheet" type="text/css"/>
-        <link href="<?php echo base_url().'assets/scripts/rangeSlider2.css'; ?>" rel="stylesheet" type="text/css"/>
-        <!--<link rel="stylesheet" href="<?php echo base_url().'assets/new/multiselect/main.css'; ?>">-->
+        <!--<link href="<?php echo base_url().'assets/scripts/rangeSlider2.css'; ?>" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" href="<?php echo base_url().'assets/new/multiselect/main.css'; ?>">-->
         <script src="<?php echo base_url().'assets/new/multiselect/js/1.11.0/jquery.min.js'; ?>"></script>
         <script src="<?php echo base_url().'assets/new/multiselect/js/1.10.4/jquery-ui.min.js'; ?>"></script>
         <!-- <script src="<?php echo base_url().'assets/new/multiselect/jquery.autocomplete.multiselect.js'; ?>"></script>
@@ -92,8 +92,8 @@ License: You must have a valid license purchased only from themeforest(the above
         <link href="<?php echo base_url().'assets/layouts/layout/css/layout.min.css'; ?>" rel="stylesheet" type="text/css" />
         <link href="<?php echo base_url().'assets/layouts/layout/css/themes/darkblue.min.css'; ?>" rel="stylesheet" type="text/css" id="style_color" />
         <link href="<?php echo base_url().'assets/layouts/layout/css/custom.min.css'; ?>" rel="stylesheet" type="text/css" />
-        <!-- END THEME LAYOUT STYLES -->
-        <link href="<?php echo base_url().'assets/scripts/canvas.css'; ?>" rel="stylesheet" type="text/css" />
+        <!-- END THEME LAYOUT STYLES
+        <link href="<?php echo base_url().'assets/scripts/canvas.css'; ?>" rel="stylesheet" type="text/css" /> -->
         <link rel="shortcut icon" href="<?php echo base_url().'assets/favicon.ico'; ?>" />
     </head>
     <!-- END HEAD -->
@@ -142,7 +142,7 @@ License: You must have a valid license purchased only from themeforest(the above
                 <div class="page-header-inner ">
                     <!-- BEGIN LOGO -->
                     <div class="page-logo">
-                     <img src="<?php echo base_url().'assets/pages/img/login/tulisanrsp.png'; ?>" alt="logo" class="logo-default"/>
+                     <img src="<?php echo base_url().'assets/pages/img/login/tulisanrspxx.png'; ?>" alt="logo" class="logo-default"/>
                         <div class="menu-toggler sidebar-toggler hide hidden-ms">
                             <span></span>
                         </div>
@@ -189,7 +189,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                     <i class="fa fa-angle-down"></i>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-default">
-                                    <!--<li>
+                                    <li>
                                         <a data-target="#ubahpassword" data-toggle="modal">
                                         <i class="icon-user"></i> Rubah Password </a>
 
@@ -228,7 +228,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                               </div>
                                           </div>
                                         </div>
-                                    </li>-->
+                                    </li>
                                     <li>
                                         <a data-target="#modalLogout" data-toggle="modal">
                                         <i class="icon-key"></i> Log Out </a>

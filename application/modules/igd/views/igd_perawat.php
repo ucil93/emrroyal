@@ -3,32 +3,32 @@
 <div class="page-content-wrapper">
   <?php
   if($norm == 'UNKNOWN')
-  {?>
-    <input type="text" id="EMR_pr_IGD_IDPEMERIKSAAN" value="<?=$ID_PEMERIKSAAN;?>">
-    <?php
-    $Utahun = $this->db->query("select * from EMR_IGD_MRX where ID_PEMERIKSAAN = '$ID_PEMERIKSAAN'")->row()->TTL_ALIAS;
+  {
+    $cekidpemeriksaan = $ID_PEMERIKSAAN;
+    $ambiltahun1 = date('Y');
+    $ambiltahun2 = $this->db->query("select * from EMR_IGD_MRX where ID_PEMERIKSAAN = '$ID_PEMERIKSAAN'")->row()->TTL_ALIAS;
+    $Utahun = $ambiltahun1 - $ambiltahun2;
+  }
+  else
+  {
+    $cekidpemeriksaan = $this->db->get("EMR_UTAMA_PERIKSA where NOREG ='$noreg'")->row()->ID_PEMERIKSAAN;
   }?>
+  <input type="text" class="collapse" id="EMR_pr_IGD_Umur" value="<?=$Utahun;?>">
   <!-- BEGIN CONTENT BODY -->
   <div class="page-content" style="background-color:#BFBFBF;">
-    <input type="hidden" id="EMR_pr_IGD_NamaDokter" name="EMR_pr_IGD_NamaDokter" value="<?=$namadokter; ?>" class="form-control">
-    <input type="hidden" id="EMR_pr_IGD_KodeDokter" name="EMR_pr_IGD_KodeDokter" value="<?=$kodedokter; ?>" class="form-control">
+    <!--<input type="text" class="form-control collapse"  id="EMR_pr_IGD_NamaDokter" name="EMR_IGD_NamaDokter" value="<?php echo $namadokter; ?>" class="form-control">
+    <input type="text" class="form-control collapse"  id="EMR_pr_IGD_KodeDokter" name="EMR_IGD_KodeDokter" value="<?php echo $kodedokter; ?>" class="form-control">-->
     <div class="row">
       <div class="col-md-9">
         <div class="portlet light bordered">
           <div class="caption font-red-sunglo">
-            <center><span id="EMR_pr_IGD_judulHalaman" class="caption-subject bold uppercase" style="display: block; margin-top: 0em; margin-bottom: 0em;">ASESMEN KEPERAWATAN PASIEN IGD</span></center>
+            <center><span id="EMR_pr_IGD_judulHalaman" class="caption-subject bold uppercase" style="display: block; margin-top: 0em; margin-bottom: 0em;">ASESMEN KEDOKTERAN PASIEN IGD</span></center>
           </div>
         </div>
         <?php
-        if($noreg != 'UNKNOWN')
-        {
-          $that = 'GD-';
-          $data = $this->db->query("select * from EMR_UTAMA_PERIKSA where ID_PEMERIKSAAN LIKE '%$that%' AND NOREG = '$noreg'")->num_rows();
-        }
-        else
-        {
-          $data = $this->db->query("select * from EMR_IGD_TRIASE where ID_PEMERIKSAAN = '$ID_PEMERIKSAAN'")->num_rows();
-        }
+
+        $data = $this->db->query("select * from EMR_IGD_TRIASE where ID_PEMERIKSAAN = '$cekidpemeriksaan'")->num_rows();
+
         if($data > 0)
         {
           if($noreg != 'UNKNOWN')
@@ -42,61 +42,56 @@
             $cekinMenu = $this->db->query("select * from EMR_IGD_MENU where ID_PEMERIKSAAN = '$ID_PEMERIKSAAN'")->row();
           }
           ?>
-          <input type="hidden" id="EMR_pr_IGD_ID2" value="<?=$cekin->Triase;?>">
-          <input type="hidden" id="EMR_pr_IGD_MENUMU1" value="<?=$cekinMenu->Menu_1;?>">
-          <input type="hidden" id="EMR_pr_IGD_MENUMU2" value="<?=$cekinMenu->Menu_2;?>">
-          <input type="hidden" id="EMR_pr_IGD_MENUMU3" value="<?=$cekinMenu->Menu_3;?>">
-          <input type="hidden" id="EMR_pr_IGD_MENUMU4" value="<?=$cekinMenu->Menu_4;?>">
-          <input type="hidden" id="EMR_pr_IGD_MENUMU5" value="<?=$cekinMenu->Menu_5;?>">
-          <input type="hidden" id="EMR_pr_IGD_MENUMU6" value="<?=$cekinMenu->Menu_6;?>">
-          <input type="hidden" id="EMR_pr_IGD_ID" value="<?=$data;?>">
+          <input type="text" class="form-control collapse" id="EMR_pr_IGD_ID2" value="<?=$cekin->Triase;?>">
+          <input type="text" class="form-control collapse" id="EMR_pr_IGD_MENUMU1" value="<?=$cekinMenu->Menu_1;?>">
+          <input type="text" class="form-control collapse" id="EMR_pr_IGD_MENUMU2" value="<?=$cekinMenu->Menu_2;?>">
+          <input type="text" class="form-control collapse" id="EMR_pr_IGD_MENUMU3" value="<?=$cekinMenu->Menu_3;?>">
+          <input type="text" class="form-control collapse" id="EMR_pr_IGD_MENUMU4" value="<?=$cekinMenu->Menu_4;?>">
+          <input type="text" class="form-control collapse" id="EMR_pr_IGD_MENUMU5" value="<?=$cekinMenu->Menu_5;?>">
+          <input type="text" class="form-control collapse" id="EMR_pr_IGD_MENUMU6" value="<?=$cekinMenu->Menu_6;?>">
+          <input type="text" class="form-control collapse" id="EMR_pr_IGD_ID" value="<?=$data;?>">
           <?php
         }
         else
         {?>
-          <input type="hidden" id="EMR_pr_IGD_ID" value="<?=$data;?>">
+          <input type="text" class="form-control collapse"  id="EMR_pr_IGD_ID" value="<?=$data;?>">
         <?php
         }
         ?>
         <script type="text/javascript">
         $(document).ready(function(){
 
+          if(document.getElementById('EMR_pr_IGD_ID').value == 0)
+          {
+            $('#modalIGDtriase').modal('show');
+          }
+          else
+          {
+            document.getElementById('showMenu').classList.remove('collapse');
+          }
+
           if(document.getElementById('EMR_pr_IGD_MENUMU1').value == "DONE")
           {
             document.getElementById('EMR_pr_IGD_P1_Halaman').classList.add('collapse');
-            document.getElementById('EMR_pr_IGD_P1_divBtnMenu').classList.add('collapse');
-            document.getElementById('EMR_pr_IGD_P1_divBtnMenuX').classList.remove('collapse');
             if(document.getElementById('EMR_pr_IGD_MENUMU2').value == "DONE")
             {
               document.getElementById('EMR_pr_IGD_P2_Halaman').classList.add('collapse');
-              document.getElementById('EMR_pr_IGD_P2_divBtnMenu').classList.add('collapse');
-              document.getElementById('EMR_pr_IGD_P2_divBtnMenuX').classList.remove('collapse');
               if(document.getElementById('EMR_pr_IGD_MENUMU3').value == "DONE")
               {
                 document.getElementById('EMR_pr_IGD_P3_Halaman').classList.add('collapse');
-                document.getElementById('EMR_pr_IGD_P3_divBtnMenu').classList.add('collapse');
-                document.getElementById('EMR_pr_IGD_P3_divBtnMenuX').classList.remove('collapse');
                 if(document.getElementById('EMR_pr_IGD_MENUMU4').value == "DONE")
                 {
                   document.getElementById('EMR_pr_IGD_P4_Halaman').classList.add('collapse');
-                  document.getElementById('EMR_pr_IGD_P4_divBtnMenu').classList.add('collapse');
-                  document.getElementById('EMR_pr_IGD_P4_divBtnMenuX').classList.remove('collapse');
                   if(document.getElementById('EMR_pr_IGD_MENUMU5').value == "DONE")
                   {
                     document.getElementById('EMR_pr_IGD_P5_Halaman').classList.add('collapse');
-                    document.getElementById('EMR_pr_IGD_P5_divBtnMenu').classList.add('collapse');
-                    document.getElementById('EMR_pr_IGD_P5_divBtnMenuX').classList.remove('collapse');
                     if(document.getElementById('EMR_pr_IGD_MENUMU6').value == "DONE")
                     {
                       document.getElementById('EMR_pr_IGD_P6_Halaman').classList.add('collapse');
-                      document.getElementById('EMR_pr_IGD_P6_divBtnMenu').classList.add('collapse');
-                      document.getElementById('EMR_pr_IGD_P6_divBtnMenuX').classList.remove('collapse');
                     }
                     else
                     {
                       document.getElementById('EMR_pr_IGD_P6_Halaman').classList.remove('collapse');
-                      document.getElementById('EMR_pr_IGD_P6_divBtnMenuX').classList.add('collapse');
-                      document.getElementById('EMR_pr_IGD_P6_divBtnMenu').classList.remove('collapse');
                       document.getElementById('EMR_pr_IGD_statverHal').value = 'P6';
                       document.getElementById('EMR_pr_IGD_P6_btnmenu').classList.remove('green');
                       document.getElementById('EMR_pr_IGD_P6_btnmenu').classList.add('white');
@@ -105,8 +100,6 @@
                   else
                   {
                     document.getElementById('EMR_pr_IGD_P5_Halaman').classList.remove('collapse');
-                    document.getElementById('EMR_pr_IGD_P5_divBtnMenuX').classList.add('collapse');
-                    document.getElementById('EMR_pr_IGD_P5_divBtnMenu').classList.remove('collapse');
                     document.getElementById('EMR_pr_IGD_statverHal').value = 'P5';
                     document.getElementById('EMR_pr_IGD_P5_btnmenu').classList.remove('green');
                     document.getElementById('EMR_pr_IGD_P5_btnmenu').classList.add('white');
@@ -115,8 +108,6 @@
                 else
                 {
                   document.getElementById('EMR_pr_IGD_P4_Halaman').classList.remove('collapse');
-                  document.getElementById('EMR_pr_IGD_P4_divBtnMenuX').classList.add('collapse');
-                  document.getElementById('EMR_pr_IGD_P4_divBtnMenu').classList.remove('collapse');
                   document.getElementById('EMR_pr_IGD_statverHal').value = 'P4';
                   document.getElementById('EMR_pr_IGD_P4_btnmenu').classList.remove('green');
                   document.getElementById('EMR_pr_IGD_P4_btnmenu').classList.add('white');
@@ -125,8 +116,6 @@
               else
               {
                 document.getElementById('EMR_pr_IGD_P3_Halaman').classList.remove('collapse');
-                document.getElementById('EMR_pr_IGD_P3_divBtnMenuX').classList.add('collapse');
-                document.getElementById('EMR_pr_IGD_P3_divBtnMenu').classList.remove('collapse');
                 document.getElementById('EMR_pr_IGD_statverHal').value = 'P3';
                 document.getElementById('EMR_pr_IGD_P3_btnmenu').classList.remove('green');
                 document.getElementById('EMR_pr_IGD_P3_btnmenu').classList.add('white');
@@ -135,8 +124,6 @@
             else
             {
               document.getElementById('EMR_pr_IGD_P2_Halaman').classList.remove('collapse');
-              document.getElementById('EMR_pr_IGD_P2_divBtnMenuX').classList.add('collapse');
-              document.getElementById('EMR_pr_IGD_P2_divBtnMenu').classList.remove('collapse');
               document.getElementById('EMR_pr_IGD_statverHal').value = 'P2';
               document.getElementById('EMR_pr_IGD_P2_btnmenu').classList.remove('green');
               document.getElementById('EMR_pr_IGD_P2_btnmenu').classList.add('white');
@@ -145,8 +132,6 @@
           else
           {
             document.getElementById('EMR_pr_IGD_P1_Halaman').classList.remove('collapse');
-            document.getElementById('EMR_pr_IGD_P1_divBtnMenuX').classList.add('collapse');
-            document.getElementById('EMR_pr_IGD_P1_divBtnMenu').classList.remove('collapse');
             document.getElementById('EMR_pr_IGD_statverHal').value = 'P1';
             document.getElementById('EMR_pr_IGD_P1_btnmenu').classList.remove('green');
             document.getElementById('EMR_pr_IGD_P1_btnmenu').classList.add('white');
@@ -178,8 +163,9 @@
           }
         })
         </script>
-        <input type="hidden" id="EMR_pr_IGD_NORM" value="<?=$norm;?>">
-        <input type="hidden" id="EMR_pr_IGD_NOREG" value="<?=$noreg;?>">
+        <input type="text" class="collapse" id="EMR_pr_IGD_NORM" value="<?=$norm;?>">
+        <input type="text" class="collapse" id="EMR_pr_IGD_NOREG" value="<?=$noreg;?>">
+        <input type="text" class="collapse" id="EMR_pr_IGD_idper" value="<?=$cekidpemeriksaan;?>">
 
         <div class="collapse" id="EMR_pr_IGD_P1_Halaman">
           <div class="row">
@@ -188,127 +174,141 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-md-12">
-              <div class="portlet light bordered form-body">
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="col-md-6">
-                      <div class="portlet light portlet-fit bordered">
-                        <div class="portlet-body row">
-                          <div class="col-md-12">
-                            <span class="control-label">Kualitas : </span>
-                            <div class="portlet-body">
-                              <div class="tab-content">
-                                <div class="col-md-6 md-radio">
-                                    <input type="radio" id="EMR_ASESMEN_PERAWAT_Kualit1" name="EMR_ASESMEN_PERAWAT_Kualit" class="md-radiobtn" value="Tidak Seimbang/Sempoyongan">
-                                    <label for="EMR_ASESMEN_PERAWAT_Kualit1">
-                                        <span class="inc"></span>
-                                        <span class="check"></span>
-                                        <span class="box"></span> Compos mentis </label>
-                                </div>
-                                <div class="col-md-6 md-radio">
-                                    <input type="radio" id="EMR_ASESMEN_PERAWAT_Kualit2" name="EMR_ASESMEN_PERAWAT_Kualit" class="md-radiobtn" value="Somnolen">
-                                    <label for="EMR_ASESMEN_PERAWAT_Kualit2">
-                                        <span class="inc"></span>
-                                        <span class="check"></span>
-                                        <span class="box"></span> Somnolen </label>
-                                </div>
-                                <div class="col-md-6 md-radio">
-                                    <input type="radio" id="EMR_ASESMEN_PERAWAT_Kualit3" name="EMR_ASESMEN_PERAWAT_Kualit" class="md-radiobtn" value="Stupor">
-                                    <label for="EMR_ASESMEN_PERAWAT_Kualit3">
-                                        <span class="inc"></span>
-                                        <span class="check"></span>
-                                        <span class="box"></span> Stupor </label>
-                                </div>
-                                <div class="col-md-6 md-radio">
-                                    <input type="radio" id="EMR_ASESMEN_PERAWAT_Kualit4" name="EMR_ASESMEN_PERAWAT_Kualit" class="md-radiobtn" value="Koma">
-                                    <label for="EMR_ASESMEN_PERAWAT_Kualit4">
-                                        <span class="inc"></span>
-                                        <span class="check"></span>
-                                        <span class="box"></span> Koma </label>
-                                </div>
-                                <div class="col-md-6 md-radio">
-                                    <input type="radio" id="EMR_ASESMEN_PERAWAT_Kualit5" name="EMR_ASESMEN_PERAWAT_Kualit" class="md-radiobtn" value="Tidak dapat dievaluasi">
-                                    <label for="EMR_ASESMEN_PERAWAT_Kualit4">
-                                        <span class="inc"></span>
-                                        <span class="check"></span>
-                                        <span class="box"></span> Tidak dapat dievaluasi </label>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
+          <div class="col-md-12">
+            <div class="portlet light bordered form-body">
+              <div class="row">
+                <div class="col-md-12">
+                  <?php
+                    $data_TTV_dok1 = $this->db->query("select * from EMR_HASIL_TAMBAHAN_DOKTER where ID_PEMERIKSAAN ='$cekidpemeriksaan'")->num_rows();
+                    if($data_TTV_dok1 == 0)
+                    {
+                      $D1_ttv_1 = '';
+                      $D1_ttv_2 = '';
+                      $D1_ttv_3 = '';
+                      $D1_ttv_4 = '';
+                      $D1_ttv_5 = '';
+                      $D1_ttv_6 = '';
+                      $D1_ttv_7 = '';
+                      $D1_ttv_8 = '';
+                      $D1_ttv_9 = '';
+                      $D1_ttv_14 = '';
+                    }
+                    else
+                    {
+                      $data_TTV_dok2 = $this->db->query("select * from EMR_HASIL_TAMBAHAN_DOKTER where ID_PEMERIKSAAN ='$cekidpemeriksaan'");
+                      $D1_ttv_1 = $data_TTV_dok2->row()->SISTOLIK_DOKTER;
+                      $D1_ttv_2 = $data_TTV_dok2->row()->DIASTOLIK_DOKTER;
+                      $D1_ttv_3 = $data_TTV_dok2->row()->SUHU_TUBUH_DOKTER;
+                      $D1_ttv_4 = $data_TTV_dok2->row()->NADI_1_DOKTER;
+                      if( $data_TTV_dok2->row()->NADI_2_DOKTER == "Reguler")
+                      {
+                        $D1_ttv_5 = 'checked';
+                        $D1_ttv_6 = '';
+                      }
+                      else
+                      {
+                        $D1_ttv_5 = '';
+                        $D1_ttv_6 = 'checked';
+                      }
+                      $D1_ttv_7 = $data_TTV_dok2->row()->RESPIRATORY_1_DOKTER;
+                      if( $data_TTV_dok2->row()->RESPIRATORY_2_DOKTER == "Teratur")
+                      {
+                        $D1_ttv_8 = 'checked';
+                        $D1_ttv_9 = '';
+                      }
+                      else
+                      {
+                        $D1_ttv_8 = '';
+                        $D1_ttv_9 = 'checked';
+                      }
+                      $D1_ttv_14 = $data_TTV_dok2->row()->LINGKAR_KEPALA_DOKTER;
+                    }
+                  ?>
+                  <div class="col-md-6">
+                    <div class="portlet light portlet-fit bordered">
+                      <div class="portlet-body row">
+                        <div class="col-md-6">
                           <br>
-                          <div class="col-md-12">
-                            <span class="control-label">Kuantitas : </span>
-                          </div>
-                          <div class="col-md-4">
-                            <span class="control-label">E : </span>
-                            <input type="text" id="EMR_pr_IGD_GCSe" name="EMR_pr_IGD_GCSe" value="4" class="form-control">
-                          </div>
-                          <div class="col-md-4">
-                            <span class="control-label">V : </span>
-                            <input type="text" id="EMR_pr_IGD_GCSv" name="EMR_pr_IGD_GCSv" value="5" class="form-control">
-                          </div>
-                          <div class="col-md-4">
-                            <span class="control-label">M : </span>
-                            <input type="text" id="EMR_pr_IGD_GCSm" name="EMR_pr_IGD_GCSm" value="6" class="form-control">
-                          </div>
+                          <span>Kualitas Kesadaran : </span>
+                          <select class="bs-select form-control" name="EMR_pr_IGD_P1_Kesadaran" id="EMR_pr_IGD_P1_Kesadaran" data-live-search="true" data-size="8">
+                            <option value='' disabled></option>
+                            <option value='Comma'>Comma</option>
+                            <option value='Soporo comma'>Soporo comma</option>
+                            <option value='Delirium'>Delirium</option>
+                            <option value='Somnolen'>Somnolen</option>
+                            <option value='Apatis'>Apatis</option>
+                            <option value='Compos Mentis'>Compos Mentis</option>
+                            <option value='Tidak Dapat Di Identifikasi'>Tidak dapat di identifikasi</option>
+                          </select>
+                        </div>
+                        <div class="col-md-6">
                           <br>
-                          <div class="col-md-12">
-                            <select class="bs-select form-control" name="EMR_pr_IGD_Kesadaran" id="EMR_pr_IGD_Kesadaran" data-live-search="true" data-size="8">
-                              <option value='' disabled selected></option>
-                              <option value='Comma'>Comma</option>
-                              <option value='Soporo comma'>Soporo comma</option>
-                              <option value='Delirium'>Delirium</option>
-                              <option value='Somnolen'>Somnolen</option>
-                              <option value='Apatis'>Apatis</option>
-                              <option value='Compos Mentis'>Compos Mentis</option>
-                            </select>
-                          </div>
+                          <span class="control-label">SpO2 % : </span>
+                          <input type="text" id="EMR_pr_IGD_P1_SpO2" name="EMR_pr_IGD_P1_SpO2" class="form-control">
+                        </div>
+                        <div class="col-md-12">
+                          <br>
+                          <span class="control-label">Kuantitas Kesadaran : </span>
+                        </div>
+                        <div class="col-md-4">
+                          <span class="control-label">E : </span>
+                          <input type="text" id="EMR_pr_IGD_P1_GCSe" name="EMR_pr_IGD_P1_GCSe" value="4" class="form-control">
+                        </div>
+                        <div class="col-md-4">
+                          <span class="control-label">V : </span>
+                          <input type="text" id="EMR_pr_IGD_P1_GCSv" name="EMR_pr_IGD_P1_GCSv" value="5" class="form-control">
+                        </div>
+                        <div class="col-md-4">
+                          <span class="control-label">M : </span>
+                          <input type="text" id="EMR_pr_IGD_P1_GCSm" name="EMR_pr_IGD_P1_GCSm" value="6" class="form-control">
                         </div>
                       </div>
                     </div>
-                    <div class="col-md-6">
-                      <div class="portlet light bordered">
-                        <div class="portlet-body">
-                          <div class="tab-content">
-                            <div class="row" style="display: block; margin-top: 0em; margin-bottom: 0em;">
-                              <div class="tab-content">
-                                <div class="col-md-4">
-                                  <label for="form_control_1">Sistolik&nbsp;</label>
-                                  <i style="font-size:12px"><b>mmHg</b></i>
-                                  <input type="text" id="EMR_pr_IGD_TDSistolik" name="EMR_pr_IGD_TDSistolik" value="" class="form-control">
-                                </div>
-                                <div class="col-md-4">
-                                  <label for="form_control_1">Diastolik</label>
-                                  <i style="font-size:12px"><b>mmHg</b></i>
-                                  <input type="text" id="EMR_pr_IGD_TDDiastolik" name="EMR_pr_IGD_TDDiastolik" value="" class="form-control">
-                                </div>
-                                <div class="col-md-4">
-                                  <label for="form_control_1">Suhu tubuh</label>
-                                  <i style="font-size:12px"><b>&deg;C</b></i>
-                                  <input type="text" id="EMR_pr_IGD_suhutubuh" name="EMR_pr_IGD_suhutubuh" value="" class="form-control">
-                                </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="portlet light bordered">
+                      <div class="portlet-body">
+                        <div class="tab-content">
+                          <div class="row" style="display: block; margin-top: 0em; margin-bottom: 0em;">
+                            <div class="tab-content">
+                              <div class="col-md-4">
+                                <label for="form_control_1">Sistolik&nbsp;</label>
+                                <i style="font-size:12px"><b>mmHg</b></i>
+                                <input type="text" id="EMR_pr_IGD_P1_TDSistolik" name="EMR_pr_IGD_P1_TDSistolik" value="<?=$D1_ttv_1;?>" class="form-control">
                               </div>
-                              <hr>
-                              <div class="tab-content">
+                              <div class="col-md-4">
+                                <label for="form_control_1">Diastolik</label>
+                                <i style="font-size:12px"><b>mmHg</b></i>
+                                <input type="text" id="EMR_pr_IGD_P1_TDDiastolik" name="EMR_pr_IGD_P1_TDDiastolik" value="<?=$D1_ttv_2;?>" class="form-control">
+                              </div>
+                              <div class="col-md-4">
+                                <label for="form_control_1">Suhu tubuh</label>
+                                <i style="font-size:12px"><b>&deg;C</b></i>
+                                <input type="text" id="EMR_pr_IGD_P1_suhutubuh" name="EMR_pr_IGD_P1_suhutubuh" value="<?=$D1_ttv_3;?>" class="form-control">
+                              </div>
+                            </div>
+                            <hr>
+                            <div class="row tab-content">
+                              <br>
+                              <div class="col-md-12">
                                 <div class="col-md-6">
                                   <label for="form_control_1">N</label>
                                   <i style="font-size:12px"><b>x/mnt</b></i>
-                                  <input type="text" id="EMR_pr_IGD_nadi" name="EMR_pr_IGD_nadi" value="" class="form-control">
+                                  <input type="text" id="EMR_pr_IGD_P1_nadi" name="EMR_pr_IGD_P1_nadi" value="<?=$D1_ttv_4;?>" class="form-control">
                                 </div>
                                 <div class="col-md-6">
+                                  <br>
                                   <div class="md-radio-inline">
                                     <div class="md-radio">
-                                      <input type="radio" id="EMR_pr_IGD_NadiCH_reguler" name="EMR_pr_IGD_NadiCH" class="md-radiobtn" value="Reguler">
-                                      <label for="EMR_pr_IGD_NadiCH_reguler">
+                                      <input type="radio" id="EMR_pr_IGD_P1_NadiCH_reguler" name="EMR_pr_IGD_P1_NadiCH" class="md-radiobtn" value="Reguler" <?=$D1_ttv_5;?>>
+                                      <label for="EMR_pr_IGD_P1_NadiCH_reguler">
                                       <span class="inc"></span>
                                       <span class="check"></span>
                                       <span class="box"></span> Reguler </label>
                                     </div>
                                     <div class="md-radio">
-                                      <input type="radio" id="EMR_pr_IGD_NadiCH_irreguler" name="EMR_pr_IGD_NadiCH" class="md-radiobtn" value="Irreguler">
-                                      <label for="EMR_pr_IGD_NadiCH_irreguler">
+                                      <input type="radio" id="EMR_pr_IGD_P1_NadiCH_irreguler" name="EMR_pr_IGD_P1_NadiCH" class="md-radiobtn" value="Irreguler" <?=$D1_ttv_6;?>>
+                                      <label for="EMR_pr_IGD_P1_NadiCH_irreguler">
                                       <span class="inc"></span>
                                       <span class="check"></span>
                                       <span class="box"></span> Irreguler </label>
@@ -316,24 +316,28 @@
                                   </div>
                                 </div>
                               </div>
-                              <div class="tab-content">
+                            </div>
+                            <div class="row tab-content">
+                              <br>
+                              <div class="col-md-12">
                                 <div class="col-md-6">
                                   <label for="form_control_1">Rr</label>
                                   <i style="font-size:12px"><b>x/mnt</b></i>
-                                  <input type="text" id="EMR_pr_IGD_respiratory" name="EMR_pr_IGD_respiratory" value="" class="form-control">
+                                  <input type="text" id="EMR_pr_IGD_P1_respiratory" name="EMR_pr_IGD_P1_respiratory" value="<?=$D1_ttv_7;?>" class="form-control">
                                 </div>
                                 <div class="col-md-6">
+                                  <br>
                                   <div class="md-radio-inline">
                                     <div class="md-radio">
-                                      <input type="radio" id="EMR_pr_IGD_RespiratoryCH_teratur" name="EMR_pr_IGD_RespiratoryCH" class="md-radiobtn" value="Teratur">
-                                      <label for="EMR_pr_IGD_RespiratoryCH_teratur">
+                                      <input type="radio" id="EMR_pr_IGD_P1_RespiratoryCH_teratur" name="EMR_pr_IGD_P1_RespiratoryCH" class="md-radiobtn" value="Teratur" <?=$D1_ttv_8;?>>
+                                      <label for="EMR_pr_IGD_P1_RespiratoryCH_teratur">
                                       <span class="inc"></span>
                                       <span class="check"></span>
                                       <span class="box"></span> Teratur </label>
                                     </div>
                                     <div class="md-radio">
-                                      <input type="radio" id="EMR_pr_IGD_RespiratoryCH_titeratur" name="EMR_pr_IGD_RespiratoryCH" class="md-radiobtn" value="Tidak Teratur">
-                                      <label for="EMR_pr_IGD_RespiratoryCH_titeratur">
+                                      <input type="radio" id="EMR_pr_IGD_P1_RespiratoryCH_titeratur" name="EMR_pr_IGD_P1_RespiratoryCH" class="md-radiobtn" value="Tidak Teratur" <?=$D1_ttv_9;?>>
+                                      <label for="EMR_pr_IGD_P1_RespiratoryCH_titeratur">
                                       <span class="inc"></span>
                                       <span class="check"></span>
                                       <span class="box"></span> Tidak Teratur </label>
@@ -341,118 +345,118 @@
                                   </div>
                                 </div>
                               </div>
-                              <div class="tab-content">
-                                <?php
-                                if($Utahun < 1)
-                                {
-                                  ?>
-                                  <div class="col-md-6">
-                                    <label for="form_control_1">Lingkar Kepala (Khusus Bayi)</label>
-                                    <i style="font-size:12px"><b>Cm</b></i>
-                                    <input type="text" id="EMR_pr_IGD_lingkarkepala" name="EMR_pr_IGD_lingkarkepala" value="" class="form-control">
-                                  </div>
-                                  <?php
-                                }
+                            </div>
+                            <div class="tab-content">
+                              <?php
+                              if($Utahun < 1)
+                              {
                                 ?>
-                              </div>
+                                <div class="col-md-6">
+                                  <label for="form_control_1">Lingkar Kepala (Khusus Bayi)</label>
+                                  <i style="font-size:12px"><b>Cm</b></i>
+                                  <input type="text" id="EMR_pr_IGD_P1_lingkarkepala" name="EMR_pr_IGD_P1_lingkarkepala" value="<?=$D1_ttv_14;?>" class="form-control">
+                                </div>
+                                <?php
+                              }
+                              ?>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="col-md-12 portlet light bordered">
+                      <table class="col-md-6">
+                        <tr>
+                          <td class="col-md-3"><span>Pupil </span><span id="EMR_ASESMEN_DOKTER_pupilstat">Isokor</span></td>
+                          <td class="col-md-3">
+                            <div class="form-group form-md-line-input has-success form-md-floating-label">
+                              <div class="input-icon right" style="display: block; margin-top: 0em; margin-bottom: -1em;">
+                                <input type="text" id="EMR_ASESMEN_DOKTER_pupilKanan" name="EMR_ASESMEN_DOKTER_pupilKanan" value="3" class="form-control" onkeypress="return hanyaAngka(event)">
+                                <label for="form_control_1"></label>
+                                <span class="help-block">Masukkan nilai</span>
+                                <i style="font-size:12px"><b>mm</b></i>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="col-md-3">
+                            <div class="form-group form-md-line-input has-success form-md-floating-label">
+                              <div class="input-icon right" style="display: block; margin-top: 0em; margin-bottom: -1em;">
+                                <input type="text" id="EMR_ASESMEN_DOKTER_pupilKiri" name="EMR_ASESMEN_DOKTER_pupilKiri" value="3" class="form-control" onkeypress="return hanyaAngka(event)">
+                                <label for="form_control_1"></label>
+                                <span class="help-block">Masukkan nilai</span>
+                                <i style="font-size:12px"><b>mm</b></i>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="col-md-3"><span>Cahaya</span></td>
+                          <td class="col-md-3"><button type="button" id="EMR_ASESMEN_DOKTER_btnCahayaKanan" name="EMR_ASESMEN_DOKTER_btnCahayaKanan" class="btn green col-md-12" value="+"><b> + </b></button></td>
+                          <td class="col-md-3"><button type="button" id="EMR_ASESMEN_DOKTER_btnCahayaKiri" name="EMR_ASESMEN_DOKTER_btnCahayaKiri" class="btn green col-md-12" value="+"><b> + </b></button></td>
+                        </tr>
+                      </table>
+                      <table class="col-md-6">
+                        <tr>
+                          <td colspan="2" class="col-md-12"><span><center>Akral Hangat</center></span></td>
+                        </tr>
+                        <tr>
+                          <td class="col-md-6"><button type="button" id="EMR_pr_IGD_P1_btnAH1" name="EMR_pr_IGD_P1_btnAH1" class="btn green col-md-12" value="+"><b> + </b></button></td>
+                          <td class="col-md-6"><button type="button" id="EMR_pr_IGD_P1_btnAH2" name="EMR_pr_IGD_P1_btnAH2" class="btn green col-md-12" value="+"><b> + </b></button></td>
+                        </tr>
+                        <tr>
+                          <td class="col-md-6"><button type="button" id="EMR_pr_IGD_P1_btnAH3" name="EMR_pr_IGD_P1_btnAH3" class="btn green col-md-12" value="+"><b> + </b></button></td>
+                          <td class="col-md-6"><button type="button" id="EMR_pr_IGD_P1_btnAH4" name="EMR_pr_IGD_P1_btnAH4" class="btn green col-md-12" value="+"><b> + </b></button></td>
+                        </tr>
+                      </table>
+                    </div>
                     <div class="col-md-12">
                       <div class="col-md-12 portlet light bordered">
                         <table class="col-md-6">
                           <tr>
-                            <td class="col-md-3"><span>Pupil </span><span id="EMR_ASESMEN_DOKTER_pupilstat">Isokor</span></td>
-                            <td class="col-md-3">
-                              <div class="form-group form-md-line-input has-success form-md-floating-label">
-                                <div class="input-icon right" style="display: block; margin-top: 0em; margin-bottom: -1em;">
-                                  <input type="text" id="EMR_ASESMEN_DOKTER_pupilKanan" name="EMR_ASESMEN_DOKTER_pupilKanan" value="3" class="form-control" onkeypress="return hanyaAngka(event)">
-                                  <label for="form_control_1"></label>
-                                  <span class="help-block">Masukkan nilai</span>
-                                  <i style="font-size:12px"><b>mm</b></i>
-                                </div>
-                              </div>
-                            </td>
-                            <td class="col-md-3">
-                              <div class="form-group form-md-line-input has-success form-md-floating-label">
-                                <div class="input-icon right" style="display: block; margin-top: 0em; margin-bottom: -1em;">
-                                  <input type="text" id="EMR_ASESMEN_DOKTER_pupilKiri" name="EMR_ASESMEN_DOKTER_pupilKiri" value="3" class="form-control" onkeypress="return hanyaAngka(event)">
-                                  <label for="form_control_1"></label>
-                                  <span class="help-block">Masukkan nilai</span>
-                                  <i style="font-size:12px"><b>mm</b></i>
-                                </div>
-                              </div>
-                            </td>
+                            <td colspan="2" class="col-md-12"><span><center>Akral Merah</center></span></td>
                           </tr>
                           <tr>
-                            <td class="col-md-3"><span>Cahaya</span></td>
-                            <td class="col-md-3"><button type="button" id="EMR_ASESMEN_DOKTER_btnCahayaKanan" name="EMR_ASESMEN_DOKTER_btnCahayaKanan" class="btn green col-md-12" value="+"><b> + </b></button></td>
-                            <td class="col-md-3"><button type="button" id="EMR_ASESMEN_DOKTER_btnCahayaKiri" name="EMR_ASESMEN_DOKTER_btnCahayaKiri" class="btn green col-md-12" value="+"><b> + </b></button></td>
+                            <td class="col-md-6"><button type="button" id="EMR_pr_IGD_P1_btnAM1" name="EMR_pr_IGD_P1_btnAM1" class="btn green col-md-12" value="+"><b> + </b></button></td>
+                            <td class="col-md-6"><button type="button" id="EMR_pr_IGD_P1_btnAM2" name="EMR_pr_IGD_P1_btnAM2" class="btn green col-md-12" value="+"><b> + </b></button></td>
+                          </tr>
+                          <tr>
+                            <td class="col-md-6"><button type="button" id="EMR_pr_IGD_P1_btnAM3" name="EMR_pr_IGD_P1_btnAM3" class="btn green col-md-12" value="+"><b> + </b></button></td>
+                            <td class="col-md-6"><button type="button" id="EMR_pr_IGD_P1_btnAM4" name="EMR_pr_IGD_P1_btnAM4" class="btn green col-md-12" value="+"><b> + </b></button></td>
                           </tr>
                         </table>
                         <table class="col-md-6">
                           <tr>
-                            <td colspan="2" class="col-md-12"><span><center>Akral Hangat</center></span></td>
-                          </tr>
-                          <tr>
-                            <td class="col-md-6"><button type="button" id="EMR_ASESMEN_DOKTER_btnEkstremitas1" name="EMR_ASESMEN_DOKTER_btnEkstremitas1" class="btn green col-md-12" value="+"><b> + </b></button></td>
-                            <td class="col-md-6"><button type="button" id="EMR_ASESMEN_DOKTER_btnEkstremitas2" name="EMR_ASESMEN_DOKTER_btnEkstremitas2" class="btn green col-md-12" value="+"><b> + </b></button></td>
-                          </tr>
-                          <tr>
-                            <td class="col-md-6"><button type="button" id="EMR_ASESMEN_DOKTER_btnEkstremitas3" name="EMR_ASESMEN_DOKTER_btnEkstremitas3" class="btn green col-md-12" value="+"><b> + </b></button></td>
-                            <td class="col-md-6"><button type="button" id="EMR_ASESMEN_DOKTER_btnEkstremitas4" name="EMR_ASESMEN_DOKTER_btnEkstremitas4" class="btn green col-md-12" value="+"><b> + </b></button></td>
-                          </tr>
-                        </table>
-                      </div>
-                      <div class="col-md-12">
-                        <div class="col-md-12 portlet light bordered">
-                          <table class="col-md-6">
-                          <tr>
-                            <td colspan="2" class="col-md-12"><span><center>Akral Merah</center></span></td>
-                          </tr>
-                          <tr>
-                            <td class="col-md-6"><button type="button" id="EMR_ASESMEN_DOKTER_btnEkstremitas1" name="EMR_ASESMEN_DOKTER_btnEkstremitas1" class="btn green col-md-12" value="+"><b> + </b></button></td>
-                            <td class="col-md-6"><button type="button" id="EMR_ASESMEN_DOKTER_btnEkstremitas2" name="EMR_ASESMEN_DOKTER_btnEkstremitas2" class="btn green col-md-12" value="+"><b> + </b></button></td>
-                          </tr>
-                          <tr>
-                            <td class="col-md-6"><button type="button" id="EMR_ASESMEN_DOKTER_btnEkstremitas3" name="EMR_ASESMEN_DOKTER_btnEkstremitas3" class="btn green col-md-12" value="+"><b> + </b></button></td>
-                            <td class="col-md-6"><button type="button" id="EMR_ASESMEN_DOKTER_btnEkstremitas4" name="EMR_ASESMEN_DOKTER_btnEkstremitas4" class="btn green col-md-12" value="+"><b> + </b></button></td>
-                          </tr>
-                        </table>
-                          <table class="col-md-6">
-                          <tr>
                             <td colspan="2" class="col-md-12"><span><center>Akral Kering</center></span></td>
                           </tr>
                           <tr>
-                            <td class="col-md-6"><button type="button" id="EMR_ASESMEN_DOKTER_btnEkstremitas1" name="EMR_ASESMEN_DOKTER_btnEkstremitas1" class="btn green col-md-12" value="+"><b> + </b></button></td>
-                            <td class="col-md-6"><button type="button" id="EMR_ASESMEN_DOKTER_btnEkstremitas2" name="EMR_ASESMEN_DOKTER_btnEkstremitas2" class="btn green col-md-12" value="+"><b> + </b></button></td>
+                            <td class="col-md-6"><button type="button" id="EMR_pr_IGD_P1_btnAK1" name="EMR_pr_IGD_P1_btnAK1" class="btn green col-md-12" value="+"><b> + </b></button></td>
+                            <td class="col-md-6"><button type="button" id="EMR_pr_IGD_P1_btnAK2" name="EMR_pr_IGD_P1_btnAK2" class="btn green col-md-12" value="+"><b> + </b></button></td>
                           </tr>
                           <tr>
-                            <td class="col-md-6"><button type="button" id="EMR_ASESMEN_DOKTER_btnEkstremitas3" name="EMR_ASESMEN_DOKTER_btnEkstremitas3" class="btn green col-md-12" value="+"><b> + </b></button></td>
-                            <td class="col-md-6"><button type="button" id="EMR_ASESMEN_DOKTER_btnEkstremitas4" name="EMR_ASESMEN_DOKTER_btnEkstremitas4" class="btn green col-md-12" value="+"><b> + </b></button></td>
+                            <td class="col-md-6"><button type="button" id="EMR_pr_IGD_P1_btnAK3" name="EMR_pr_IGD_P1_btnAK3" class="btn green col-md-12" value="+"><b> + </b></button></td>
+                            <td class="col-md-6"><button type="button" id="EMR_pr_IGD_P1_btnAK4" name="EMR_pr_IGD_P1_btnAK4" class="btn green col-md-12" value="+"><b> + </b></button></td>
                           </tr>
                         </table>
-                        </div>
                       </div>
                     </div>
                   </div>
-                  <a type="button" class="btn green col-md-12" id="EMR_pr_IGD_P1_btnsimpan" style="width:100%">SIMPAN</a><br/><br/>
                 </div>
+                <a type="button" class="btn green col-md-12" id="EMR_pr_IGD_P1_btnsimpan" style="width:100%">SIMPAN</a><br/><br/>
               </div>
             </div>
+          </div>
           </div>
         </div>
         <div class="collapse" id="EMR_pr_IGD_P2_Halaman">
           <div class="row">
             <div class="col-md-12">
-              <button type="button" id="EMR_pr_IGD_btnHalaman1" class="btn white col-md-7">1. Informasi</button>
+              <button type="button" id="EMR_pr_IGD_btnHalaman1" class="btn white col-md-8">1. Informasi</button>
               <button type="button" id="EMR_pr_IGD_btnHalaman2" class="btn green col-md-1">2</button>
               <button type="button" id="EMR_pr_IGD_btnHalaman3" class="btn green col-md-1">3</button>
               <button type="button" id="EMR_pr_IGD_btnHalaman4" class="btn green col-md-1">4</button>
               <button type="button" id="EMR_pr_IGD_btnHalaman5" class="btn green col-md-1">5</button>
-              <button type="button" id="EMR_pr_IGD_btnHalaman6" class="btn green col-md-1">6</button>
             </div>
           </div>
           <div class="row">
@@ -461,6 +465,69 @@
                 <div class="row">
                   <div class="col-md-12" id="EMR_pr_IGD_Halaman1">
                     <div class="col-md-12">
+                      <div class="col-md-12 portlet light bordered">
+                        <div class="portlet-body">
+                          <div class="portlet-body">
+                            <div class="tab-content">
+                              <div class="col-md-4">
+                                <div class="form-group form-md-line-input has-success form-md-floating-label">
+                                  <div class="input-icon right" style="display: block; margin-top: 0em; margin-bottom: -1em;">
+                                    <input type="text" id="EMR_pr_IGD_P2_jamTindakan1" name="EMR_pr_IGD_P2_jamTindakan1" value="" class="form-control">
+                                    <label for="form_control_1">Pasien Datang</label>
+                                    <span class="help-block">Masukkan Waktu Datang</span>
+                                    <i style="font-size:12px"><b>WIB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></i>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group form-md-line-input has-success form-md-floating-label">
+                                  <div class="input-icon right" style="display: block; margin-top: 0em; margin-bottom: -1em;">
+                                    <input type="text" id="EMR_pr_IGD_P2_jamTindakan2" name="EMR_pr_IGD_P2_jamTindakan2" value="" class="form-control">
+                                    <label for="form_control_1">Mulai Tindakan</label>
+                                    <span class="help-block">Masukkan Waktu Mulai Tindakan</span>
+                                    <i style="font-size:12px"><b>WIB</b></i>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group form-md-line-input has-success form-md-floating-label">
+                                  <div class="input-icon right" style="display: block; margin-top: 0em; margin-bottom: -1em;">
+                                    <input type="text" id="EMR_pr_IGD_P2_jamTindakan3" name="EMR_pr_IGD_P2_jamTindakan3" value="" class="form-control">
+                                    <label for="form_control_1">Selesai Tindakan</label>
+                                    <span class="help-block">Masukkan Waktu Selesai Tindakan</span>
+                                    <i style="font-size:12px"><b>WIB</b></i>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-12 portlet light bordered">
+                        <div class="portlet-body">
+                          <div class="portlet-body">
+                            <div class="tab-content">
+                              <div class="col-md-6">
+                                <span style="width:40%">Jam Masuk IGD : </span>
+                                <input type="text" class="form-control timepicker timepicker-24" id="EMR_pr_IGD_P2_jamMasuk" value="<?=date('H:i');?>">
+                              </div>
+                              <div class="col-md-6">
+                                <span style="width:40%">Tanggal Masuk IGD : </span>
+                                <div class="form-group">
+                                    <div class="input-group input-medium date date-picker" data-date-format="yyyy-mm-dd">
+                                        <input name="EMR_pr_IGD_P2_tglMasuk" id="EMR_pr_IGD_P2_tglMasuk" type="text" class="form-control" readonly value="<?=date('Y-m-d');?>">
+                                        <span class="input-group-btn">
+                                            <button class="btn default" type="button">
+                                                <i class="fa fa-calendar"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                       <div class="col-md-12 portlet light bordered">
                         <div class="portlet-body">
                           <div class="portlet-body">
@@ -509,85 +576,47 @@
                   </div>
                   <div class="col-md-12 collapse" id="EMR_pr_IGD_Halaman2">
                     <div class="col-md-12">
-                      <div class="col-md-12 portlet light bordered">
-                        <div class="portlet-body">
-                          <div class="portlet-body">
-                            <div class="tab-content">
-                              <div class="col-md-4">
-                                <div class="form-group form-md-line-input has-success form-md-floating-label">
-                                  <div class="input-icon right" style="display: block; margin-top: 0em; margin-bottom: -1em;">
-                                    <input type="text" id="EMR_ASESMEN_PERAWAT_TDSistolik" name="EMR_ASESMEN_PERAWAT_TDSistolik" value="" class="form-control">
-                                    <label for="form_control_1">Pasien Datang</label>
-                                    <span class="help-block">Masukkan Waktu Datang</span>
-                                    <i style="font-size:12px"><b>WIB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></i>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="col-md-4">
-                                <div class="form-group form-md-line-input has-success form-md-floating-label">
-                                  <div class="input-icon right" style="display: block; margin-top: 0em; margin-bottom: -1em;">
-                                    <input type="text" id="EMR_ASESMEN_PERAWAT_TDDiastolik" name="EMR_ASESMEN_PERAWAT_TDDiastolik" value="" class="form-control">
-                                    <label for="form_control_1">Mulai Tindakan</label>
-                                    <span class="help-block">Masukkan Waktu Mulai Tindakan</span>
-                                    <i style="font-size:12px"><b>WIB</b></i>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="col-md-4">
-                                <div class="form-group form-md-line-input has-success form-md-floating-label">
-                                  <div class="input-icon right" style="display: block; margin-top: 0em; margin-bottom: -1em;">
-                                    <input type="text" id="EMR_ASESMEN_PERAWAT_TDDiastolik" name="EMR_ASESMEN_PERAWAT_TDDiastolik" value="" class="form-control">
-                                    <label for="form_control_1">Selesai Tindakan</label>
-                                    <span class="help-block">Masukkan Waktu Selesai Tindakan</span>
-                                    <i style="font-size:12px"><b>WIB</b></i>
-                                  </div>
+                      <div class="portlet light bordered">
+                        <div class="md-radio-inline">
+                          <div class="md-radio">
+                              <input type="radio" id="EMR_pr_IGD_CaraMasukJalanTanpaBantuan" name="EMR_pr_IGD_CaraMasuk" class="md-radiobtn" value="Jalan Tanpa Bantuan">
+                              <label for="EMR_pr_IGD_CaraMasukJalanTanpaBantuan">
+                                  <span class="inc"></span>
+                                  <span class="check"></span>
+                                  <span class="box"></span> Jalan Tanpa Bantuan </label>
+                          </div>
+                          <div class="md-radio">
+                              <input type="radio" id="EMR_pr_IGD_CaraMasukKursiRoda" name="EMR_pr_IGD_CaraMasuk" class="md-radiobtn" value="Kursi Roda">
+                              <label for="EMR_pr_IGD_CaraMasukKursiRoda">
+                                  <span class="inc"></span>
+                                  <span class="check"></span>
+                                  <span class="box"></span> Kursi Roda </label>
+                          </div>
+                          <div class="md-radio">
+                              <input type="radio" id="EMR_pr_IGD_CaraMasukTempatTidurDorong" name="EMR_pr_IGD_CaraMasuk" class="md-radiobtn" value="Tempat Tidur Dorong">
+                              <label for="EMR_pr_IGD_CaraMasukTempatTidurDorong">
+                                  <span class="inc"></span>
+                                  <span class="check"></span>
+                                  <span class="box"></span> Tempat Tidur Dorong </label>
+                          </div>
+                          <div class="md-radio">
+                              <input type="radio" id="EMR_pr_IGD_CaraMasukDenganBantuan" name="EMR_pr_IGD_CaraMasuk" class="md-radiobtn" value="Jalan dengan bantuan">
+                              <label for="EMR_pr_IGD_CaraMasukDenganBantuan">
+                                  <span class="inc"></span>
+                                  <span class="check"></span>
+                                  <span class="box"></span> Jalan Dengan Bantuan </label>
+                          </div>
+                          <div class="collapse" id="EMR_pr_IGD_isianCaraMasuk">
+                            <div class="col-md-4">
+                              <div class="form-group form-md-line-input has-success form-md-floating-label">
+                                <div class="input-icon right" style="display: block; margin-top: 0em; margin-bottom: -1em;">
+                                  <input type="text" id="EMR_pr_IGD_caraMasukbantuan" name="EMR_pr_IGD_caraMasukbantuan" value="" class="form-control">
+                                  <label for="form_control_1">Cara Masuk</label>
+                                  <span class="help-block">Masukkan data</span>
                                 </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      </div>
-                      <div class="portlet light bordered">
-                        <div class="md-radio-inline">
-                            <div class="md-radio">
-                                <input type="radio" id="EMR_pr_IGD_CaraMasukJalanTanpaBantuan" name="EMR_pr_IGD_CaraMasuk" class="md-radiobtn" value="Jalan Tanpa Bantuan">
-                                <label for="EMR_pr_IGD_CaraMasukJalanTanpaBantuan">
-                                    <span class="inc"></span>
-                                    <span class="check"></span>
-                                    <span class="box"></span> Jalan Tanpa Bantuan </label>
-                            </div>
-                            <div class="md-radio">
-                                <input type="radio" id="EMR_pr_IGD_CaraMasukKursiRoda" name="EMR_pr_IGD_CaraMasuk" class="md-radiobtn" value="Kursi Roda">
-                                <label for="EMR_pr_IGD_CaraMasukKursiRoda">
-                                    <span class="inc"></span>
-                                    <span class="check"></span>
-                                    <span class="box"></span> Kursi Roda </label>
-                            </div>
-                            <div class="md-radio">
-                                <input type="radio" id="EMR_pr_IGD_CaraMasukTempatTidurDorong" name="EMR_pr_IGD_CaraMasuk" class="md-radiobtn" value="Tempat Tidur Dorong">
-                                <label for="EMR_pr_IGD_CaraMasukTempatTidurDorong">
-                                    <span class="inc"></span>
-                                    <span class="check"></span>
-                                    <span class="box"></span> Tempat Tidur Dorong </label>
-                            </div>
-                            <div class="md-radio">
-                                <input type="radio" id="EMR_pr_IGD_CaraMasukDenganBantuan" name="EMR_pr_IGD_CaraMasuk" class="md-radiobtn" value="">
-                                <label for="EMR_pr_IGD_CaraMasukDenganBantuan">
-                                    <span class="inc"></span>
-                                    <span class="check"></span>
-                                    <span class="box"></span> Jalan Dengan Bantuan </label>
-                            </div>
-                            <div class="collapse" id="EMR_pr_IGD_isianCaraMasuk">
-                              <div class="col-md-4">
-                                <div class="form-group form-md-line-input has-success form-md-floating-label">
-                                  <div class="input-icon right" style="display: block; margin-top: 0em; margin-bottom: -1em;">
-                                    <input type="text" id="EMR_pr_IGD_caraMasukbantuan" name="EMR_pr_IGD_caraMasukbantuan" value="" class="form-control">
-                                    <label for="form_control_1">Cara Masuk</label>
-                                    <span class="help-block">Masukkan data</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
                         </div>
                       </div>
                     </div>
@@ -639,7 +668,7 @@
                             <div class="col-md-6">
                               <div class="portlet light portlet-fit bordered">
                                 <div class="portlet-title">
-                                  <span><b>Keluhan Utama</b></span>
+                                  <span><b>Riwayat Penyakit Dahulu</b></span>
                                 </div>
                                 <div class="portlet-body">
                                   <center>
@@ -647,64 +676,57 @@
                                     <div class="input-group">
                                       <div class="row md-checkbox-inline">
                                         <div class="col-md-5 md-checkbox">
-                                          <input type="checkbox" id="EMR_pr_IGD_Keluhanutama1" name="EMR_pr_IGD_Keluhanutama1" value="Nyeri" class="md-check">
-                                          <label for="EMR_pr_IGD_Keluhanutama1">
+                                          <input type="checkbox" id="EMR_pr_IGD_RiwayatPenyakitDahuluA1" name="EMR_pr_IGD_RiwayatPenyakitDahuluA1" value="DM" class="md-check">
+                                          <label for="EMR_pr_IGD_RiwayatPenyakitDahuluA1">
                                           <span></span>
                                           <span class="check"></span>
-                                          <span class="box"></span> Nyeri </label>
+                                          <span class="box"></span> DM </label>
                                         </div>
                                         <div class="col-md-5 md-checkbox">
-                                          <input type="checkbox" id="EMR_pr_IGD_Keluhanutama2" name="EMR_pr_IGD_Keluhanutama2" value="Mual" class="md-check">
-                                          <label for="EMR_pr_IGD_Keluhanutama2">
+                                          <input type="checkbox" id="EMR_pr_IGD_RiwayatPenyakitDahuluA2" name="EMR_pr_IGD_RiwayatPenyakitDahuluA2" value="HT" class="md-check">
+                                          <label for="EMR_pr_IGD_RiwayatPenyakitDahuluA2">
                                           <span></span>
                                           <span class="check"></span>
-                                          <span class="box"></span> Mual </label>
+                                          <span class="box"></span> HT </label>
+                                        </div>
+                                      </div>
+                                      <div class="row md-checkbox-inline">
+                                        <div class="col-md-5 md-checkbox">
+                                          <input type="checkbox" id="EMR_pr_IGD_RiwayatPenyakitDahuluA3" name="EMR_pr_IGD_RiwayatPenyakitDahuluA3" value="Stroke" class="md-check">
+                                          <label for="EMR_pr_IGD_RiwayatPenyakitDahuluA3">
+                                          <span></span>
+                                          <span class="check"></span>
+                                          <span class="box"></span> Stroke</label>
                                         </div>
                                         <div class="col-md-5 md-checkbox">
-                                          <input type="checkbox" id="EMR_pr_IGD_Keluhanutama3" name="EMR_pr_IGD_Keluhanutama3" value="Muntah" class="md-check">
-                                          <label for="EMR_pr_IGD_Keluhanutama3">
+                                          <input type="checkbox" id="EMR_pr_IGD_RiwayatPenyakitDahuluA4" name="EMR_pr_IGD_RiwayatPenyakitDahuluA4" value="Jantung" class="md-check">
+                                          <label for="EMR_pr_IGD_RiwayatPenyakitDahuluA4">
                                           <span></span>
                                           <span class="check"></span>
-                                          <span class="box"></span> Muntah</label>
+                                          <span class="box"></span> Jantung </label>
                                         </div>
+                                      </div>
+                                      <div class="row md-checkbox-inline">
                                         <div class="col-md-5 md-checkbox">
-                                          <input type="checkbox" id="EMR_pr_IGD_Keluhanutama4" name="EMR_pr_IGD_Keluhanutama4" value="Sesak nafas" class="md-check">
-                                          <label for="EMR_pr_IGD_Keluhanutama4">
+                                          <input type="checkbox" id="EMR_pr_IGD_RiwayatPenyakitDahuluA5" name="EMR_pr_IGD_RiwayatPenyakitDahuluA5" value="Ginjal" class="md-check">
+                                          <label for="EMR_pr_IGD_RiwayatPenyakitDahuluA5">
                                           <span></span>
                                           <span class="check"></span>
-                                          <span class="box"></span> Sesak nafas </label>
-                                        </div>
-                                        <div class="col-md-5 md-checkbox">
-                                          <input type="checkbox" id="EMR_pr_IGD_Keluhanutama5" name="EMR_pr_IGD_Keluhanutama5" value="Diare" class="md-check">
-                                          <label for="EMR_pr_IGD_Keluhanutama5">
-                                          <span></span>
-                                          <span class="check"></span>
-                                          <span class="box"></span> Diare </label>
-                                        </div>
-                                        <div class="col-md-5 md-checkbox">
-                                          <input type="checkbox" id="EMR_pr_IGD_Keluhanutama6" name="EMR_pr_IGD_Keluhanutama6" value="Pingsan" class="md-check">
-                                          <label for="EMR_pr_IGD_Keluhanutama6">
-                                          <span></span>
-                                          <span class="check"></span>
-                                          <span class="box"></span> Pingsan </label>
-                                        </div>
-                                        <div class="col-md-5 md-checkbox">
-                                          <input type="checkbox" id="EMR_pr_IGD_Keluhanutama9" name="EMR_pr_IGD_Keluhanutama9" value="Luka " class="md-check">
-                                          <label for="EMR_pr_IGD_Keluhanutama9">
-                                          <span></span>
-                                          <span class="check"></span>
-                                          <span class="box"></span> Luka </label>
-                                        </div>
-                                        <div class="col-md-5 md-checkbox">
-                                          <input type="checkbox" id="EMR_pr_IGD_Keluhanutama7" name="EMR_pr_IGD_Keluhanutama7" value="Pusing " class="md-check">
-                                          <label for="EMR_pr_IGD_Keluhanutama7">
-                                          <span></span>
-                                          <span class="check"></span>
-                                          <span class="box"></span> Pusing </label>
+                                          <span class="box"></span> Ginjal </label>
                                         </div>
                                         <div class="col-md-12">
                                           <span class="control-label">Lain lain : </span>
-                                          <input type="text" class="form-control" id="EMR_pr_IGD_Keluhanutama8" name="EMR_pr_IGD_Keluhanutama8" value="" placeholder="Lain lain">
+                                          <input type="text" class="form-control" id="EMR_pr_IGD_RiwayatPenyakitDahuluA6" name="EMR_pr_IGD_RiwayatPenyakitDahuluA6" value="" placeholder="Lain lain">
+                                        </div>
+                                      </div>
+                                      <br>
+                                      <div class="row md-checkbox-inline">
+                                        <div class="col-md-12 md-checkbox">
+                                          <input type="checkbox" id="EMR_pr_IGD_RiwayatPenyakitDahuluA7" name="EMR_pr_IGD_RiwayatPenyakitDahuluA7" value="Tidak ada" class="md-check" checked>
+                                          <label for="EMR_pr_IGD_RiwayatPenyakitDahuluA7">
+                                          <span></span>
+                                          <span class="check"></span>
+                                          <span class="box"></span> Tidak ada </label>
                                         </div>
                                       </div>
                                     </div>
@@ -740,14 +762,14 @@
                         <div class="portlet-body">
                           <div class="md-radio-inline">
                               <div class="md-radio">
-                                  <input type="radio" id="EMR_pr_IGD_PengobatansebelumnyaA" name="EMR_pr_IGD_Pengobatansebelumnya" class="md-radiobtn" value="Auto Anamese">
+                                  <input type="radio" id="EMR_pr_IGD_PengobatansebelumnyaA" name="EMR_pr_IGD_Pengobatansebelumnya" class="md-radiobtn" value="Ada">
                                   <label for="EMR_pr_IGD_PengobatansebelumnyaA">
                                       <span class="inc"></span>
                                       <span class="check"></span>
                                       <span class="box"></span> Ada </label>
                               </div>
                               <div class="md-radio">
-                                  <input type="radio" id="EMR_pr_IGD_PengobatansebelumnyaT" name="EMR_pr_IGD_Pengobatansebelumnya" class="md-radiobtn" value="Hetero Anemese">
+                                  <input type="radio" id="EMR_pr_IGD_PengobatansebelumnyaT" name="EMR_pr_IGD_Pengobatansebelumnya" class="md-radiobtn" value="Tidak ada riwayat pengobatan sebelumnya">
                                   <label for="EMR_pr_IGD_PengobatansebelumnyaT">
                                       <span class="inc"></span>
                                       <span class="check"></span>
@@ -755,15 +777,15 @@
                               </div>
                           </div>
                           <div id="EMR_pr_IGD_RiwayatSebelumnya" class="form-group form-md-line-input form-md-floating-label collapse">
-                            <textarea class="form-control" id="EMR_pr_IGD_PengobatanSebelumnya" name="EMR_pr_IGD_PengobatanSebelumnya" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 70px;"></textarea>
+                            <textarea class="form-control" id="EMR_pr_IGD_PengobatanSebelumnyatxt" name="EMR_pr_IGD_PengobatanSebelumnyatxt" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 70px;"></textarea>
                             <label for="form_control_1">Riwayat Pengobatan Sebelumnya</label>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="col-md-12 collapse" id="EMR_pr_IGD_Halaman6">
-
+                    <div class="col-md-12">
+                      <a type="button" class="btn green col-md-12" id="EMR_pr_IGD_P2_btnsimpan" style="width:100%">SIMPAN</a><br/><br/>
+                    </div>
                   </div>
                   <div class="col-md-12">
                     <div class="btn-group btn-group-circle btn-group-solid" style="width:100%">
@@ -779,11 +801,12 @@
         <div class="collapse" id="EMR_pr_IGD_P3_Halaman">
           <div class="row">
             <div class="col-md-12">
-              <button type="button" id="EMR_pr_IGD_P3_btnHalaman1" class="btn white col-md-8">1. Pengkajian Nyeri</button>
+              <button type="button" id="EMR_pr_IGD_P3_btnHalaman1" class="btn white col-md-7">1. Pengkajian Nyeri</button>
               <button type="button" id="EMR_pr_IGD_P3_btnHalaman2" class="btn green col-md-1">2</button>
               <button type="button" id="EMR_pr_IGD_P3_btnHalaman3" class="btn green col-md-1">3</button>
               <button type="button" id="EMR_pr_IGD_P3_btnHalaman4" class="btn green col-md-1">4</button>
               <button type="button" id="EMR_pr_IGD_P3_btnHalaman5" class="btn green col-md-1">5</button>
+              <button type="button" id="EMR_pr_IGD_P3_btnHalaman5" class="btn green col-md-1">6</button>
             </div>
           </div>
           <div class="row">
@@ -1458,7 +1481,7 @@
                                         <span class="box"></span> Mandiri </label>
                                 </div>
                                 <div class="md-radio">
-                                    <input type="radio" id="EMR_pr_IGD_KajiFungsiDenganBantuan" name="EMR_pr_IGD_KajiFungsi" class="md-radiobtn" value="">
+                                    <input type="radio" id="EMR_pr_IGD_KajiFungsiDenganBantuan" name="EMR_pr_IGD_KajiFungsi" class="md-radiobtn" value="Dengan bantuan : ">
                                     <label for="EMR_pr_IGD_KajiFungsiDenganBantuan">
                                         <span class="inc"></span>
                                         <span class="check"></span>
@@ -1489,46 +1512,18 @@
                           <div class="tab-content">
                             <div class="row" style="display: block; margin-top: 0em; margin-bottom: 0em;">
                               <div class="col-md-12">
-                                <input class="hidden" id="tindak">
-                                a. Bagaimana cara berjalan Pasien?
-                                <div class="row md-radio-inline">
-
-                                    <div class="col-md-12 md-radio">
-                                        <input type="radio" id="EMR_pr_IGD_FungA2" name="EMR_pr_IGD_FungA" class="md-radiobtn" value="Tidak Seimbang/Sempoyongan">
-                                        <label for="EMR_pr_IGD_FungA2">
-                                            <span class="inc"></span>
-                                            <span class="check"></span>
-                                            <span class="box"></span> Tidak seimbang / sempoyongan </label>
-                                    </div>
-                                    <div class="col-md-12 md-radio">
-                                        <input type="radio" id="EMR_pr_IGD_FungA3" name="EMR_pr_IGD_FungA" class="md-radiobtn" value="Jalan Dengan Menggunakan Alat Bantu. ">
-                                        <label for="EMR_pr_IGD_FungA3">
-                                            <span class="inc"></span>
-                                            <span class="check"></span>
-                                            <span class="box"></span> Jalan dengan menggunakan alat bantu </label>
-                                    </div>
-                                    <input type="text" id="EMR_pr_IGD_alatbantu" name="EMR_pr_IGD_alatbantu" value="" class="form-control collapse" placeholder="Alat bantu yang digunakan pasien">
-                                    <input type="hidden" id="EMR_pr_IGD_alatbantustatus" name="EMR_pr_IGD_alatbantustatus" value="Tidak" class="form-control">
-                                    <div class="col-md-12 md-radio">
-                                        <input type="radio" id="EMR_pr_IGD_FungA1" name="EMR_pr_IGD_FungA" class="md-radiobtn" value="Normal" checked>
-                                        <label for="EMR_pr_IGD_FungA1">
-                                            <span class="inc"></span>
-                                            <span class="check"></span>
-                                            <span class="box"></span> Normal </label>
-                                    </div>
-                                </div>
-                                b. Apakah pasien menopang saat akan duduk?
+                                Pasien memiliki risiko jatuh?
                                 <div class="md-radio-inline">
                                   <div class="md-radio">
-                                    <input type="radio" id="EMR_pr_IGD_FungBYA" name="EMR_pr_IGD_FungB" class="md-radiobtn" value="Ya">
-                                    <label for="EMR_pr_IGD_FungBYA">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJY" name="EMR_pr_IGD_P3_RJ" class="md-radiobtn" value="Ya">
+                                    <label for="EMR_pr_IGD_P3_RJY">
                                     <span></span>
                                     <span class="check"></span>
                                     <span class="box"></span> Ya </label>
                                   </div>
                                   <div class="md-radio">
-                                    <input type="radio" id="EMR_pr_IGD_FungBTD" name="EMR_pr_IGD_FungB" class="md-radiobtn" value="Tidak" checked>
-                                    <label for="EMR_pr_IGD_FungBTD">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJT" name="EMR_pr_IGD_P3_RJ" class="md-radiobtn" value="Tidak">
+                                    <label for="EMR_pr_IGD_P3_RJT">
                                     <span></span>
                                     <span class="check"></span>
                                     <span class="box"></span> Tidak </label>
@@ -1539,17 +1534,654 @@
                           </div>
                         </div>
                       </div>
+                      <div class="collapse" id="EMR_pr_IGD_P3_RJatuhShow">
+                        <?php
+                        if($Utahun < 18){ ?>
+                        <div class="col-md-12 portlet light bordered">
+                          <div class="portlet-body">
+                            <center><b><h3>PENGKAJIAN RESIKO JATUH ANAK ( <i>HUMTY DUMPTY</i> ) </h3></b></center>
+                            <div class="col-md-12 tab-content">
+                              <br>
+                              <span>Umur : </span>
+                              <div class="md-radio-inline">
+                                <div class="md-radio col-md-5">
+                                  <input type="radio" id="EMR_pr_IGD_P3_RJBayi_A1" name="EMR_pr_IGD_P3_RJBayi_A" class="md-radiobtn" value="4">
+                                  <label for="EMR_pr_IGD_P3_RJBayi_A1">
+                                  <span></span>
+                                  <span class="check"></span>
+                                  <span class="box"></span> Kurang dari 3 bulan </label>
+                                </div>
+                                <div class="md-radio col-md-5">
+                                  <input type="radio" id="EMR_pr_IGD_P3_RJBayi_A2" name="EMR_pr_IGD_P3_RJBayi_A" class="md-radiobtn" value="3">
+                                  <label for="EMR_pr_IGD_P3_RJBayi_A2">
+                                  <span></span>
+                                  <span class="check"></span>
+                                  <span class="box"></span> 3 bulan - 7 tahun </label>
+                                </div>
+                              </div>
+                              <div class="md-radio-inline">
+                                <div class="md-radio col-md-5">
+                                  <input type="radio" id="EMR_pr_IGD_P3_RJBayi_A3" name="EMR_pr_IGD_P3_RJBayi_A" class="md-radiobtn" value="2">
+                                  <label for="EMR_pr_IGD_P3_RJBayi_A3">
+                                  <span></span>
+                                  <span class="check"></span>
+                                  <span class="box"></span> 7 tahun - 13 tahun </label>
+                                </div>
+                                <div class="md-radio col-md-5">
+                                  <input type="radio" id="EMR_pr_IGD_P3_RJBayi_A4" name="EMR_pr_IGD_P3_RJBayi_A" class="md-radiobtn" value="1">
+                                  <label for="EMR_pr_IGD_P3_RJBayi_A4">
+                                  <span></span>
+                                  <span class="check"></span>
+                                  <span class="box"></span> 13 bulan - 18 tahun </label>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-12 tab-content">
+                              <br>
+                              <span>Jenis kelamin : </span>
+                              <div class="md-radio-inline">
+                                <div class="md-radio col-md-5">
+                                  <input type="radio" id="EMR_pr_IGD_P3_RJBayi_B1" name="EMR_pr_IGD_P3_RJBayi_B" class="md-radiobtn" value="2">
+                                  <label for="EMR_pr_IGD_P3_RJBayi_B1">
+                                  <span></span>
+                                  <span class="check"></span>
+                                  <span class="box"></span> Laki - laki </label>
+                                </div>
+                                <div class="md-radio col-md-5">
+                                  <input type="radio" id="EMR_pr_IGD_P3_RJBayi_B2" name="EMR_pr_IGD_P3_RJBayi_B" class="md-radiobtn" value="1">
+                                  <label for="EMR_pr_IGD_P3_RJBayi_B2">
+                                  <span></span>
+                                  <span class="check"></span>
+                                  <span class="box"></span> Perempuan </label>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-12 tab-content">
+                              <br>
+                              <span>Diagnosa : </span>
+                              <div class="md-radio-inline">
+                                <div class="md-radio col-md-5">
+                                  <input type="radio" id="EMR_pr_IGD_P3_RJBayi_C1" name="EMR_pr_IGD_P3_RJBayi_C" class="md-radiobtn" value="4">
+                                  <label for="EMR_pr_IGD_P3_RJBayi_C1">
+                                  <span></span>
+                                  <span class="check"></span>
+                                  <span class="box"></span> Neurologi </label>
+                                </div>
+                                <div class="md-radio col-md-5">
+                                  <input type="radio" id="EMR_pr_IGD_P3_RJBayi_C2" name="EMR_pr_IGD_P3_RJBayi_C" class="md-radiobtn" value="3">
+                                  <label for="EMR_pr_IGD_P3_RJBayi_C2">
+                                  <span></span>
+                                  <span class="check"></span>
+                                  <span class="box"></span> Respiratory, dehidrasi, anemia, anorexia, syncope </label>
+                                </div>
+                              </div>
+                              <div class="md-radio-inline">
+                                <div class="md-radio col-md-5">
+                                  <input type="radio" id="EMR_pr_IGD_P3_RJBayi_C3" name="EMR_pr_IGD_P3_RJBayi_C" class="md-radiobtn" value="2">
+                                  <label for="EMR_pr_IGD_P3_RJBayi_C3">
+                                  <span></span>
+                                  <span class="check"></span>
+                                  <span class="box"></span> Perilaku </label>
+                                </div>
+                                <div class="md-radio col-md-5">
+                                  <input type="radio" id="EMR_pr_IGD_P3_RJBayi_C4" name="EMR_pr_IGD_P3_RJBayi_C" class="md-radiobtn" value="1">
+                                  <label for="EMR_pr_IGD_P3_RJBayi_C4">
+                                  <span></span>
+                                  <span class="check"></span>
+                                  <span class="box"></span> Lain - lain </label>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-12 tab-content">
+                              <br>
+                              <span>Gangguan kognitif : </span>
+                              <div class="md-radio-inline">
+                                <div class="md-radio col-md-5">
+                                  <input type="radio" id="EMR_pr_IGD_P3_RJBayi_D1" name="EMR_pr_IGD_P3_RJBayi_D" class="md-radiobtn" value="3">
+                                  <label for="EMR_pr_IGD_P3_RJBayi_D1">
+                                  <span></span>
+                                  <span class="check"></span>
+                                  <span class="box"></span> Keterbatasan daya pikir </label>
+                                </div>
+                                <div class="md-radio col-md-5">
+                                  <input type="radio" id="EMR_pr_IGD_P3_RJBayi_D2" name="EMR_pr_IGD_P3_RJBayi_D" class="md-radiobtn" value="2">
+                                  <label for="EMR_pr_IGD_P3_RJBayi_D2">
+                                  <span></span>
+                                  <span class="check"></span>
+                                  <span class="box"></span> Pelupa </label>
+                                </div>
+                              </div>
+                              <div class="md-radio-inline">
+                                <div class="md-radio col-md-12">
+                                  <input type="radio" id="EMR_pr_IGD_P3_RJBayi_D3" name="EMR_pr_IGD_P3_RJBayi_D" class="md-radiobtn" value="1">
+                                  <label for="EMR_pr_IGD_P3_RJBayi_D3">
+                                  <span></span>
+                                  <span class="check"></span>
+                                  <span class="box"></span> Dapat menggunakan daya pikir tanpa hambatan </label>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-12 tab-content">
+                              <br>
+                              <span>Faktor lingkungan : </span>
+                              <div class="md-radio-inline">
+                                <div class="md-radio col-md-12">
+                                  <input type="radio" id="EMR_pr_IGD_P3_RJBayi_E1" name="EMR_pr_IGD_P3_RJBayi_E" class="md-radiobtn" value="4">
+                                  <label for="EMR_pr_IGD_P3_RJBayi_E1">
+                                  <span></span>
+                                  <span class="check"></span>
+                                  <span class="box"></span> Riwayat jatuh bayi/balita yang ditempatkan di tempat tidur </label>
+                                </div>
+                              </div>
+                              <div class="md-radio-inline">
+                                <div class="md-radio col-md-12">
+                                  <input type="radio" id="EMR_pr_IGD_P3_RJBayi_E2" name="EMR_pr_IGD_P3_RJBayi_E" class="md-radiobtn" value="3">
+                                  <label for="EMR_pr_IGD_P3_RJBayi_E2">
+                                  <span></span>
+                                  <span class="check"></span>
+                                  <span class="box"></span> Pasien yang menggunakan alat bantu/bayi atau balita pada ayunan </label>
+                                </div>
+                              </div>
+                              <div class="md-radio-inline">
+                                <div class="md-radio col-md-5">
+                                  <input type="radio" id="EMR_pr_IGD_P3_RJBayi_E3" name="EMR_pr_IGD_P3_RJBayi_E" class="md-radiobtn" value="2">
+                                  <label for="EMR_pr_IGD_P3_RJBayi_E3">
+                                  <span></span>
+                                  <span class="check"></span>
+                                  <span class="box"></span> Pasien di tempat tidur standart </label>
+                                </div>
+                                <div class="md-radio col-md-5">
+                                  <input type="radio" id="EMR_pr_IGD_P3_RJBayi_E4" name="EMR_pr_IGD_P3_RJBayi_E" class="md-radiobtn" value="1">
+                                  <label for="EMR_pr_IGD_P3_RJBayi_E4">
+                                  <span></span>
+                                  <span class="check"></span>
+                                  <span class="box"></span> Area pasien rawat jalan </label>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-12 tab-content">
+                              <br>
+                              <span>Respon terhadap pembedahan, sedasi dan anestesi : </span>
+                              <div class="md-radio-inline">
+                                <div class="md-radio col-md-5">
+                                  <input type="radio" id="EMR_pr_IGD_P3_RJBayi_F1" name="EMR_pr_IGD_P3_RJBayi_F" class="md-radiobtn" value="3">
+                                  <label for="EMR_pr_IGD_P3_RJBayi_F1">
+                                  <span></span>
+                                  <span class="check"></span>
+                                  <span class="box"></span> Dalam 24 Jam </label>
+                                </div>
+                                <div class="md-radio col-md-5">
+                                  <input type="radio" id="EMR_pr_IGD_P3_RJBayi_E2" name="EMR_pr_IGD_P3_RJBayi_F" class="md-radiobtn" value="2">
+                                  <label for="EMR_pr_IGD_P3_RJBayi_F2">
+                                  <span></span>
+                                  <span class="check"></span>
+                                  <span class="box"></span> Dalam 48 Jam </label>
+                                </div>
+                              </div>
+                              <div class="md-radio-inline">
+                                <div class="md-radio col-md-12">
+                                  <input type="radio" id="EMR_pr_IGD_P3_RJBayi_F3" name="EMR_pr_IGD_P3_RJBayi_F" class="md-radiobtn" value="1">
+                                  <label for="EMR_pr_IGD_P3_RJBayi_F3">
+                                  <span></span>
+                                  <span class="check"></span>
+                                  <span class="box"></span> Lebih dari 48 Jam/tidak ada respon </label>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-12 tab-content">
+                              <br>
+                              <span>Penggunaan obat - obatan : </span>
+                              <div class="md-radio-inline">
+                                <div class="md-radio col-md-12">
+                                  <input type="radio" id="EMR_pr_IGD_P3_RJBayi_G1" name="EMR_pr_IGD_P3_RJBayi_G" class="md-radiobtn" value="3">
+                                  <label for="EMR_pr_IGD_P3_RJBayi_G1">
+                                  <span></span>
+                                  <span class="check"></span>
+                                  <span class="box"></span> Penggunaan bersamaan sedative, barbieturate, anti depresan, diuretik, narkotik </label>
+                                </div>
+                              </div>
+                              <div class="md-radio-inline">
+                                <div class="md-radio col-md-5">
+                                  <input type="radio" id="EMR_pr_IGD_P3_RJBayi_G2" name="EMR_pr_IGD_P3_RJBayi_G" class="md-radiobtn" value="2">
+                                  <label for="EMR_pr_IGD_P3_RJBayi_G2">
+                                  <span></span>
+                                  <span class="check"></span>
+                                  <span class="box"></span> Salah satu obat diatas </label>
+                                </div>
+                                <div class="md-radio col-md-5">
+                                  <input type="radio" id="EMR_pr_IGD_P3_RJBayi_G3" name="EMR_pr_IGD_P3_RJBayi_G" class="md-radiobtn" value="1">
+                                  <label for="EMR_pr_IGD_P3_RJBayi_G3">
+                                  <span></span>
+                                  <span class="check"></span>
+                                  <span class="box"></span> Obat lain/tanpa obat </label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <?php }
+                        elseif($Utahun < 65){ ?>
+                          <div class="col-md-12 portlet light bordered">
+                            <div class="portlet-body">
+                              <center><b><h3>PENGKAJIAN RESIKO JATUH ( <i>MORSE FALL SCALE</i> ) USIA 18 - 65 TH </h3></b></center>
+                              <div class="col-md-12 tab-content">
+                                <br>
+                                <span>Riwayat Jatuh (baru-baru ini atau dalam 3 bulan terakhir) : </span>
+                                <div class="md-radio-inline">
+                                  <div class="md-radio col-md-5">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJMorse_A1" name="EMR_pr_IGD_P3_RJMorse_A" class="md-radiobtn" value="0">
+                                    <label for="EMR_pr_IGD_P3_RJMorse_A1">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Tidak pernah </label>
+                                  </div>
+                                  <div class="md-radio col-md-5">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJMorse_A2" name="EMR_pr_IGD_P3_RJMorse_A" class="md-radiobtn" value="25">
+                                    <label for="EMR_pr_IGD_P3_RJMorse_A2">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Pernah </label>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-12 tab-content">
+                                <br>
+                                <span>Penyakit Penyerta : </span>
+                                <div class="md-radio-inline">
+                                  <div class="md-radio col-md-5">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJMorse_B1" name="EMR_pr_IGD_P3_RJMorse_B" class="md-radiobtn" value="25">
+                                    <label for="EMR_pr_IGD_P3_RJMorse_B1">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Ada </label>
+                                  </div>
+                                  <div class="md-radio col-md-5">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJMorse_B2" name="EMR_pr_IGD_P3_RJMorse_B" class="md-radiobtn" value="0">
+                                    <label for="EMR_pr_IGD_P3_RJMorse_B2">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Tidak ada </label>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-12 tab-content">
+                                <br>
+                                <span>Alat Bantu Jalan : </span>
+                                <div class="md-radio-inline">
+                                  <div class="md-radio col-md-12">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJMorse_C1" name="EMR_pr_IGD_P3_RJMorse_C" class="md-radiobtn" value="0">
+                                    <label for="EMR_pr_IGD_P3_RJMorse_C1">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Tanpa alat bantu : Bedrest/dibantu nperawat </label>
+                                  </div>
+                                </div>
+                                <div class="md-radio-inline">
+                                  <div class="md-radio col-md-5">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJMorse_C2" name="EMR_pr_IGD_P3_RJMorse_C" class="md-radiobtn" value="15">
+                                    <label for="EMR_pr_IGD_P3_RJMorse_C2">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Tongkat penyangga </label>
+                                  </div>
+                                  <div class="md-radio col-md-5">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJMorse_C3" name="EMR_pr_IGD_P3_RJMorse_C" class="md-radiobtn" value="30">
+                                    <label for="EMR_pr_IGD_P3_RJMorse_C3">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Furnitur </label>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-12 tab-content">
+                                <br>
+                                <span>Pemakaian infus intravena : </span>
+                                <div class="md-radio-inline">
+                                  <div class="md-radio col-md-5">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJMorse_D1" name="EMR_pr_IGD_P3_RJMorse_D" class="md-radiobtn" value="20">
+                                    <label for="EMR_pr_IGD_P3_RJMorse_D1">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Ya </label>
+                                  </div>
+                                  <div class="md-radio col-md-5">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJMorse_D2" name="EMR_pr_IGD_P3_RJMorse_D" class="md-radiobtn" value="0">
+                                    <label for="EMR_pr_IGD_P3_RJMorse_D2">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Tidak </label>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-12 tab-content">
+                                <br>
+                                <span>Cara Berjalan : </span>
+                                <div class="md-radio-inline">
+                                  <div class="md-radio col-md-12">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJMorse_E1" name="EMR_pr_IGD_P3_RJMorse_E" class="md-radiobtn" value="0">
+                                    <label for="EMR_pr_IGD_P3_RJMorse_E1">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Normal, tidak dapat berjalan </label>
+                                  </div>
+                                </div>
+                                <div class="md-radio-inline">
+                                  <div class="md-radio col-md-5">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJMorse_E2" name="EMR_pr_IGD_P3_RJMorse_E" class="md-radiobtn" value="10">
+                                    <label for="EMR_pr_IGD_P3_RJMorse_E2">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Lemah </label>
+                                  </div>
+                                  <div class="md-radio col-md-5">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJMorse_E3" name="EMR_pr_IGD_P3_RJMorse_E" class="md-radiobtn" value="20">
+                                    <label for="EMR_pr_IGD_P3_RJMorse_E3">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Terganggu </label>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-12 tab-content">
+                                <br>
+                                <span>Status Mental : </span>
+                                <div class="md-radio-inline">
+                                  <div class="md-radio col-md-12">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJMorse_F1" name="EMR_pr_IGD_P3_RJMorse_F" class="md-radiobtn" value="0">
+                                    <label for="EMR_pr_IGD_P3_RJMorse_F1">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Menyadari kelemahannya </label>
+                                  </div>
+                                </div>
+                                <div class="md-radio-inline">
+                                  <div class="md-radio col-md-12">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJMorse_F2" name="EMR_pr_IGD_P3_RJMorse_F" class="md-radiobtn" value="15">
+                                    <label for="EMR_pr_IGD_P3_RJMorse_F2">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Tidak menyadari kelemahannya </label>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        <?php }
+                        elseif($Utahun >= 65){ ?>
+                          <div class="col-md-12 portlet light bordered">
+                            <div class="portlet-body">
+                              <center><b><h3>PENGKAJIAN RESIKO JATUH KHUSUS GERIARTRI USIA >= 65 TH </h3></b></center>
+                              <div class="col-md-12 tab-content">
+                                <br>
+                                <span>Riwayat Jatuh : </span><br>
+                                <span>Apakah pasien datang ke rumah sakit karena jatuh? </span>
+                                <div class="md-radio-inline">
+                                  <div class="md-radio col-md-5">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJGeriartri_A11" name="EMR_pr_IGD_P3_RJGeriartri_A1" class="md-radiobtn" value="0">
+                                    <label for="EMR_pr_IGD_P3_RJGeriartri_A11">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Tidak </label>
+                                  </div>
+                                  <div class="md-radio col-md-5">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJGeriartri_A12" name="EMR_pr_IGD_P3_RJGeriartri_A1" class="md-radiobtn" value="6">
+                                    <label for="EMR_pr_IGD_P3_RJGeriartri_A12">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Ya </label>
+                                  </div>
+                                  <div class="collapse" id="EMR_pr_IGD_P3_RJGeriartri_AShow">
+                                    <div class="col-md-12"></div>
+                                    <span></br>Apakah pasien mengalami jatuh dalam 2 bulan terakhir? </span>
+                                    <div class="md-radio-inline">
+                                      <div class="md-radio col-md-5">
+                                        <input type="radio" id="EMR_pr_IGD_P3_RJGeriartri_A21" name="EMR_pr_IGD_P3_RJGeriartri_A2" class="md-radiobtn" value="0" checked>
+                                        <label for="EMR_pr_IGD_P3_RJGeriartri_A21">
+                                        <span></span>
+                                        <span class="check"></span>
+                                        <span class="box"></span> Tidak </label>
+                                      </div>
+                                      <div class="md-radio col-md-5">
+                                        <input type="radio" id="EMR_pr_IGD_P3_RJGeriartri_A22" name="EMR_pr_IGD_P3_RJGeriartri_A2" class="md-radiobtn" value="6">
+                                        <label for="EMR_pr_IGD_P3_RJGeriartri_A22">
+                                        <span></span>
+                                        <span class="check"></span>
+                                        <span class="box"></span> Ya </label>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-12 tab-content">
+                                <br>
+                                <span>Status mental : </span><br>
+                                <span>Apakah pasien delirium? (tidak dapat mengambil keputusan, pola pikir tidak terorganisir, gangguan daya ingat) </span>
+                                <div class="md-radio-inline">
+                                  <div class="md-radio col-md-5">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJGeriartri_B11" name="EMR_pr_IGD_P3_RJGeriartri_B1" class="md-radiobtn" value="14">
+                                    <label for="EMR_pr_IGD_P3_RJGeriartri_B11">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Ya </label>
+                                  </div>
+                                  <div class="md-radio col-md-5">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJGeriartri_B12" name="EMR_pr_IGD_P3_RJGeriartri_B1" class="md-radiobtn" value="0">
+                                    <label for="EMR_pr_IGD_P3_RJGeriartri_B12">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Tidak </label>
+                                  </div>
+                                </div>
+                                <div class="col-md-12"></div>
+                                <span></br>Apakah pasien disorientasi? (salah menyebutkan waktu, tempat atau orang) </span>
+                                <div class="md-radio-inline">
+                                  <div class="md-radio col-md-5">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJGeriartri_B21" name="EMR_pr_IGD_P3_RJGeriartri_B2" class="md-radiobtn" value="14">
+                                    <label for="EMR_pr_IGD_P3_RJGeriartri_B21">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Ya </label>
+                                  </div>
+                                  <div class="md-radio col-md-5">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJGeriartri_B22" name="EMR_pr_IGD_P3_RJGeriartri_B2" class="md-radiobtn" value="0">
+                                    <label for="EMR_pr_IGD_P3_RJGeriartri_B22">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Tidak </label>
+                                  </div>
+                                </div>
+                                <div class="col-md-12"></div>
+                                <span></br>Apakah pasien menalami agitasi? (kelakuan gelisah dan cemas) </span>
+                                <div class="md-radio-inline">
+                                  <div class="md-radio col-md-5">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJGeriartri_B31" name="EMR_pr_IGD_P3_RJGeriartri_B3" class="md-radiobtn" value="14">
+                                    <label for="EMR_pr_IGD_P3_RJGeriartri_B31">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Ya </label>
+                                  </div>
+                                  <div class="md-radio col-md-5">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJGeriartri_B32" name="EMR_pr_IGD_P3_RJGeriartri_B3" class="md-radiobtn" value="0">
+                                    <label for="EMR_pr_IGD_P3_RJGeriartri_B32">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Tidak </label>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-12 tab-content">
+                                <br>
+                                <span>Penglihatan : </span><br>
+                                <span>Apakah pasien memakai kacamata? </span>
+                                <div class="md-radio-inline">
+                                  <div class="md-radio col-md-5">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJGeriartri_C11" name="EMR_pr_IGD_P3_RJGeriartri_C1" class="md-radiobtn" value="1">
+                                    <label for="EMR_pr_IGD_P3_RJGeriartri_C11">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Ya </label>
+                                  </div>
+                                  <div class="md-radio col-md-5">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJGeriartri_C12" name="EMR_pr_IGD_P3_RJGeriartri_C1" class="md-radiobtn" value="0">
+                                    <label for="EMR_pr_IGD_P3_RJGeriartri_C12">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Tidak </label>
+                                  </div>
+                                </div>
+                                <div class="col-md-12"></div>
+                                <span></br>Apakah pasien mengeluh adanya penglihatan buram? </span>
+                                <div class="md-radio-inline">
+                                  <div class="md-radio col-md-5">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJGeriartri_C21" name="EMR_pr_IGD_P3_RJGeriartri_C2" class="md-radiobtn" value="1">
+                                    <label for="EMR_pr_IGD_P3_RJGeriartri_C21">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Ya </label>
+                                  </div>
+                                  <div class="md-radio col-md-5">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJGeriartri_C22" name="EMR_pr_IGD_P3_RJGeriartri_C2" class="md-radiobtn" value="0">
+                                    <label for="EMR_pr_IGD_P3_RJGeriartri_C22">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Tidak </label>
+                                  </div>
+                                </div>
+                                <div class="col-md-12"></div>
+                                <span></br>Apakah pasien mempunyai glaucoma, katarak, degenerasi makula? </span>
+                                <div class="md-radio-inline">
+                                  <div class="md-radio col-md-5">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJGeriartri_C31" name="EMR_pr_IGD_P3_RJGeriartri_C3" class="md-radiobtn" value="1">
+                                    <label for="EMR_pr_IGD_P3_RJGeriartri_C31">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Ya </label>
+                                  </div>
+                                  <div class="md-radio col-md-5">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJGeriartri_C32" name="EMR_pr_IGD_P3_RJGeriartri_C3" class="md-radiobtn" value="0">
+                                    <label for="EMR_pr_IGD_P3_RJGeriartri_C32">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Tidak </label>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-12 tab-content">
+                                <br>
+                                <span>Kebiasaan berkemih : </span><br>
+                                <span>Apakah terdapat perubahan perilaku berkemih? (frekuensi, urgensi, inkontinensia, nokturia) </span>
+                                <div class="md-radio-inline">
+                                  <div class="md-radio col-md-5">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJGeriartri_D1" name="EMR_pr_IGD_P3_RJGeriartri_D" class="md-radiobtn" value="2">
+                                    <label for="EMR_pr_IGD_P3_RJGeriartri_D1">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Ya </label>
+                                  </div>
+                                  <div class="md-radio col-md-5">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJGeriartri_D2" name="EMR_pr_IGD_P3_RJGeriartri_D" class="md-radiobtn" value="0">
+                                    <label for="EMR_pr_IGD_P3_RJGeriartri_D2">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Tidak </label>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-12 tab-content">
+                                <br>
+                                <span>Transfer (dari tempat tidur ke kursi dan kembali ke tempat tidur) : </span>
+                                <div class="md-radio-inline">
+                                  <div class="md-radio col-md-12">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJGeriartri_E1" name="EMR_pr_IGD_P3_RJGeriartri_E" class="md-radiobtn" value="0">
+                                    <label for="EMR_pr_IGD_P3_RJGeriartri_E1">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Mandiri (boleh menggunakan alat bantu jalan) </label>
+                                  </div>
+                                </div>
+                                <div class="md-radio-inline">
+                                  <div class="md-radio col-md-12">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJGeriartri_E2" name="EMR_pr_IGD_P3_RJGeriartri_E" class="md-radiobtn" value="1">
+                                    <label for="EMR_pr_IGD_P3_RJGeriartri_E2">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Memerlukan sedikit bantuan (1 orang)/dalam pengawasan </label>
+                                  </div>
+                                </div>
+                                <div class="md-radio-inline">
+                                  <div class="md-radio col-md-12">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJGeriartri_E3" name="EMR_pr_IGD_P3_RJGeriartri_E" class="md-radiobtn" value="2">
+                                    <label for="EMR_pr_IGD_P3_RJGeriartri_E3">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Memerlukan bantuan yang nyata (2 orang) </label>
+                                  </div>
+                                </div>
+                                <div class="md-radio-inline">
+                                  <div class="md-radio col-md-12">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJGeriartri_E4" name="EMR_pr_IGD_P3_RJGeriartri_E" class="md-radiobtn" value="3">
+                                    <label for="EMR_pr_IGD_P3_RJGeriartri_E4">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Tidak dapat duduk dengan seimbang, perlu bantuan total </label>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-12 tab-content">
+                                <br>
+                                <span>Mobilitas : </span>
+                                <div class="md-radio-inline">
+                                  <div class="md-radio col-md-12">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJGeriartri_F1" name="EMR_pr_IGD_P3_RJGeriartri_F" class="md-radiobtn" value="0">
+                                    <label for="EMR_pr_IGD_P3_RJGeriartri_F1">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Mandiri (boleh menggunakan alat bantu jalan) </label>
+                                  </div>
+                                </div>
+                                <div class="md-radio-inline">
+                                  <div class="md-radio col-md-12">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJGeriartri_F2" name="EMR_pr_IGD_P3_RJGeriartri_F" class="md-radiobtn" value="1">
+                                    <label for="EMR_pr_IGD_P3_RJGeriartri_F2">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Berjalan dengan bantuan orang (verbal/fisik) </label>
+                                  </div>
+                                </div>
+                                <div class="md-radio-inline">
+                                  <div class="md-radio col-md-12">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJGeriartri_F3" name="EMR_pr_IGD_P3_RJGeriartri_F" class="md-radiobtn" value="2">
+                                    <label for="EMR_pr_IGD_P3_RJGeriartri_F3">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Menggunakan kursi roda </label>
+                                  </div>
+                                </div>
+                                <div class="md-radio-inline">
+                                  <div class="md-radio col-md-12">
+                                    <input type="radio" id="EMR_pr_IGD_P3_RJGeriartri_F4" name="EMR_pr_IGD_P3_RJGeriartri_F" class="md-radiobtn" value="3">
+                                    <label for="EMR_pr_IGD_P3_RJGeriartri_F4">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> imobilisasi </label>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        <?php } ?>
+                      </div>
                       <div class="col-md-12 portlet light bordered">
                         <div class="portlet-body">
                           <div class="tab-content">
                             <div class="col-md-12">
                               Hasil asesmen risiko jatuh :
-                              <span id="EMR_pr_IGD_FungHasil"><b> Tidak berisiko </b></span>
+                              <b><span id="EMR_pr_IGD_FungHasil"> Tidak berisiko </span></b>
                               <input type="hidden" id="EMR_pr_IGD_FungHasil_text" name="EMR_pr_IGD_FungHasil_text" value="" class="form-control">
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-12"></br>
                               Tindakan pencegahan risiko jatuh yg perlu dilakukan :
-                              <span id="EMR_pr_IGD_FungTindakan"><b> Tidak ada tindakan </b></span>
+                              <b> <span id="EMR_pr_IGD_FungTindakan"> Tidak ada tindakan </span></b>
                               <input type="hidden" id="EMR_pr_IGD_FungTindakan_text" name="EMR_pr_IGD_FungTindakan_text" value="" class="form-control">
                             </div>
                           </div>
@@ -1624,14 +2256,14 @@
                                 <span>Apakah pasien di atas usia 60 tahun?</span>
                                 <div class="md-radio-inline">
                                   <div class="md-radio">
-                                      <input type="radio" id="EMR_pr_IGD_DekubitasDYa" name="EMR_pr_IGD_DekubitasD" class="md-radiobtn" value="Pasien di atas usia 60 tahun">
+                                      <input type="radio" id="EMR_pr_IGD_DekubitasDYa" name="EMR_pr_IGD_DekubitasD" class="md-radiobtn" value="Pasien di atas usia 60 tahun" <?php if($Utahun >= 60){ ?> checked <?php }?>>
                                       <label for="EMR_pr_IGD_DekubitasDYa">
                                           <span class="inc"></span>
                                           <span class="check"></span>
                                           <span class="box"></span> Ya </label>
                                   </div>
                                   <div class="md-radio">
-                                      <input type="radio" id="EMR_pr_IGD_DekubitasDTdk" name="EMR_pr_IGD_DekubitasD" class="md-radiobtn" value="Pasien di bawah usia 60 tahun" checked = "True">
+                                      <input type="radio" id="EMR_pr_IGD_DekubitasDTdk" name="EMR_pr_IGD_DekubitasD" class="md-radiobtn" value="Pasien di bawah usia 60 tahun"  <?php if($Utahun < 60){ ?> checked <?php }?>>
                                       <label for="EMR_pr_IGD_DekubitasDTdk">
                                           <span class="inc"></span>
                                           <span class="check"></span>
@@ -1639,6 +2271,9 @@
                                   </div>
                                 </div>
                               </div>
+                              <?php
+                              If($Utahun < 14)
+                              {?>
                               <div class="col-md-12">
                                 <span>Apakah ekstremitas dan badan sesuai dengan usia perkembangan?</span>
                                 <div class="md-radio-inline">
@@ -1658,6 +2293,7 @@
                                   </div>
                                 </div>
                               </div>
+                            <?php } ?>
                             </div>
                           </div>
                         </div>
@@ -1666,46 +2302,616 @@
                   </div>
                   <div class="col-md-12 collapse" id="EMR_pr_IGD_P3_Halaman5">
                     <div class="col-md-12">
-                      <div class="portlet light portlet-fit bordered">
+                      <span>ANTROPOMETRI</span>
+                      <div class="portlet light bordered">
                         <div class="portlet-body">
                           <div class="tab-content">
-                            <div class="col-md-3">
-                              <label for="form_control_1">BB</label>
-                              <i style="font-size:12px"><b>Kg</b></i>
-                              <input type="text" id="EMR_pr_IGD_beratbadan" name="EMR_pr_IGD_beratbadan" value="" class="form-control">
-                            </div>
-                            <div class="col-md-3">
-                              <label for="form_control_1">TB</label>
-                              <i style="font-size:12px"><b>Cm</b></i>
-                              <input type="text" id="EMR_pr_IGD_tinggibadan" name="EMR_pr_IGD_tinggibadan" value="" class="form-control">
-                            </div>
-                            <div class="col-md-6">
-                              <span>Nilai BMI &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </span><b><span id="EMR_pr_IGD_Nilai_BMI">0</span></b></br>
-                              <span>Kategori BMI : </span><b><span id="EMR_pr_IGD_Kategori_BMI"></span></b>
-                            </div>
-                            <div class="md-radio-inline">
-                              <div class="md-radio">
-                                  <input type="radio" id="EMR_pr_IGD_GiziBMIMandiri" name="EMR_pr_IGD_GiziBMI" class="md-radiobtn" value="Mandiri">
-                                  <label for="EMR_pr_IGD_KajiFungsiMandiri">
-                                      <span class="inc"></span>
-                                      <span class="check"></span>
-                                      <span class="box"></span> Dapat di evaluasi </label>
-                              </div>
-                              <div class="md-radio">
-                                  <input type="radio" id="EMR_pr_IGD_GiziBMIDenganBantuan" name="EMR_pr_IGD_GiziBMI" class="md-radiobtn" value="">
-                                  <label for="EMR_pr_IGD_KajiFungsiDenganBantuan">
-                                      <span class="inc"></span>
-                                      <span class="check"></span>
-                                      <span class="box"></span> Tidak dapat Dievaluasi </label>
+                            <div class="row" style="display: block; margin-top: 0em; margin-bottom: 0em;">
+                              <div class="tab-content">
+                                <div class="col-md-3">
+                                  <label for="form_control_1">BB</label>
+                                  <i style="font-size:12px"><b>Kg</b></i>
+                                  <input type="text" id="EMR_pr_IGD_P3_beratbadan" name="EMR_pr_IGD_P3_beratbadan" value="" class="form-control">
+                                </div>
+                                <div class="col-md-3">
+                                  <label for="form_control_1">TB</label>
+                                  <i style="font-size:12px"><b>Cm</b></i>
+                                  <input type="text" id="EMR_pr_IGD_P3_tinggibadan" name="EMR_pr_IGD_P3_tinggibadan" value="" class="form-control">
+                                </div>
+                                <div class="col-md-6">
+                                  <span>Nilai BMI &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </span><b><span id="EMR_pr_IGD_P3_Nilai_BMI"></span></b></br>
+                                  <span>Kategori BMI : </span><b><span id="EMR_pr_IGD_P3_Kategori_BMI"></span></b></br>
+                                  <span>BB Ideal : </span><b><span id="EMR_pr_IGD_P3_BBIdeal_BMI"></span></b>
+                                  <input type="text" id="EMR_pr_IGD_P3_BBIdeal_BMItxtss" name="EMR_pr_IGD_P3_BBIdeal_BMItxtss" value="" class="form-control collapse">
+                                  <input type="text" id="EMR_pr_IGD_P3_Nilai_BMItxtss" name="EMR_pr_IGD_P3_Nilai_BMItxtss" value="" class="form-control collapse">
+                                  <input type="text" id="EMR_pr_IGD_P3_Kategori_BMItxtss" name="EMR_pr_IGD_P3_Kategori_BMItxtss" value="" class="form-control collapse">
+                                </div>
                               </div>
                             </div>
-
+                            <div class="row" style="display: block; margin-top: 0em; margin-bottom: 0em;">
+                              <div class="tab-content">
+                                <div class="col-md-12">
+                                  <br>
+                                  <label for="form_control_1">NILAI Z SKOR</label>
+                                  <label for="form_control_1">STATUS GIZI</label>
+                                  <div class="md-radio-inline">
+                                    <div class="md-radio col-md-5">
+                                      <input type="radio" id="EMR_pr_IGD_P3_stsGiziBuruk" name="EMR_pr_IGD_P3_stsGizi" class="md-radiobtn" value="Buruk ( < -3 SD )">
+                                      <label for="EMR_pr_IGD_P3_stsGiziBuruk">
+                                      <span></span>
+                                      <span class="check"></span>
+                                      <span class="box"></span> Buruk ( < -3 SD ) </label>
+                                    </div>
+                                    <div class="md-radio col-md-5">
+                                      <input type="radio" id="EMR_pr_IGD_P3_stsGiziKurang" name="EMR_pr_IGD_P3_stsGizi" class="md-radiobtn" value="Kurang ( < -3 SD sampai < -2 SD )">
+                                      <label for="EMR_pr_IGD_P3_stsGiziKurang">
+                                      <span></span>
+                                      <span class="check"></span>
+                                      <span class="box"></span> Kurang ( < -3 SD sampai < -2 SD ) </label>
+                                    </div>
+                                  </div>
+                                  <div class="md-radio-inline">
+                                    <div class="md-radio col-md-5">
+                                      <input type="radio" id="EMR_pr_IGD_P3_stsGiziBaik" name="EMR_pr_IGD_P3_stsGizi" class="md-radiobtn" value="Baik ( < -2 SD sampai +2 SD )">
+                                      <label for="EMR_pr_IGD_P3_stsGiziBaik">
+                                      <span></span>
+                                      <span class="check"></span>
+                                      <span class="box"></span> Baik ( < -2 SD sampai +2 SD ) </label>
+                                    </div>
+                                    <div class="md-radio col-md-5">
+                                      <input type="radio" id="EMR_pr_IGD_P3_stsGiziLebih" name="EMR_pr_IGD_P3_stsGizi" class="md-radiobtn" value="Lebih ( < +2 SD sampai < +3 SD )">
+                                      <label for="EMR_pr_IGD_P3_stsGiziLebih">
+                                      <span></span>
+                                      <span class="check"></span>
+                                      <span class="box"></span> Lebih ( < +2 SD sampai < +3 SD ) </label>
+                                    </div>
+                                  </div>
+                                  <div class="md-radio-inline">
+                                    <div class="md-radio col-md-5">
+                                      <input type="radio" id="EMR_pr_IGD_P3_stsGiziObesitas" name="EMR_pr_IGD_P3_stsGizi" class="md-radiobtn" value="Obesitas ( > +3 SD )">
+                                      <label for="EMR_pr_IGD_P3_stsGiziObesitas">
+                                      <span></span>
+                                      <span class="check"></span>
+                                      <span class="box"></span> Obesitas ( > +3 SD ) </label>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
+                    <div class="col-md-12">
+                      <span>GANGGUAN GASTROINTESTINAL</span>
+                      <div class="portlet light bordered">
+                        <div class="portlet-body">
+                          <div class="tab-content">
+                            <div class="row" style="display: block; margin-top: 0em; margin-bottom: 0em;">
+                              <div class="tab-content">
+                                <div class="md-radio-inline">
+                                  <div class="md-radio">
+                                    <input type="radio" id="EMR_pr_IGD_P3_GastrointestinalT" name="EMR_pr_IGD_P3_Gastrointestinal" class="md-radiobtn" value="Tidak ada gangguan">
+                                    <label for="EMR_pr_IGD_P3_GastrointestinalT">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Tidak ada gangguan </label>
+                                  </div>
+                                  <div class="md-radio">
+                                    <input type="radio" id="EMR_pr_IGD_P3_GastrointestinalY" name="EMR_pr_IGD_P3_Gastrointestinal" class="md-radiobtn" value="Ada gangguan">
+                                    <label for="EMR_pr_IGD_P3_GastrointestinalY">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Ada gangguan </label>
+                                  </div>
+                                  <div class="col-md-12 collapse" id="EMR_pr_IGD_P3_Gastrointestinalshow1">
+                                    <div class="md-radio-inline">
+                                      <div class="md-radio">
+                                        <input type="radio" id="EMR_pr_IGD_P3_GastrointestinalYkurang" name="EMR_pr_IGD_P3_GastrointestinalY" class="md-radiobtn" value=" < dari 2 minggu dengan gejala : ">
+                                        <label for="EMR_pr_IGD_P3_GastrointestinalYkurang">
+                                        <span></span>
+                                        <span class="check"></span>
+                                        <span class="box"></span> < 2 minggu dengan gejala :  </label>
+                                      </div>
+                                      <div class="col-md-12 collapse" id="EMR_pr_IGD_P3_Gastrointestinalshow2">
+                                        <div class="input-group">
+                                          <div class="md-radio-inline">
+                                            <div class="row md-checkbox-inline">
+                                              <div class="col-md-12 md-checkbox">
+                                                <div class="row">
+                                                  <input type="checkbox" id="EMR_pr_IGD_P3_GastrointestinalYkurangMual" name="EMR_pr_IGD_P3_GastrointestinalYkurang" value="Mual" class="md-check">
+                                                  <label for="EMR_pr_IGD_P3_GastrointestinalYkurangMual">
+                                                  <span></span>
+                                                  <span class="check"></span>
+                                                  <span class="box"></span> Mual </label>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <div class="row md-checkbox-inline">
+                                              <div class="col-md-12 md-checkbox">
+                                                <div class="row">
+                                                  <input type="checkbox" id="EMR_pr_IGD_P3_GastrointestinalYkurangMuntah" name="EMR_pr_IGD_P3_GastrointestinalYkurang" value="Muntah" class="md-check">
+                                                  <label for="EMR_pr_IGD_P3_GastrointestinalYkurangMuntah">
+                                                  <span></span>
+                                                  <span class="check"></span>
+                                                  <span class="box"></span> Muntah </label>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <div class="row md-checkbox-inline">
+                                              <div class="col-md-12 md-checkbox">
+                                                <div class="row">
+                                                  <input type="checkbox" id="EMR_pr_IGD_P3_GastrointestinalYkurangDiare" name="EMR_pr_IGD_P3_GastrointestinalYkurang" value="Diare" class="md-check">
+                                                  <label for="EMR_pr_IGD_P3_GastrointestinalYkurangDiare">
+                                                  <span></span>
+                                                  <span class="check"></span>
+                                                  <span class="box"></span> Diare </label>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <div class="row md-checkbox-inline">
+                                              <div class="col-md-12 md-checkbox">
+                                                <div class="row">
+                                                  <input type="checkbox" id="EMR_pr_IGD_P3_GastrointestinalYkurangKonstipasi" name="EMR_pr_IGD_P3_GastrointestinalYkurang" value="Konstipasi" class="md-check">
+                                                  <label for="EMR_pr_IGD_P3_GastrointestinalYkurangKonstipasi">
+                                                  <span></span>
+                                                  <span class="check"></span>
+                                                  <span class="box"></span> Konstipasi </label>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <div class="row md-checkbox-inline">
+                                              <div class="col-md-12 md-checkbox">
+                                                <div class="row">
+                                                  <input type="checkbox" id="EMR_pr_IGD_P3_GastrointestinalYkurangAnoreksia" name="EMR_pr_IGD_P3_GastrointestinalYkurang" value="Anoreksia" class="md-check">
+                                                  <label for="EMR_pr_IGD_P3_GastrointestinalYkurangAnoreksia">
+                                                  <span></span>
+                                                  <span class="check"></span>
+                                                  <span class="box"></span> Anoreksia </label>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                              <span class="control-label">Lain lain : </span>
+                                              <input type="text" id="EMR_pr_IGD_P3_GastrointestinalYkurangtxt" name="EMR_pr_IGD_P3_GastrointestinalYkurangtxt" class="form-control" placeholder="Lain lain">
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="md-radio-inline">
+                                      <div class="md-radio">
+                                        <input type="radio" id="EMR_pr_IGD_P3_GastrointestinalYlebih" name="EMR_pr_IGD_P3_GastrointestinalY" class="md-radiobtn" value=" > dari 2 minggu dengan gejala : ">
+                                        <label for="EMR_pr_IGD_P3_GastrointestinalYlebih">
+                                        <span></span>
+                                        <span class="check"></span>
+                                        <span class="box"></span> > 2 minggu dengan gejala :  </label>
+                                      </div>
+                                      <div class="col-md-12 collapse" id="EMR_pr_IGD_P3_Gastrointestinalshow3">
+                                        <div class="input-group">
+                                          <div class="md-radio-inline">
+                                            <div class="row md-checkbox-inline">
+                                              <div class="col-md-12 md-checkbox">
+                                                <div class="row">
+                                                  <input type="checkbox" id="EMR_pr_IGD_P3_GastrointestinalYlebihMual" name="EMR_pr_IGD_P3_GastrointestinalYlebih" value="Mual" class="md-check">
+                                                  <label for="EMR_pr_IGD_P3_GastrointestinalYlebihMual">
+                                                  <span></span>
+                                                  <span class="check"></span>
+                                                  <span class="box"></span> Mual </label>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <div class="row md-checkbox-inline">
+                                              <div class="col-md-12 md-checkbox">
+                                                <div class="row">
+                                                  <input type="checkbox" id="EMR_pr_IGD_P3_GastrointestinalYlebihMuntah" name="EMR_pr_IGD_P3_GastrointestinalYlebih" value="Muntah" class="md-check">
+                                                  <label for="EMR_pr_IGD_P3_GastrointestinalYlebihMuntah">
+                                                  <span></span>
+                                                  <span class="check"></span>
+                                                  <span class="box"></span> Muntah </label>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <div class="row md-checkbox-inline">
+                                              <div class="col-md-12 md-checkbox">
+                                                <div class="row">
+                                                  <input type="checkbox" id="EMR_pr_IGD_P3_GastrointestinalYlebihDiare" name="EMR_pr_IGD_P3_GastrointestinalYlebih" value="Diare" class="md-check">
+                                                  <label for="EMR_pr_IGD_P3_GastrointestinalYlebihDiare">
+                                                  <span></span>
+                                                  <span class="check"></span>
+                                                  <span class="box"></span> Diare </label>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <div class="row md-checkbox-inline">
+                                              <div class="col-md-12 md-checkbox">
+                                                <div class="row">
+                                                  <input type="checkbox" id="EMR_pr_IGD_P3_GastrointestinalYlebihKonstipasi" name="EMR_pr_IGD_P3_GastrointestinalYlebih" value="Konstipasi" class="md-check">
+                                                  <label for="EMR_pr_IGD_P3_GastrointestinalYlebihKonstipasi">
+                                                  <span></span>
+                                                  <span class="check"></span>
+                                                  <span class="box"></span> Konstipasi </label>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <div class="row md-checkbox-inline">
+                                              <div class="col-md-12 md-checkbox">
+                                                <div class="row">
+                                                  <input type="checkbox" id="EMR_pr_IGD_P3_GastrointestinalYlebihAnoreksia" name="EMR_pr_IGD_P3_GastrointestinalYlebih" value="Anoreksia" class="md-check">
+                                                  <label for="EMR_pr_IGD_P3_GastrointestinalYlebihAnoreksia">
+                                                  <span></span>
+                                                  <span class="check"></span>
+                                                  <span class="box"></span> Anoreksia </label>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                              <span class="control-label">Lain lain : </span>
+                                              <input type="text" id="EMR_pr_IGD_P3_GastrointestinalYlebihtxt" name="EMR_pr_IGD_P3_GastrointestinalYlebihtxt" class="form-control" placeholder="Lain lain">
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <span>PERUBAHAN ASUPAN MAKAN</span>
+                      <div class="portlet light bordered">
+                        <div class="portlet-body">
+                          <div class="tab-content">
+                            <div class="row" style="display: block; margin-top: 0em; margin-bottom: 0em;">
+                              <div class="tab-content">
+                                <div class="md-radio-inline">
+                                  <div class="md-radio">
+                                    <input type="radio" id="EMR_pr_IGD_P3_AsupanT" name="EMR_pr_IGD_P3_Asupan" class="md-radiobtn" value="Tidak ada perubahan">
+                                    <label for="EMR_pr_IGD_P3_AsupanT">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Tidak ada perubahan </label>
+                                  </div>
+                                  <div class="md-radio">
+                                    <input type="radio" id="EMR_pr_IGD_P3_AsupanY" name="EMR_pr_IGD_P3_Asupan" class="md-radiobtn" value="Ada perubahan">
+                                    <label for="EMR_pr_IGD_P3_AsupanY">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Ada perubahan </label>
+                                  </div>
+                                  <div class="col-md-12 collapse" id="EMR_pr_IGD_P3_Asupanshow1">
+                                    <div class="md-radio-inline">
+                                      <div class="md-radio">
+                                        <input type="radio" id="EMR_pr_IGD_P3_AsupanYkurang" name="EMR_pr_IGD_P3_AsupanY" class="md-radiobtn" value="<= 5 hari, asupan makan berkurang > 60%">
+                                        <label for="EMR_pr_IGD_P3_AsupanYkurang">
+                                        <span></span>
+                                        <span class="check"></span>
+                                        <span class="box"></span> <= 5 hari, asupan makan berkurang > 60% </label>
+                                      </div>
+                                    </div>
+                                    <div class="md-radio-inline">
+                                      <div class="md-radio">
+                                        <input type="radio" id="EMR_pr_IGD_P3_AsupanYlebih" name="EMR_pr_IGD_P3_AsupanY" class="md-radiobtn" value="> 5 hari, asupan makan berkurang > 60%">
+                                        <label for="EMR_pr_IGD_P3_AsupanYlebih">
+                                        <span></span>
+                                        <span class="check"></span>
+                                        <span class="box"></span> > 5 hari, asupan makan berkurang > 60%  </label>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <span>MEMPUNYAI FAKTOR RESIKO PENYAKIT</span>
+                      <div class="portlet light bordered">
+                        <div class="portlet-body">
+                          <div class="tab-content">
+                            <div class="row" style="display: block; margin-top: 0em; margin-bottom: 0em;">
+                              <div class="tab-content">
+                                <div class="md-radio-inline">
+                                  <div class="md-radio">
+                                    <input type="radio" id="EMR_pr_IGD_P3_PenyakitT" name="EMR_pr_IGD_P3_Penyakit" class="md-radiobtn" value="Tidak ada">
+                                    <label for="EMR_pr_IGD_P3_PenyakitT">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Tidak ada </label>
+                                  </div>
+                                  <div class="md-radio">
+                                    <input type="radio" id="EMR_pr_IGD_P3_PenyakitY" name="EMR_pr_IGD_P3_Penyakit" class="md-radiobtn" value="Ada">
+                                    <label for="EMR_pr_IGD_P3_PenyakitY">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Ada </label>
+                                  </div>
+                                  <div class="col-md-12 collapse" id="EMR_pr_IGD_P3_Penyakitshow1">
+                                    <div class="md-checkbox-inline">
+                                      <div class="md-checkbox col-md-5">
+                                        <input type="checkbox" id="EMR_pr_IGD_P3_PenyakitDiabetes" name="EMR_pr_IGD_P3_Penyakit1" class="md-check" value="Diabetes">
+                                        <label for="EMR_pr_IGD_P3_PenyakitDiabetes">
+                                        <span></span>
+                                        <span class="check"></span>
+                                        <span class="box"></span> Diabetes </label>
+                                      </div>
+                                      <div class="md-checkbox col-md-5">
+                                        <input type="checkbox" id="EMR_pr_IGD_P3_PenyakitHipertensi" name="EMR_pr_IGD_P3_Penyakit1" class="md-check" value="Hipertensi">
+                                        <label for="EMR_pr_IGD_P3_PenyakitHipertensi">
+                                        <span></span>
+                                        <span class="check"></span>
+                                        <span class="box"></span> Hipertensi </label>
+                                      </div>
+                                    </div>
+                                    <div class="md-checkbox-inline">
+                                      <div class="md-checkbox col-md-5">
+                                        <input type="checkbox" id="EMR_pr_IGD_P3_PenyakitLuka bakar" name="EMR_pr_IGD_P3_Penyakit1" class="md-check" value="Luka bakar">
+                                        <label for="EMR_pr_IGD_P3_PenyakitLuka bakar">
+                                        <span></span>
+                                        <span class="check"></span>
+                                        <span class="box"></span> Luka bakar </label>
+                                      </div>
+                                      <div class="md-checkbox col-md-5">
+                                        <input type="checkbox" id="EMR_pr_IGD_P3_PenyakitKanker" name="EMR_pr_IGD_P3_Penyakit1" class="md-check" value="Kanker">
+                                        <label for="EMR_pr_IGD_P3_PenyakitKanker">
+                                        <span></span>
+                                        <span class="check"></span>
+                                        <span class="box"></span> Kanker </label>
+                                      </div>
+                                    </div>
+                                    <div class="md-checkbox-inline">
+                                      <div class="md-checkbox col-md-5">
+                                        <input type="checkbox" id="EMR_pr_IGD_P3_PenyakitDislipidemia" name="EMR_pr_IGD_P3_Penyakit1" class="md-check" value="Dislipidemia">
+                                        <label for="EMR_pr_IGD_P3_PenyakitDislipidemia">
+                                        <span></span>
+                                        <span class="check"></span>
+                                        <span class="box"></span> Dislipidemia </label>
+                                      </div>
+                                      <div class="md-checkbox col-md-5">
+                                        <input type="checkbox" id="EMR_pr_IGD_P3_PenyakitGangguanginjal" name="EMR_pr_IGD_P3_Penyakit1" class="md-check" value="Gangguan ginjal">
+                                        <label for="EMR_pr_IGD_P3_PenyakitGangguanginjal">
+                                        <span></span>
+                                        <span class="check"></span>
+                                        <span class="box"></span> Gangguan ginjal </label>
+                                      </div>
+                                    </div>
+                                    <div class="md-checkbox-inline">
+                                      <div class="md-checkbox col-md-5">
+                                        <input type="checkbox" id="EMR_pr_IGD_P3_PenyakitGangguanhati" name="EMR_pr_IGD_P3_Penyakit1" class="md-check" value="Gangguan hati">
+                                        <label for="EMR_pr_IGD_P3_PenyakitGangguanhati">
+                                        <span></span>
+                                        <span class="check"></span>
+                                        <span class="box"></span> Gangguan hati </label>
+                                      </div>
+                                      <div class="md-checkbox col-md-5">
+                                        <input type="checkbox" id="EMR_pr_IGD_P3_PenyakitGangguanjantung" name="EMR_pr_IGD_P3_Penyakit1" class="md-check" value="Gangguan jantung">
+                                        <label for="EMR_pr_IGD_P3_PenyakitGangguanjantung">
+                                        <span></span>
+                                        <span class="check"></span>
+                                        <span class="box"></span> Gangguan jantung </label>
+                                      </div>
+                                    </div>
+                                    <div class="md-checkbox-inline">
+                                      <div class="md-checkbox col-md-5">
+                                        <input type="checkbox" id="EMR_pr_IGD_P3_PenyakitStroke" name="EMR_pr_IGD_P3_Penyakit1" class="md-check" value="Stroke">
+                                        <label for="EMR_pr_IGD_P3_PenyakitStroke">
+                                        <span></span>
+                                        <span class="check"></span>
+                                        <span class="box"></span> Stroke </label>
+                                      </div>
+                                      <div class="md-checkbox col-md-5">
+                                        <input type="checkbox" id="EMR_pr_IGD_P3_PenyakitGastritis" name="EMR_pr_IGD_P3_Penyakit1" class="md-check" value="Gastritis">
+                                        <label for="EMR_pr_IGD_P3_PenyakitGastritis">
+                                        <span></span>
+                                        <span class="check"></span>
+                                        <span class="box"></span> Gastritis </label>
+                                      </div>
+                                    </div>
+                                    <div class="md-checkbox-inline">
+                                      <div class="md-checkbox col-md-5">
+                                        <input type="checkbox" id="EMR_pr_IGD_P3_PenyakitTyphoid" name="EMR_pr_IGD_P3_Penyakit1" class="md-check" value="Typhoid">
+                                        <label for="EMR_pr_IGD_P3_PenyakitTyphoid">
+                                        <span></span>
+                                        <span class="check"></span>
+                                        <span class="box"></span> Typhoid </label>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <span>TINDAK LANJUT OLEH DIETISIEN</span>
+                      <div class="portlet-body" id="">
+                        <div class="form-group form-md-line-input form-md-floating-label">
+                          <textarea class="form-control" id="EMR_dr_IGD_P1_Dietisientxt" name="EMR_dr_IGD_P1_Dietisientxt" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 70px;"></textarea>
+                          <label for="form_control_1">Restrain Farmakologi</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-12 collapse" id="EMR_pr_IGD_P3_Halaman6">
+                    <div class="col-md-12">
+                      <div class="portlet light portlet-fit bordered">
+                        <div class="portlet-title">
+                          <span><b>Survei</b></span>
+                        </div>
+                        <div class="row portlet-body">
+                          <div class="col-md-12">
+                            <span>Gangguan Perilaku?</span>
+                            <div class="form-group">
+                              <div class="input-group">
+                                <div class="md-radio-inline">
+                                  <div class="md-radio">
+                                    <input type="radio" id="EMR_dr_IGD_P1_MentalY" name="EMR_dr_IGD_P1_Mental" class="md-radiobtn" value="Tidak ada gangguan">
+                                    <label for="EMR_dr_IGD_P1_MentalY">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Tidak ada gangguan </label>
+                                  </div>
+                                  <div class="md-radio">
+                                    <input type="radio" id="EMR_dr_IGD_P1_MentalT" name="EMR_dr_IGD_P1_Mental" class="md-radiobtn" value="Ada gangguan">
+                                    <label for="EMR_dr_IGD_P1_MentalT">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span> Ada gangguan </label>
+                                  </div>
+                                  <div class="col-md-12 collapse" id="EMR_dr_IGD_P1_Mentalshow">
+                                    <span>Hasil Observasi : </span>
+                                    <div class="input-group">
+                                      <div class="row md-checkbox-inline">
+                                        <div class="col-md-12 md-checkbox">
+                                          <div class="row">
+                                            <input type="checkbox" id="EMR_dr_IGD_P1_MentalObservasi1" name="EMR_dr_IGD_P1_MentalObservasi" value="Pasien gelisah atau delirium dan berontak" class="md-check">
+                                            <label for="EMR_dr_IGD_P1_MentalObservasi1">
+                                            <span></span>
+                                            <span class="check"></span>
+                                            <span class="box"></span> Pasien gelisah atau delirium dan berontak </label>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="row md-checkbox-inline">
+                                        <div class="col-md-12 md-checkbox">
+                                          <div class="row">
+                                            <input type="checkbox" id="EMR_dr_IGD_P1_MentalObservasi2" name="EMR_dr_IGD_P1_MentalObservasi" value="Pasien tidak kooperatif" class="md-check">
+                                            <label for="EMR_dr_IGD_P1_MentalObservasi2">
+                                            <span></span>
+                                            <span class="check"></span>
+                                            <span class="box"></span> Pasien tidak kooperatif </label>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="row md-checkbox-inline">
+                                        <div class="col-md-12 md-checkbox">
+                                          <div class="row">
+                                            <input type="checkbox" id="EMR_dr_IGD_P1_MentalObservasi3" name="EMR_dr_IGD_P1_MentalObservasi" value="Ketidakmampuan untuk mengikuti perintah untuk tidak meninggalkan tempat tidur" class="md-check">
+                                            <label for="EMR_dr_IGD_P1_MentalObservasi3">
+                                            <span></span>
+                                            <span class="check"></span>
+                                            <span class="box"></span> Ketidakmampuan untuk mengikuti perintah untuk tidak meninggalkan tempat tidur </label>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div><br>
+                                    <span>Pertimbangan Klinis : </span>
+                                    <div class="input-group">
+                                      <div class="row md-checkbox-inline">
+                                        <div class="col-md-12 md-checkbox">
+                                          <div class="row">
+                                            <input type="checkbox" id="EMR_dr_IGD_P1_MentalPertimbanganklinis1" name="EMR_dr_IGD_P1_MentalPertimbanganklinis" value="Membahayakan diri sendiri" class="md-check">
+                                            <label for="EMR_dr_IGD_P1_MentalPertimbanganklinis1">
+                                            <span></span>
+                                            <span class="check"></span>
+                                            <span class="box"></span> Membahayakan diri sendiri </label>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="row md-checkbox-inline">
+                                        <div class="col-md-12 md-checkbox">
+                                          <div class="row">
+                                            <input type="checkbox" id="EMR_dr_IGD_P1_MentalPertimbanganklinis2" name="EMR_dr_IGD_P1_MentalPertimbanganklinis" value="Membahayakan orang lain" class="md-check">
+                                            <label for="EMR_dr_IGD_P1_MentalPertimbanganklinis2">
+                                            <span></span>
+                                            <span class="check"></span>
+                                            <span class="box"></span> Membahayakan orang lain </label>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div><br>
+                                    <span>Penilaian dan order dokter : </span>
+                                    <div class="input-group">
+                                      <div class="md-radio-inline">
+                                        <div class="col-md-12 md-checkbox">
+                                          <div class="row">
+                                            <input type="checkbox" id="EMR_dr_IGD_P1_MentalRestrain1" name="EMR_dr_IGD_P1_MentalRestrain" value="Restrain non Farmakologi" class="md-check">
+                                            <label for="EMR_dr_IGD_P1_MentalRestrain1">
+                                            <span></span>
+                                            <span class="check"></span>
+                                            <span class="box"></span> Restrain non Farmakologi </label>
+                                          </div>
+                                        </div>
+                                        <div class="col-md-12 collapse" id="EMR_dr_IGD_P1_MentalRestrain1Show">
+                                          <div class="row md-checkbox-inline">
+                                            <div class="col-md-12 md-checkbox">
+                                              <div class="row">
+                                                <input type="checkbox" id="EMR_dr_IGD_P1_MentalNonFarmakologi1" name="EMR_dr_IGD_P1_MentalNonFarmakologi" value="Restrain pergelangan tangan" class="md-check">
+                                                <label for="EMR_dr_IGD_P1_MentalNonFarmakologi1">
+                                                <span></span>
+                                                <span class="check"></span>
+                                                <span class="box"></span> Restrain pergelangan tangan </label>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div class="row md-checkbox-inline">
+                                            <div class="col-md-12 md-checkbox">
+                                              <div class="row">
+                                                <input type="checkbox" id="EMR_dr_IGD_P1_MentalNonFarmakologi2" name="EMR_dr_IGD_P1_MentalNonFarmakologi" value="Restrain pergelangan kaki" class="md-check">
+                                                <label for="EMR_dr_IGD_P1_MentalNonFarmakologi2">
+                                                <span></span>
+                                                <span class="check"></span>
+                                                <span class="box"></span> Restrain pergelangan kaki </label>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div class="row md-checkbox-inline">
+                                            <div class="col-md-12 md-checkbox">
+                                              <div class="row">
+                                                <input type="checkbox" id="EMR_dr_IGD_P1_MentalNonFarmakologi3" name="EMR_dr_IGD_P1_MentalNonFarmakologi" value="Restrain badan" class="md-check">
+                                                <label for="EMR_dr_IGD_P1_MentalNonFarmakologi3">
+                                                <span></span>
+                                                <span class="check"></span>
+                                                <span class="box"></span> Restrain badan </label>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div class="col-md-12">
+                                            <span class="control-label">Lain lain : </span>
+                                            <input type="text" id="EMR_dr_IGD_P1_MentalNonFarmakologi4" name="EMR_dr_IGD_P1_MentalNonFarmakologi4" class="form-control" placeholder="Lain lain">
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="row md-checkbox-inline">
+                                        <div class="col-md-12 md-checkbox">
+                                          <div class="row">
+                                            <input type="checkbox" id="EMR_dr_IGD_P1_MentalRestrain2" name="EMR_dr_IGD_P1_MentalRestrain" value="Restrain Farmakologi" class="md-check">
+                                            <label for="EMR_dr_IGD_P1_MentalRestrain2">
+                                            <span></span>
+                                            <span class="check"></span>
+                                            <span class="box"></span> Restrain Farmakologi </label>
+                                          </div>
+                                        </div>
+                                        <div class="portlet-body collapse" id="EMR_dr_IGD_P1_MentalRestrain2Show">
+                                          <div class="form-group form-md-line-input">
+                                            <textarea class="form-control" id="EMR_dr_IGD_P1_MentalRestrainFarmakologitextarea" name="EMR_dr_IGD_P1_MentalRestrainFarmakologitextarea" rows="5" style="margin-top: 0px; margin-bottom: 0px; height: 70px;"></textarea>
+                                            <label for="form_control_1">Restrain Farmakologi</label>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <center>
+                      <a type="button" class="btn green col-md-6" id="EMR_pr_IGD_P3_btnsimpan" style="width:50%">SIMPAN</a>
+                    </center>
                   </div>
                   <div class="col-md-12">
+                    <br>
                     <div class="btn-group btn-group-circle btn-group-solid" style="width:100%">
                       <button type="button" id="EMR_pr_IGD_P3_HalamanBack" class="btn white" style="width:50%" disabled="true"><< Kembali</button>
                       <button type="button" id="EMR_pr_IGD_P3_HalamanNext" class="btn green" style="width:50%">Lanjutkan >></button>
@@ -1719,265 +2925,270 @@
         <div class="collapse" id="EMR_pr_IGD_P4_Halaman">
           <div class="row">
             <div class="col-md-12">
-              <button type="button" id="EMR_pr_IGD_P4_btnHalaman1" class="btn white col-md-12"> Diagnosis dan Tindakan</button>
+              <button type="button" class="btn white col-md-12"> Input Diagnosis dan Tindakan</button>
             </div>
           </div>
           <div class="row">
             <div class="col-md-12">
               <div class="portlet light bordered form-body">
-                <div class="row">
-                  <div class="col-md-12" id="EMR_pr_IGD_P4_Halaman1">
-                    <div class="col-md-12">
-                      <div class="portlet light portlet-fit bordered">
-                        <div class="portlet-title">
-                          <span><b>Input Diagnosis dan Tindakan</b></span>
-                        </div>
-                        <div class="portlet-body">
-                          <center>
-                            <div class="input-group">
-                                <table border="1" class="col-md-12">
-                                  <hr>
-                                    <td class="col-md-1"><center><b>JAM</b></center></td>
-                                    <td class="col-md-2"><center><b>SISTEM</b></center></td>
-                                    <td class="col-md-4"><center><b>Diagnosa Keperawatan</b></center></td>
-                                    <td class="col-md-4"><center><b>Tindakan</b></center></td>
-                                    <td class="col-md-1"><center><b>Aksi</b></center></td>
-                                  </hr>
-                                  <tr>
-                                    <td style="width:10%"><input type="text" class="form-control timepicker timepicker-24" id="EMR_pr_IGD_JamDT" value="<?=date('H:i');?>"></td>
-                                    <td>
-                                      <select class="bs-select form-control" name="EMR_pr_IGD_Sistem" id="EMR_pr_IGD_Sistem" data-live-search="true" data-size="4">
-                                        <option value='Belum' selected disabled>Pilih Sistem</option>
-                                        <option value='Breathing'>Breathing</option>
-                                        <option value='Blood'>Blood</option>
-                                        <option value='Brain'>Brain</option>
-                                        <option value='Bladder'>Bladder</option>
-                                        <option value='Bowl'>Bowl</option>
-                                        <option value='Bone'>Bone</option>
-                                        <option value='Exposure'>Exposure</option>
-                                      </select>
-                                    </td>
-                                    <td id="EMR_pr_IGD_D_Belum">
-                                      <select class="bs-select form-control" name="" id="" data-live-search="true" data-size="8">
-                                        <option value=''>Sistem belum dipilih</option>
-                                      </select>
-                                    </td>
-                                    <td id="EMR_pr_IGD_D_input" class="collapse">
-                                      <input type="text" class="form-control" id="EMR_pr_IGD_Diagnosa_Input" style="width:70%"><a class="btn green" id="EMR_pr_IGD_D_btnChange" style="width:30%"><i class="fa fa-arrow-left"></i></a>
-                                    </td>
-                                    <td id="EMR_pr_IGD_D_Breathing" class="collapse">
-                                      <select class="bs-select form-control" name="EMR_pr_IGD_Diagnosa_Breathing" id="EMR_pr_IGD_Diagnosa_Breathing" data-live-search="true" data-size="4">
-                                        <option value='' selected disabled>Pilih Diagnosa</option>
-                                        <?php
-                                        $jmlbarisD_b = $this->db->get("EMR_IGD_DIAGNOSA_PERAWAT where SISTEM = 'Breathing'")->num_rows();
-                                        $D_breathing = $this->db->get("EMR_IGD_DIAGNOSA_PERAWAT where SISTEM = 'Breathing'");
-                                        for($D_ = 0; $D_ < $jmlbarisD_b; $D_++)
-                                        {?>
-                                          <option value='<?=$D_breathing->row($D_)->DIAGNOSA;?>'><?=$D_breathing->row($D_)->DIAGNOSA;?></option>
-                                        <?php }
-                                         ?>
-                                         <option value='Tambah'>Tambah</option>
-                                      </select>
-                                    </td>
-                                    <td id="EMR_pr_IGD_D_Blood" class="collapse">
-                                      <select class="bs-select form-control" name="EMR_pr_IGD_Diagnosa_Blood" id="EMR_pr_IGD_Diagnosa_Blood" data-live-search="true" data-size="4">
-                                        <option value='' selected disabled>Pilih Diagnosa</option>
-                                        <?php
-                                        $jmlbarisD_b = $this->db->get("EMR_IGD_DIAGNOSA_PERAWAT where SISTEM = 'Blood'")->num_rows();
-                                        $D_breathing = $this->db->get("EMR_IGD_DIAGNOSA_PERAWAT where SISTEM = 'Blood'");
-                                        for($D_ = 0; $D_ < $jmlbarisD_b; $D_++)
-                                        {?>
-                                          <option value='<?=$D_breathing->row($D_)->DIAGNOSA;?>'><?=$D_breathing->row($D_)->DIAGNOSA;?></option>
-                                        <?php }
-                                         ?>
-                                         <option value='Tambah'>Tambah</option>
-                                      </select>
-                                    </td>
-                                    <td id="EMR_pr_IGD_D_Brain" class="collapse">
-                                      <select class="bs-select form-control" name="EMR_pr_IGD_Diagnosa_Brain" id="EMR_pr_IGD_Diagnosa_Brain" data-live-search="true" data-size="8">
-                                        <option value='' selected disabled>Pilih Diagnosa</option>
-                                        <?php
-                                        $jmlbarisD_b = $this->db->get("EMR_IGD_DIAGNOSA_PERAWAT where SISTEM = 'Brain'")->num_rows();
-                                        $D_breathing = $this->db->get("EMR_IGD_DIAGNOSA_PERAWAT where SISTEM = 'Brain'");
-                                        for($D_ = 0; $D_ < $jmlbarisD_b; $D_++)
-                                        {?>
-                                          <option value='<?=$D_breathing->row($D_)->DIAGNOSA;?>'><?=$D_breathing->row($D_)->DIAGNOSA;?></option>
-                                        <?php }
-                                         ?>
-                                         <option value='Tambah'>Tambah</option>
-                                      </select>
-                                    </td>
-                                    <td id="EMR_pr_IGD_D_Bladder" class="collapse">
-                                      <select class="bs-select form-control" name="EMR_pr_IGD_Diagnosa_Bladder" id="EMR_pr_IGD_Diagnosa_Bladder" data-live-search="true" data-size="8">
-                                        <option value='' selected disabled>Pilih Diagnosa</option>
-                                        <?php
-                                        $jmlbarisD_b = $this->db->get("EMR_IGD_DIAGNOSA_PERAWAT where SISTEM = 'Bladder'")->num_rows();
-                                        $D_breathing = $this->db->get("EMR_IGD_DIAGNOSA_PERAWAT where SISTEM = 'Bladder'");
-                                        for($D_ = 0; $D_ < $jmlbarisD_b; $D_++)
-                                        {?>
-                                          <option value='<?=$D_breathing->row($D_)->DIAGNOSA;?>'><?=$D_breathing->row($D_)->DIAGNOSA;?></option>
-                                        <?php }
-                                         ?>
-                                         <option value='Tambah'>Tambah</option>
-                                      </select>
-                                    </td>
-                                    <td id="EMR_pr_IGD_D_Bowl" class="collapse">
-                                      <select class="bs-select form-control" name="EMR_pr_IGD_Diagnosa_Bowl" id="EMR_pr_IGD_Diagnosa_Bowl" data-live-search="true" data-size="8">
-                                        <option value='' selected disabled>Pilih Diagnosa</option>
-                                        <?php
-                                        $jmlbarisD_b = $this->db->get("EMR_IGD_DIAGNOSA_PERAWAT where SISTEM = 'Bowl'")->num_rows();
-                                        $D_breathing = $this->db->get("EMR_IGD_DIAGNOSA_PERAWAT where SISTEM = 'Bowl'");
-                                        for($D_ = 0; $D_ < $jmlbarisD_b; $D_++)
-                                        {?>
-                                          <option value='<?=$D_breathing->row($D_)->DIAGNOSA;?>'><?=$D_breathing->row($D_)->DIAGNOSA;?></option>
-                                        <?php }
-                                         ?>
-                                         <option value='Tambah'>Tambah</option>
-                                      </select>
-                                    </td>
-                                    <td id="EMR_pr_IGD_D_Bone" class="collapse">
-                                      <select class="bs-select form-control" name="EMR_pr_IGD_Diagnosa_Bone" id="EMR_pr_IGD_Diagnosa_Bone" data-live-search="true" data-size="8">
-                                        <option value='' selected disabled>Pilih Diagnosa</option>
-                                        <?php
-                                        $jmlbarisD_b = $this->db->get("EMR_IGD_DIAGNOSA_PERAWAT where SISTEM = 'Bone'")->num_rows();
-                                        $D_breathing = $this->db->get("EMR_IGD_DIAGNOSA_PERAWAT where SISTEM = 'Bone'");
-                                        for($D_ = 0; $D_ < $jmlbarisD_b; $D_++)
-                                        {?>
-                                          <option value='<?=$D_breathing->row($D_)->DIAGNOSA;?>'><?=$D_breathing->row($D_)->DIAGNOSA;?></option>
-                                        <?php }
-                                         ?>
-                                         <option value='Tambah'>Tambah</option>
-                                      </select>
-                                    </td>
-                                    <td id="EMR_pr_IGD_D_Exposure" class="collapse">
-                                      <select class="bs-select form-control" name="EMR_pr_IGD_Diagnosa_Exposure" id="EMR_pr_IGD_Diagnosa_Exposure" data-live-search="true" data-size="8">
-                                        <option value='' selected disabled>Pilih Diagnosa</option>
-                                        <?php
-                                        $jmlbarisD_b = $this->db->get("EMR_IGD_DIAGNOSA_PERAWAT where SISTEM = 'Exposure'")->num_rows();
-                                        $D_breathing = $this->db->get("EMR_IGD_DIAGNOSA_PERAWAT where SISTEM = 'Exposure'");
-                                        for($D_ = 0; $D_ < $jmlbarisD_b; $D_++)
-                                        {?>
-                                          <option value='<?=$D_breathing->row($D_)->DIAGNOSA;?>'><?=$D_breathing->row($D_)->DIAGNOSA;?></option>
-                                        <?php }
-                                         ?>
-                                         <option value='Tambah'>Tambah</option>
-                                      </select>
-                                    </td>
-                                    <td id="EMR_pr_IGD_T_Belum">
-                                      <select class="bs-select form-control" name="" id="" data-live-search="true" data-size="8">
-                                        <option value=''>Sistem belum dipilih</option>
-                                      </select>
-                                    </td>
-                                    <td id="EMR_pr_IGD_T_input" class="collapse">
-                                      <input type="text" class="form-control" id="EMR_pr_IGD_Tindakan_Input" style="width:70%"><a class="btn green" id="EMR_pr_IGD_T_btnChange" style="width:30%"><i class="fa fa-arrow-left"></i></a>
-                                    </td>
-                                    <td id="EMR_pr_IGD_T_Breathing" class="collapse">
-                                      <select class="bs-select form-control" name="EMR_pr_IGD_Tindakan_Breathing" id="EMR_pr_IGD_Tindakan_Breathing" data-live-search="true" data-size="8">
-                                        <option value='' selected disabled>Pilih Tindakan</option>
-                                        <?php
-                                        $jmlbarisT_b = $this->db->get("EMR_IGD_TINDAKAN_PERAWAT where SISTEM = 'Breathing'")->num_rows();
-                                        $T_breathing = $this->db->get("EMR_IGD_TINDAKAN_PERAWAT where SISTEM = 'Breathing'");
-                                        for($T_ = 0; $T_ < $jmlbarisT_b; $T_++)
-                                        {?>
-                                          <option value='<?=$T_breathing->row($T_)->TINDAKAN;?>'><?=$T_breathing->row($T_)->TINDAKAN;?></option>
-                                        <?php }
-                                         ?>
-                                         <option value='Tambah'>Tambah</option>
-                                      </select>
-                                    </td>
-                                    <td id="EMR_pr_IGD_T_Blood" class="collapse">
-                                      <select class="bs-select form-control" name="EMR_pr_IGD_Tindakan_Blood" id="EMR_pr_IGD_Tindakan_Blood" data-live-search="true" data-size="8">
-                                        <option value='' selected disabled>Pilih Tindakan</option>
-                                        <?php
-                                        $jmlbarisT_b = $this->db->get("EMR_IGD_TINDAKAN_PERAWAT where SISTEM = 'Blood'")->num_rows();
-                                        $T_breathing = $this->db->get("EMR_IGD_TINDAKAN_PERAWAT where SISTEM = 'Blood'");
-                                        for($T_ = 0; $T_ < $jmlbarisT_b; $T_++)
-                                        {?>
-                                          <option value='<?=$T_breathing->row($T_)->TINDAKAN;?>'><?=$T_breathing->row($T_)->TINDAKAN;?></option>
-                                        <?php }
-                                         ?>
-                                         <option value='Tambah'>Tambah</option>
-                                      </select>
-                                    </td>
-                                    <td id="EMR_pr_IGD_T_Brain" class="collapse">
-                                      <select class="bs-select form-control" name="EMR_pr_IGD_Tindakan_Brain" id="EMR_pr_IGD_Tindakan_Brain" data-live-search="true" data-size="8">
-                                        <option value='' selected disabled>Pilih Tindakan</option>
-                                        <?php
-                                        $jmlbarisT_b = $this->db->get("EMR_IGD_TINDAKAN_PERAWAT where SISTEM = 'Brain'")->num_rows();
-                                        $T_breathing = $this->db->get("EMR_IGD_TINDAKAN_PERAWAT where SISTEM = 'Brain'");
-                                        for($T_ = 0; $T_ < $jmlbarisT_b; $T_++)
-                                        {?>
-                                          <option value='<?=$T_breathing->row($T_)->TINDAKAN;?>'><?=$T_breathing->row($T_)->TINDAKAN;?></option>
-                                        <?php }
-                                         ?>
-                                         <option value='Tambah'>Tambah</option>
-                                      </select>
-                                    </td>
-                                    <td id="EMR_pr_IGD_T_Bladder" class="collapse">
-                                      <select class="bs-select form-control" name="EMR_pr_IGD_Tindakan_Bladder" id="EMR_pr_IGD_Tindakan_Bladder" data-live-search="true" data-size="8">
-                                        <option value='' selected disabled>Pilih Tindakan</option>
-                                        <?php
-                                        $jmlbarisT_b = $this->db->get("EMR_IGD_TINDAKAN_PERAWAT where SISTEM = 'Bladder'")->num_rows();
-                                        $T_breathing = $this->db->get("EMR_IGD_TINDAKAN_PERAWAT where SISTEM = 'Bladder'");
-                                        for($T_ = 0; $T_ < $jmlbarisT_b; $T_++)
-                                        {?>
-                                          <option value='<?=$T_breathing->row($T_)->TINDAKAN;?>'><?=$T_breathing->row($T_)->TINDAKAN;?></option>
-                                        <?php }
-                                         ?>
-                                         <option value='Tambah'>Tambah</option>
-                                      </select>
-                                    </td>
-                                    <td id="EMR_pr_IGD_T_Bowl" class="collapse">
-                                      <select class="bs-select form-control" name="EMR_pr_IGD_Tindakan_Bowl" id="EMR_pr_IGD_Tindakan_Bowl" data-live-search="true" data-size="8">
-                                        <option value='' selected disabled>Pilih Tindakan</option>
-                                        <?php
-                                        $jmlbarisT_b = $this->db->get("EMR_IGD_TINDAKAN_PERAWAT where SISTEM = 'Bowl'")->num_rows();
-                                        $T_breathing = $this->db->get("EMR_IGD_TINDAKAN_PERAWAT where SISTEM = 'Bowl'");
-                                        for($T_ = 0; $T_ < $jmlbarisT_b; $T_++)
-                                        {?>
-                                          <option value='<?=$T_breathing->row($T_)->TINDAKAN;?>'><?=$T_breathing->row($T_)->TINDAKAN;?></option>
-                                        <?php }
-                                         ?>
-                                         <option value='Tambah'>Tambah</option>
-                                      </select>
-                                    </td>
-                                    <td id="EMR_pr_IGD_T_Bone" class="collapse">
-                                      <select class="bs-select form-control" name="EMR_pr_IGD_Tindakan_Bone" id="EMR_pr_IGD_Tindakan_Bone" data-live-search="true" data-size="8">
-                                        <option value='' selected disabled>Pilih Tindakan</option>
-                                        <?php
-                                        $jmlbarisT_b = $this->db->get("EMR_IGD_TINDAKAN_PERAWAT where SISTEM = 'Bone'")->num_rows();
-                                        $T_breathing = $this->db->get("EMR_IGD_TINDAKAN_PERAWAT where SISTEM = 'Bone'");
-                                        for($T_ = 0; $T_ < $jmlbarisT_b; $T_++)
-                                        {?>
-                                          <option value='<?=$T_breathing->row($T_)->TINDAKAN;?>'><?=$T_breathing->row($T_)->TINDAKAN;?></option>
-                                        <?php }
-                                         ?>
-                                         <option value='Tambah'>Tambah</option>
-                                      </select>
-                                    </td>
-                                    <td id="EMR_pr_IGD_D_Exposure" class="collapse">
-                                      <select class="bs-select form-control" name="EMR_pr_IGD_Tindakan_Exposure" id="EMR_pr_IGD_Tindakan_Exposure" data-live-search="true" data-size="8">
-                                        <option value='' selected disabled>Pilih Tindakan</option>
-                                        <?php
-                                        $jmlbarisT_b = $this->db->get("EMR_IGD_TINDAKAN_PERAWAT where SISTEM = 'Exposure'")->num_rows();
-                                        $T_breathing = $this->db->get("EMR_IGD_TINDAKAN_PERAWAT where SISTEM = 'Exposure'");
-                                        for($T_ = 0; $T_ < $jmlbarisT_b; $T_++)
-                                        {?>
-                                          <option value='<?=$T_breathing->row($T_)->TINDAKAN;?>'><?=$T_breathing->row($T_)->TINDAKAN;?></option>
-                                        <?php }
-                                         ?>
-                                         <option value='Tambah'>Tambah</option>
-                                      </select>
-                                    </td>
-                                    <td>
-                                      <a type="button" class="btn green" style="width:100%" id="EMR_pr_IGD_btnTambahDNT"><i class="fa fa-plus"></i></a>
-                                    </td>
-                                  </tr>
-                                </table>
-                            </div>
-                          </ceter>
-                        </div>
-                      </div>
+                <div class="portlet-body row">
+                  <div class="col-md-12">
+                    <center>
+                      <table border="1" class="col-md-12">
+                        <hr>
+                          <td class="col-md-1"><center><b>JAM</b></center></td>
+                          <td class="col-md-2"><center><b>SISTEM</b></center></td>
+                          <td class="col-md-4"><center><b>Diagnosa Keperawatan</b></center></td>
+                          <td class="col-md-4"><center><b>Tindakan</b></center></td>
+                          <td class="col-md-1"><center><b>Aksi</b></center></td>
+                        </hr>
+                        <tr>
+                          <td style="width:10%"><input type="text" class="form-control timepicker timepicker-24" id="EMR_pr_IGD_JamDT" value="<?=date('H:i');?>"></td>
+                          <td>
+                            <select class="bs-select form-control" name="EMR_pr_IGD_Sistem" id="EMR_pr_IGD_Sistem" data-live-search="true" data-size="4">
+                              <option value='Belum' selected disabled>Pilih Sistem</option>
+                              <option value='Breathing'>Breathing</option>
+                              <option value='Blood'>Blood</option>
+                              <option value='Brain'>Brain</option>
+                              <option value='Bladder'>Bladder</option>
+                              <option value='Bowl'>Bowl</option>
+                              <option value='Bone'>Bone</option>
+                              <option value='Exposure'>Exposure</option>
+                            </select>
+                          </td>
+                          <td id="EMR_pr_IGD_D_Belum">
+                            <select class="bs-select form-control" name="" id="" data-live-search="true" data-size="8">
+                              <option value=''>Sistem belum dipilih</option>
+                            </select>
+                          </td>
+                          <td id="EMR_pr_IGD_D_input" class="collapse">
+                            <input type="text" class="form-control" id="EMR_pr_IGD_Diagnosa_Input" style="width:70%"><a class="btn green" id="EMR_pr_IGD_D_btnChange" style="width:30%"><i class="fa fa-arrow-left"></i></a>
+                          </td>
+                          <td id="EMR_pr_IGD_D_Breathing" class="collapse">
+                            <select class="bs-select form-control" name="EMR_pr_IGD_Diagnosa_Breathing" id="EMR_pr_IGD_Diagnosa_Breathing" data-live-search="true" data-size="4">
+                              <option value='' selected disabled>Pilih Diagnosa</option>
+                              <?php
+                              $jmlbarisD_b = $this->db->get("EMR_IGD_DIAGNOSA_PERAWAT where SISTEM = 'Breathing'")->num_rows();
+                              $D_breathing = $this->db->get("EMR_IGD_DIAGNOSA_PERAWAT where SISTEM = 'Breathing'");
+                              for($D_ = 0; $D_ < $jmlbarisD_b; $D_++)
+                              {?>
+                                <option value='<?=$D_breathing->row($D_)->DIAGNOSA;?>'><?=$D_breathing->row($D_)->DIAGNOSA;?></option>
+                              <?php }
+                               ?>
+                               <option value='Tambah'>Tambah</option>
+                            </select>
+                          </td>
+                          <td id="EMR_pr_IGD_D_Blood" class="collapse">
+                            <select class="bs-select form-control" name="EMR_pr_IGD_Diagnosa_Blood" id="EMR_pr_IGD_Diagnosa_Blood" data-live-search="true" data-size="4">
+                              <option value='' selected disabled>Pilih Diagnosa</option>
+                              <?php
+                              $jmlbarisD_b = $this->db->get("EMR_IGD_DIAGNOSA_PERAWAT where SISTEM = 'Blood'")->num_rows();
+                              $D_breathing = $this->db->get("EMR_IGD_DIAGNOSA_PERAWAT where SISTEM = 'Blood'");
+                              for($D_ = 0; $D_ < $jmlbarisD_b; $D_++)
+                              {?>
+                                <option value='<?=$D_breathing->row($D_)->DIAGNOSA;?>'><?=$D_breathing->row($D_)->DIAGNOSA;?></option>
+                              <?php }
+                               ?>
+                               <option value='Tambah'>Tambah</option>
+                            </select>
+                          </td>
+                          <td id="EMR_pr_IGD_D_Brain" class="collapse">
+                            <select class="bs-select form-control" name="EMR_pr_IGD_Diagnosa_Brain" id="EMR_pr_IGD_Diagnosa_Brain" data-live-search="true" data-size="8">
+                              <option value='' selected disabled>Pilih Diagnosa</option>
+                              <?php
+                              $jmlbarisD_b = $this->db->get("EMR_IGD_DIAGNOSA_PERAWAT where SISTEM = 'Brain'")->num_rows();
+                              $D_breathing = $this->db->get("EMR_IGD_DIAGNOSA_PERAWAT where SISTEM = 'Brain'");
+                              for($D_ = 0; $D_ < $jmlbarisD_b; $D_++)
+                              {?>
+                                <option value='<?=$D_breathing->row($D_)->DIAGNOSA;?>'><?=$D_breathing->row($D_)->DIAGNOSA;?></option>
+                              <?php }
+                               ?>
+                               <option value='Tambah'>Tambah</option>
+                            </select>
+                          </td>
+                          <td id="EMR_pr_IGD_D_Bladder" class="collapse">
+                            <select class="bs-select form-control" name="EMR_pr_IGD_Diagnosa_Bladder" id="EMR_pr_IGD_Diagnosa_Bladder" data-live-search="true" data-size="8">
+                              <option value='' selected disabled>Pilih Diagnosa</option>
+                              <?php
+                              $jmlbarisD_b = $this->db->get("EMR_IGD_DIAGNOSA_PERAWAT where SISTEM = 'Bladder'")->num_rows();
+                              $D_breathing = $this->db->get("EMR_IGD_DIAGNOSA_PERAWAT where SISTEM = 'Bladder'");
+                              for($D_ = 0; $D_ < $jmlbarisD_b; $D_++)
+                              {?>
+                                <option value='<?=$D_breathing->row($D_)->DIAGNOSA;?>'><?=$D_breathing->row($D_)->DIAGNOSA;?></option>
+                              <?php }
+                               ?>
+                               <option value='Tambah'>Tambah</option>
+                            </select>
+                          </td>
+                          <td id="EMR_pr_IGD_D_Bowl" class="collapse">
+                            <select class="bs-select form-control" name="EMR_pr_IGD_Diagnosa_Bowl" id="EMR_pr_IGD_Diagnosa_Bowl" data-live-search="true" data-size="8">
+                              <option value='' selected disabled>Pilih Diagnosa</option>
+                              <?php
+                              $jmlbarisD_b = $this->db->get("EMR_IGD_DIAGNOSA_PERAWAT where SISTEM = 'Bowl'")->num_rows();
+                              $D_breathing = $this->db->get("EMR_IGD_DIAGNOSA_PERAWAT where SISTEM = 'Bowl'");
+                              for($D_ = 0; $D_ < $jmlbarisD_b; $D_++)
+                              {?>
+                                <option value='<?=$D_breathing->row($D_)->DIAGNOSA;?>'><?=$D_breathing->row($D_)->DIAGNOSA;?></option>
+                              <?php }
+                               ?>
+                               <option value='Tambah'>Tambah</option>
+                            </select>
+                          </td>
+                          <td id="EMR_pr_IGD_D_Bone" class="collapse">
+                            <select class="bs-select form-control" name="EMR_pr_IGD_Diagnosa_Bone" id="EMR_pr_IGD_Diagnosa_Bone" data-live-search="true" data-size="8">
+                              <option value='' selected disabled>Pilih Diagnosa</option>
+                              <?php
+                              $jmlbarisD_b = $this->db->get("EMR_IGD_DIAGNOSA_PERAWAT where SISTEM = 'Bone'")->num_rows();
+                              $D_breathing = $this->db->get("EMR_IGD_DIAGNOSA_PERAWAT where SISTEM = 'Bone'");
+                              for($D_ = 0; $D_ < $jmlbarisD_b; $D_++)
+                              {?>
+                                <option value='<?=$D_breathing->row($D_)->DIAGNOSA;?>'><?=$D_breathing->row($D_)->DIAGNOSA;?></option>
+                              <?php }
+                               ?>
+                               <option value='Tambah'>Tambah</option>
+                            </select>
+                          </td>
+                          <td id="EMR_pr_IGD_D_Exposure" class="collapse">
+                            <select class="bs-select form-control" name="EMR_pr_IGD_Diagnosa_Exposure" id="EMR_pr_IGD_Diagnosa_Exposure" data-live-search="true" data-size="8">
+                              <option value='' selected disabled>Pilih Diagnosa</option>
+                              <?php
+                              $jmlbarisD_b = $this->db->get("EMR_IGD_DIAGNOSA_PERAWAT where SISTEM = 'Exposure'")->num_rows();
+                              $D_breathing = $this->db->get("EMR_IGD_DIAGNOSA_PERAWAT where SISTEM = 'Exposure'");
+                              for($D_ = 0; $D_ < $jmlbarisD_b; $D_++)
+                              {?>
+                                <option value='<?=$D_breathing->row($D_)->DIAGNOSA;?>'><?=$D_breathing->row($D_)->DIAGNOSA;?></option>
+                              <?php }
+                               ?>
+                               <option value='Tambah'>Tambah</option>
+                            </select>
+                          </td>
+                          <td id="EMR_pr_IGD_T_Belum">
+                            <select class="bs-select form-control" name="" id="" data-live-search="true" data-size="8">
+                              <option value=''>Sistem belum dipilih</option>
+                            </select>
+                          </td>
+                          <td id="EMR_pr_IGD_T_input" class="collapse">
+                            <input type="text" class="form-control" id="EMR_pr_IGD_Tindakan_Input" style="width:70%"><a class="btn green" id="EMR_pr_IGD_T_btnChange" style="width:30%"><i class="fa fa-arrow-left"></i></a>
+                          </td>
+                          <td id="EMR_pr_IGD_T_Breathing" class="collapse">
+                            <select class="bs-select form-control" name="EMR_pr_IGD_Tindakan_Breathing" id="EMR_pr_IGD_Tindakan_Breathing" data-live-search="true" data-size="8">
+                              <option value='' selected disabled>Pilih Tindakan</option>
+                              <?php
+                              $jmlbarisT_b = $this->db->get("EMR_IGD_TINDAKAN_PERAWAT where SISTEM = 'Breathing'")->num_rows();
+                              $T_breathing = $this->db->get("EMR_IGD_TINDAKAN_PERAWAT where SISTEM = 'Breathing'");
+                              for($T_ = 0; $T_ < $jmlbarisT_b; $T_++)
+                              {?>
+                                <option value='<?=$T_breathing->row($T_)->TINDAKAN;?>'><?=$T_breathing->row($T_)->TINDAKAN;?></option>
+                              <?php }
+                               ?>
+                               <option value='Tambah'>Tambah</option>
+                            </select>
+                          </td>
+                          <td id="EMR_pr_IGD_T_Blood" class="collapse">
+                            <select class="bs-select form-control" name="EMR_pr_IGD_Tindakan_Blood" id="EMR_pr_IGD_Tindakan_Blood" data-live-search="true" data-size="8">
+                              <option value='' selected disabled>Pilih Tindakan</option>
+                              <?php
+                              $jmlbarisT_b = $this->db->get("EMR_IGD_TINDAKAN_PERAWAT where SISTEM = 'Blood'")->num_rows();
+                              $T_breathing = $this->db->get("EMR_IGD_TINDAKAN_PERAWAT where SISTEM = 'Blood'");
+                              for($T_ = 0; $T_ < $jmlbarisT_b; $T_++)
+                              {?>
+                                <option value='<?=$T_breathing->row($T_)->TINDAKAN;?>'><?=$T_breathing->row($T_)->TINDAKAN;?></option>
+                              <?php }
+                               ?>
+                               <option value='Tambah'>Tambah</option>
+                            </select>
+                          </td>
+                          <td id="EMR_pr_IGD_T_Brain" class="collapse">
+                            <select class="bs-select form-control" name="EMR_pr_IGD_Tindakan_Brain" id="EMR_pr_IGD_Tindakan_Brain" data-live-search="true" data-size="8">
+                              <option value='' selected disabled>Pilih Tindakan</option>
+                              <?php
+                              $jmlbarisT_b = $this->db->get("EMR_IGD_TINDAKAN_PERAWAT where SISTEM = 'Brain'")->num_rows();
+                              $T_breathing = $this->db->get("EMR_IGD_TINDAKAN_PERAWAT where SISTEM = 'Brain'");
+                              for($T_ = 0; $T_ < $jmlbarisT_b; $T_++)
+                              {?>
+                                <option value='<?=$T_breathing->row($T_)->TINDAKAN;?>'><?=$T_breathing->row($T_)->TINDAKAN;?></option>
+                              <?php }
+                               ?>
+                               <option value='Tambah'>Tambah</option>
+                            </select>
+                          </td>
+                          <td id="EMR_pr_IGD_T_Bladder" class="collapse">
+                            <select class="bs-select form-control" name="EMR_pr_IGD_Tindakan_Bladder" id="EMR_pr_IGD_Tindakan_Bladder" data-live-search="true" data-size="8">
+                              <option value='' selected disabled>Pilih Tindakan</option>
+                              <?php
+                              $jmlbarisT_b = $this->db->get("EMR_IGD_TINDAKAN_PERAWAT where SISTEM = 'Bladder'")->num_rows();
+                              $T_breathing = $this->db->get("EMR_IGD_TINDAKAN_PERAWAT where SISTEM = 'Bladder'");
+                              for($T_ = 0; $T_ < $jmlbarisT_b; $T_++)
+                              {?>
+                                <option value='<?=$T_breathing->row($T_)->TINDAKAN;?>'><?=$T_breathing->row($T_)->TINDAKAN;?></option>
+                              <?php }
+                               ?>
+                               <option value='Tambah'>Tambah</option>
+                            </select>
+                          </td>
+                          <td id="EMR_pr_IGD_T_Bowl" class="collapse">
+                            <select class="bs-select form-control" name="EMR_pr_IGD_Tindakan_Bowl" id="EMR_pr_IGD_Tindakan_Bowl" data-live-search="true" data-size="8">
+                              <option value='' selected disabled>Pilih Tindakan</option>
+                              <?php
+                              $jmlbarisT_b = $this->db->get("EMR_IGD_TINDAKAN_PERAWAT where SISTEM = 'Bowl'")->num_rows();
+                              $T_breathing = $this->db->get("EMR_IGD_TINDAKAN_PERAWAT where SISTEM = 'Bowl'");
+                              for($T_ = 0; $T_ < $jmlbarisT_b; $T_++)
+                              {?>
+                                <option value='<?=$T_breathing->row($T_)->TINDAKAN;?>'><?=$T_breathing->row($T_)->TINDAKAN;?></option>
+                              <?php }
+                               ?>
+                               <option value='Tambah'>Tambah</option>
+                            </select>
+                          </td>
+                          <td id="EMR_pr_IGD_T_Bone" class="collapse">
+                            <select class="bs-select form-control" name="EMR_pr_IGD_Tindakan_Bone" id="EMR_pr_IGD_Tindakan_Bone" data-live-search="true" data-size="8">
+                              <option value='' selected disabled>Pilih Tindakan</option>
+                              <?php
+                              $jmlbarisT_b = $this->db->get("EMR_IGD_TINDAKAN_PERAWAT where SISTEM = 'Bone'")->num_rows();
+                              $T_breathing = $this->db->get("EMR_IGD_TINDAKAN_PERAWAT where SISTEM = 'Bone'");
+                              for($T_ = 0; $T_ < $jmlbarisT_b; $T_++)
+                              {?>
+                                <option value='<?=$T_breathing->row($T_)->TINDAKAN;?>'><?=$T_breathing->row($T_)->TINDAKAN;?></option>
+                              <?php }
+                               ?>
+                               <option value='Tambah'>Tambah</option>
+                            </select>
+                          </td>
+                          <td id="EMR_pr_IGD_D_Exposure" class="collapse">
+                            <select class="bs-select form-control" name="EMR_pr_IGD_Tindakan_Exposure" id="EMR_pr_IGD_Tindakan_Exposure" data-live-search="true" data-size="8">
+                              <option value='' selected disabled>Pilih Tindakan</option>
+                              <?php
+                              $jmlbarisT_b = $this->db->get("EMR_IGD_TINDAKAN_PERAWAT where SISTEM = 'Exposure'")->num_rows();
+                              $T_breathing = $this->db->get("EMR_IGD_TINDAKAN_PERAWAT where SISTEM = 'Exposure'");
+                              for($T_ = 0; $T_ < $jmlbarisT_b; $T_++)
+                              {?>
+                                <option value='<?=$T_breathing->row($T_)->TINDAKAN;?>'><?=$T_breathing->row($T_)->TINDAKAN;?></option>
+                              <?php }
+                               ?>
+                               <option value='Tambah'>Tambah</option>
+                            </select>
+                          </td>
+                          <td>
+                            <a type="button" class="btn green" style="width:100%" id="EMR_pr_IGD_btnTambahDNT"><i class="fa fa-plus"></i></a>
+                          </td>
+                        </tr>
+                      </table>
+                    </ceter>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <button type="button" class="btn white col-md-12"> View Diagnosis dan Tindakan Pasien : <?=$nama;?></button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="portlet light bordered form-body">
+                <div class="portlet-body row">
+                  <div class="col-md-12">
                       <table class="table table-striped table-bordered table-advance table-hover">
                         <thead id="EMR_pr_IGD_DTtableatas">
                           <tr>
@@ -1993,11 +3204,9 @@
                         </thead>
                         <tbody id="EMR_pr_IGD_DTtableshow">
                           <?php
-                          $cekidpemeriksaan = $this->db->get("EMR_UTAMA_PERIKSA where NOREG ='$noreg'")->row()->ID_PEMERIKSAAN;
                           $cekisiDT = $this->db->query("select * from EMR_D_DAN_T_PERAWAT where ID_PEMERIKSAAN ='$cekidpemeriksaan'")->num_rows();
                           if($cekisiDT == 0)
                           {?>
-
                             <tr id="EMR_pr_IGD_showtabelDT">
                               <td colspan="5"><center>Data Belum ada</center></td>
                             </tr>
@@ -2022,10 +3231,8 @@
                           <input type="hidden" id="EMR_pr_IGD_sistemDT">
                           <input type="hidden" id="EMR_pr_IGD_diagnosaDT">
                           <input type="hidden" id="EMR_pr_IGD_tindakanDT">
-                          <input type="hidden" id="EMR_pr_IGD_idper" value="<?=$cekidpemeriksaan;?>">
                         </tbody>
                       </table>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -2035,22 +3242,20 @@
         <div class="collapse" id="EMR_pr_IGD_P5_Halaman">
           <div class="row">
             <div class="col-md-12">
-              <button type="button" id="EMR_pr_IGD_P5_btnHalaman1" class="btn white col-md-10">1. Penatalaksanaan</button>
-              <button type="button" id="EMR_pr_IGD_P5_btnHalaman2" class="btn green col-md-2">2</button>
+              <button type="button" class="btn white col-md-12">Penatalaksanaan</button>
             </div>
           </div>
           <div class="row">
             <div class="col-md-12">
               <div class="portlet light bordered form-body">
                 <div class="row">
-                  <div class="col-md-12" id="EMR_pr_IGD_P5_Halaman1">
+                  <div class="col-md-12">
                     <table class="table table-striped table-bordered table-advance table-hover">
                       <thead>
                         <tr>
-                          <th class="col-md-1">NO</th>
                           <th class="col-md-1">
                             <i class="fa fa-clock-o"></i> Jam </th>
-                          <th class="colmd-3">
+                          <th class="colmd-4">
                             <i class="fa fa-heartbeat"></i> Nama Obat/infus </th>
                           <th class="col-md-3">
                             <i class="fa fa-stethoscope"></i> Dosis </th>
@@ -2062,24 +3267,26 @@
                       </thead>
                       <tbody>
                         <?php
-                        $cekisiDT = $this->db->query("select * from EMR_D_DAN_T_PERAWAT n, EMR_UTAMA_PERIKSA m where n.ID_PEMERIKSAAN = m.ID_PEMERIKSAAN and m.NOREG = '$noreg'")->num_rows();
-                        if($cekisiDT == 0)
+                        $cekisiPl = $this->db->query("select * from EMR_IGD_PENATALAKSANAAN where ID_PEMERIKSAAN = '$cekidpemeriksaan'")->num_rows();
+                        if($cekisiPl == 0)
                         {?>
-                          <tr id="EMR_pr_IGD_showtabelDT" class="">
+                          <tr>
                             <td colspan="5"><center>Data Belum ada</center></td>
                           </tr>
                         <?php
                         }
                         else
                         {
-                          foreach ($dataTableDT as $DnT)
+                          $linePl = $this->db->get("EMR_IGD_PENATALAKSANAAN where ID_PEMERIKSAAN = '$cekidpemeriksaan'")->num_rows();
+                          $showPl = $this->db->get("EMR_IGD_PENATALAKSANAAN where ID_PEMERIKSAAN = '$cekidpemeriksaan' order by JAM desc");
+                          for($show_ = 0; $show_ < $linePl; $show_++)
                           {?>
                             <tr>
-                              <td><?php echo $DnT->NO;?></td>
-                              <td><?php echo $DnT->JAM;?></td>
-                              <td><?php echo $DnT->SISTEM;?></td>
-                              <td><?php echo $DnT->DIAGOSA;?></td>
-                              <td><?php echo $DnT->TINDAKAN;?></td>
+                              <td><?php echo $showPl->row($show_)->JAM;?></td>
+                              <td><?php echo $showPl->row($show_)->NAMA_OBAT;?></td>
+                              <td><?php echo $showPl->row($show_)->DOSIS;?></td>
+                              <td><?php echo $showPl->row($show_)->RUTE;?></td>
+                              <td><?php echo $showPl->row($show_)->TINDAKAN;?></td>
                             </tr>
                           <?php
                           }
@@ -2126,61 +3333,6 @@
                       <a type="button" class="btn green col-md-12" id="" style="width:100%">Tambah Data</a><br/><br/><br/><br/>
                     </div>
                   -->
-                  </div>
-                  <div class="col-md-12 collapse" id="EMR_pr_IGD_P5_Halaman2">
-                    <div class="portlet light portlet-fit bordered">
-                      <div class="portlet-title">
-                        <span><b>Penanggung jawab pengisi data :</b></span>
-                      </div>
-                      <input type="hidden" id="EMR_pr_IGD_statver" name="EMR_pr_IGD_statver" value="Perawat1">
-                      <div class="row portlet-body" id="EMR_pr_IGD_verPerPerawat">
-                        <div class="col-sm-12">
-                          <p style="display: block; text-align:justify">&nbsp;&nbsp;&nbsp;Untuk dapat menyimpan data berikut, masukkan password anda terlebih dahulu sebagai proses verifikasi penginput data</p>
-                          <div class="form-group form-md-line-input has-success form-md-floating-label">
-                            <div class="input-icon right" style="display: block; margin-top: 0em; margin-bottom: -1em;">
-                              <input type="password" id="VerPassAsesmen" name="VerPassAsesmen" class="form-control">
-                              <label for="form_control_1">Masukkan Password</label>
-                              <span class="help-block">Masukkan password</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-sm-12">
-                          <div class="btn-group btn-group btn-group-justified">
-                            <a id="EMR_pr_IGD_btnChangePerPerawat" class="btn red"> Klik disini apabila anda bukan <?php echo $level; ?> <?php echo $username; ?></a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row portlet-body collapse" id="EMR_pr_IGD_verPerPerawat2">
-                        <div class="col-sm-12">
-                          <p style="display: block; text-align:justify">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Anda akan mengambil alih tanggung jawab proses pengisian data, kelengkapan pengisian data akan mempengaruhi penilaian anda</p>
-                          <div class="form-group form-md-line-input has-success form-md-floating-label">
-                            <div class="input-icon right" style="display: block; margin-top: 0em; margin-bottom: -1em;">
-                              <input type="text" id="EMR_pr_IGD_userPerPerawat" name="EMR_pr_IGD_userPerPerawat" class="form-control">
-                              <label for="form_control_1">Masukkan Username</label>
-                              <span class="help-block">Masukkan Username</span>
-                            </div>
-                          </div>
-                          <div class="form-group form-md-line-input has-success form-md-floating-label">
-                          <div class="input-icon right" style="display: block; margin-top: 0em; margin-bottom: -1em;">
-                            <input type="password" id="EMR_pr_IGD_passPerPerawat" name="EMR_pr_IGD_passPerPerawat" class="form-control">
-                            <label for="form_control_1">Masukkan Password</label>
-                            <span class="help-block">Masukkan Password</span>
-                          </div>
-                        </div>
-                        </div>
-                        <div class="col-sm-12">
-                          <div class="btn-group btn-group btn-group-justified">
-                            <a id="EMR_pr_IGD_btnChangePerPerawat2" class="btn red"> Klik disini apabila anda <?php echo $level; ?> <?php echo $username; ?></a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-12">
-                    <div class="btn-group btn-group-circle btn-group-solid" style="width:100%">
-                      <button type="button" id="EMR_pr_IGD_P5_HalamanBack" class="btn white" style="width:50%" disabled="true"><< Kembali</button>
-                      <button type="button" id="EMR_pr_IGD_P5_HalamanNext" class="btn green" style="width:50%">Lanjutkan >></button>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -2406,53 +3558,6 @@
                             <a type="button" class="btn green col-md-6" id="EMR_pr_IGD_P6_btnsimpan" style="width:50%">SIMPAN</a><br/><br/>
                           </center>
                         </div>
-
-                        <div class="col-md-12">
-                        <hr>
-                        </div>
-                        <div class="col-md-12">
-                          <table class="table table-striped table-bordered table-hover order-column" id="sample_11">
-                            <thead>
-                              <tr>
-                                <th class="col-md-2">
-                                  <i class="fa fa-clock-o"></i> Jam </th>
-                                  <th class="col-md-8">
-                                    <i class="fa fa-heartbeat"></i> Evaluasi </th>
-                                    <th class="col-md-2">
-                                      <i class="fa fa-frank"></i> Oleh </th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    <?php
-                                    $cekisiOb = $this->db->query("select * from EMR_IGD_Observasi where ID_PEMERIKSAAN ='$cekidpemeriksaan'")->num_rows();
-                                    if($cekisiOb == 0)
-                                    {?>
-                                      <tr>
-                                        <td colspan="3"><center>Data Belum ada</center></td>
-                                      </tr>
-                                    <?php
-                                    }
-                                    else
-                                    {
-                                      $lineOb = $this->db->get("EMR_IGD_Observasi where ID_PEMERIKSAAN = '$cekidpemeriksaan'")->num_rows();
-                                      $showOb = $this->db->get("EMR_IGD_Observasi where ID_PEMERIKSAAN = '$cekidpemeriksaan' order by JAM desc");
-                                      for($showOb_ = 0; $showOb_ < $lineOb; $showOb_++)
-                                      {?>
-                                        <tr>
-                                          <td><?php echo $showOb->row($showOb_)->JAM;?></td>
-                                          <td><?php echo $showOb->row($showOb_)->OBSERVASI;?></td>
-                                          <td><?php echo $showOb->row($showOb_)->OLEH;?></td>
-                                        </tr>
-                                      <?php
-                                      }
-                                    }?>
-                                    <input type="hidden" id="EMR_pr_IGD_InputcekisiOb" value="<?=$cekisiOb +1;?>">
-                                    <input type="hidden" id="EMR_pr_IGD_observasiOb">
-                                    <input type="hidden" id="EMR_pr_IGD_olehOb" value="<?=$username;?>">
-                                  </tbody>
-                                </table>
-
-                              </div>
                       </div>
                     </div>
                   </ceter>
@@ -2460,9 +3565,64 @@
               </div>
             </div>
           </div>
+          <div class="row">
+            <div class="col-md-12">
+              <button type="button" class="btn white col-md-12"> View Observasi Pasien : <?=$nama;?></button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="portlet light portlet-fit bordered">
+                <div class="portlet-body">
+                  <div class="form-group">
+                        <table class="table table-striped table-bordered table-hover order-column" id="sample_11">
+                          <thead>
+                            <tr>
+                              <th class="col-md-2">
+                                <i class="fa fa-clock-o"></i> Jam </th>
+                              <th class="col-md-8">
+                                <i class="fa fa-heartbeat"></i> Evaluasi </th>
+                              <th class="col-md-2">
+                                <i class="fa fa-frank"></i> Oleh </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <?php
+                            $cekisiOb = $this->db->query("select * from EMR_IGD_Observasi where ID_PEMERIKSAAN ='$cekidpemeriksaan'")->num_rows();
+                            if($cekisiOb == 0)
+                            {?>
+                              <tr>
+                                <td colspan="3"><center>Data Belum ada</center></td>
+                              </tr>
+                            <?php
+                            }
+                            else
+                            {
+                              $lineOb = $this->db->get("EMR_IGD_Observasi where ID_PEMERIKSAAN = '$cekidpemeriksaan'")->num_rows();
+                              $showOb = $this->db->get("EMR_IGD_Observasi where ID_PEMERIKSAAN = '$cekidpemeriksaan' order by JAM desc");
+                              for($showOb_ = 0; $showOb_ < $lineOb; $showOb_++)
+                              {?>
+                                <tr>
+                                  <td><?php echo $showOb->row($showOb_)->JAM;?></td>
+                                  <td><?php echo $showOb->row($showOb_)->OBSERVASI;?></td>
+                                  <td><?php echo $showOb->row($showOb_)->OLEH;?></td>
+                                </tr>
+                              <?php
+                              }
+                            }?>
+                            <input type="text" class="collapse" id="EMR_pr_IGD_InputcekisiOb" value="<?=$cekisiOb +1;?>">
+                            <input type="text" class="collapse" id="EMR_pr_IGD_observasiOb">
+                            <input type="text" class="collapse" id="EMR_pr_IGD_olehOb" value="<?=$username;?>">
+                          </tbody>
+                        </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-
       </div>
+
       <div class="col-md-3">
         <!-- BEGIN TAB PORTLET-->
         <div class="portlet light portlet-fit bordered">
@@ -2496,47 +3656,92 @@
             <div class="portlet-title">
               <span><b>Sub Menu IGD Perawat :</b></span>
             </div>
-            <input type="hidden" id="EMR_pr_IGD_statverHal" name="EMR_pr_IGD_statverHal" value="P1">
-            <div class="row portlet-body" id="">
-              <div>
-                <a type="button" class="btn white col-md-12" id="EMR_pr_IGD_P0_btntriase" style="width:100%" onClick="window.location.reload()">Triase</a><br/><br/>
+              <input type="hidden" id="EMR_pr_IGD_statverHal" name="EMR_pr_IGD_statverHal" value="">
+              <div class="row portlet-body collapse" id="showMenu">
+                <div>
+                  <a type="button" class="btn white col-md-12" id="EMR_pr_IGD_P0_btntriase" style="width:100%" onClick="window.location.reload()">Triase</a><br/><br/>
+                </div>
+                <?php
+                if($cekinMenu->Menu_1 != "DONE")
+                {?>
+                  <a type="button" class="btn white col-md-12" id="EMR_pr_IGD_P1_btnmenu" style="width:100%"><i class="fa fa-pencil-square-o pull-left"></i> TTV</a><br/><br/>
+                <?php }
+                else { ?>
+                  <a type="button" class="btn grey col-md-12" id="EMR_pr_IGD_P1_btnmenuX" style="width:100%"><i class="fa fa-search pull-left"></i> TTV</a><br/><br/>
+                <?php }
+                if($cekinMenu->Menu_2 != "DONE")
+                {?>
+                  <a type="button" class="btn green col-md-12" id="EMR_pr_IGD_P2_btnmenu" style="width:100%"><i class="fa fa-pencil-square-o pull-left"></i> PENGKAJIAN DATA</a><br/><br/>
+                <?php }
+                else { ?>
+                  <a type="button" class="btn grey col-md-12" id="EMR_pr_IGD_P2_btnmenuX" style="width:100%"><i class="fa fa-search pull-left"></i> PENGKAJIAN DATA</a><br/><br/>
+                <?php }
+                if($cekinMenu->Menu_3 != "DONE")
+                {?>
+                  <a type="button" class="btn green col-md-12" id="EMR_pr_IGD_P3_btnmenu" style="width:100%"><i class="fa fa-pencil-square-o pull-left"></i> ASESMEN RISIKO</a><br/><br/>
+                <?php }
+                else { ?>
+                  <a type="button" class="btn grey col-md-12" id="EMR_pr_IGD_P3_btnmenuX" style="width:100%"><i class="fa fa-search pull-left"></i> ASESMEN RISIKO</a><br/><br/>
+                <?php }
+                if($cekinMenu->Menu_4 != "DONE")
+                {?>
+                  <a type="button" class="btn green col-md-12" id="EMR_pr_IGD_P4_btnmenu" style="width:100%"><i class="fa fa-pencil-square-o pull-left"></i> DIAGNOSIS DAN TINDKAN</a><br/><br/>
+                <?php }
+                else { ?>
+                  <a type="button" class="btn grey col-md-12" id="EMR_pr_IGD_P4_btnmenuX" style="width:100%"><i class="fa fa-search pull-left"></i> DIAGNOSIS DAN TINDKAN</a><br/><br/>
+                <?php }
+                if($cekinMenu->Menu_6 != "DONE")
+                {?>
+                  <a type="button" class="btn green col-md-12" id="EMR_pr_IGD_P6_btnmenu" style="width:100%"><i class="fa fa-pencil-square-o pull-left"></i> Observasi</a>
+                <?php }
+                else { ?>
+                  <a type="button" class="btn grey col-md-12" id="EMR_pr_IGD_P6_btnmenuX" style="width:100%"><i class="fa fa-search pull-left"></i> Observasi</a>
+                <?php } ?>
+                </div>
               </div>
-              <div class="" id="EMR_pr_IGD_P1_divBtnMenu">
-                <a type="button" class="btn white col-md-12" id="EMR_pr_IGD_P1_btnmenu" style="width:100%"><i class="fa fa-pencil-square-o pull-left"></i> TTV</a><br/><br/>
-              </div>
-              <div class="collapse" id="EMR_pr_IGD_P1_divBtnMenuX">
-                <a type="button" class="btn grey col-md-12" id="EMR_pr_IGD_P1_btnmenuX" style="width:100%"><i class="fa fa-search pull-left"></i> TTV</a><br/><br/>
-              </div>
-              <div class="" id="EMR_pr_IGD_P2_divBtnMenu">
-                <a type="button" class="btn green col-md-12" id="EMR_pr_IGD_P2_btnmenu" style="width:100%"><i class="fa fa-pencil-square-o pull-left"></i> PENGKAJIAN DATA</a><br/><br/>
-              </div>
-              <div class="collapse" id="EMR_pr_IGD_P2_divBtnMenuX">
-                <a type="button" class="btn grey col-md-12" id="EMR_pr_IGD_P2_btnmenuX" style="width:100%"><i class="fa fa-search pull-left"></i> PENGKAJIAN DATA</a><br/><br/>
-              </div>
-              <div class="" id="EMR_pr_IGD_P3_divBtnMenu">
-                <a type="button" class="btn green col-md-12" id="EMR_pr_IGD_P3_btnmenu" style="width:100%"><i class="fa fa-pencil-square-o pull-left"></i> ASESMEN RISIKO</a><br/><br/>
-              </div>
-              <div class="collapse" id="EMR_pr_IGD_P3_divBtnMenuX">
-                <a type="button" class="btn grey col-md-12" id="EMR_pr_IGD_P3_btnmenuX" style="width:100%"><i class="fa fa-search pull-left"></i> ASESMEN RISIKO</a><br/><br/>
-              </div>
-              <div class="" id="EMR_pr_IGD_P4_divBtnMenu">
-                <a type="button" class="btn green col-md-12" id="EMR_pr_IGD_P4_btnmenu" style="width:100%"><i class="fa fa-pencil-square-o pull-left"></i> DIAGNOSIS DAN TINDKAN</a><br/><br/>
-              </div>
-              <div class="collapse" id="EMR_pr_IGD_P4_divBtnMenuX">
-                <a type="button" class="btn grey col-md-12" id="EMR_pr_IGD_P4_btnmenuX" style="width:100%"><i class="fa fa-search pull-left"></i> DIAGNOSIS DAN TINDKAN</a><br/><br/>
-              </div>
-              <div class="" id="EMR_pr_IGD_P5_divBtnMenu">
-                <a type="button" class="btn green col-md-12" id="EMR_pr_IGD_P5_btnmenu" style="width:100%"><i class="fa fa-pencil-square-o pull-left"></i> PENATALAKSANAAN</a><br/><br/>
-              </div>
-              <div class="collapse" id="EMR_pr_IGD_P5_divBtnMenuX">
-                <a type="button" class="btn grey col-md-12" id="EMR_pr_IGD_P5_btnmenuX" style="width:100%"><i class="fa fa-search pull-left"></i> PENATALAKSANAAN</a><br/><br/>
-              </div>
-              <div class="" id="EMR_pr_IGD_P6_divBtnMenu">
-                <a type="button" class="btn green col-md-12" id="EMR_pr_IGD_P6_btnmenu" style="width:100%"><i class="fa fa-pencil-square-o pull-left"></i> Observasi</a>
-              </div>
-              <div class="collapse" id="EMR_pr_IGD_P6_divBtnMenuX">
-                <a type="button" class="btn grey col-md-12" id="EMR_pr_IGD_P6_btnmenuX" style="width:100%"><i class="fa fa-search pull-left"></i> Observasi</a>
-              </div>
+          </div>
+        </div>
+
+        <div id="modalIGDtriase" class="modal fade modalInput" tabindex="-1" data-backdrop="static" data-width="40%" data-keyboard="false" style="width:40%">
+          <div class="modal-content">
+            <div class="modal-header bg-blue bg-font-blue">
+                <h4 class="blue modal-title"><center><b>Triase Pasien</b></center></h4>
+            </div>
+            <div class="modal-body">
+              <center>
+                <div class="col-md-12">
+                  <div class="btn-group btn-group btn-group-justified" style="width:100%; height:100px">
+                    <a type="button" class="btn bg-green-jungle bg-font-green-jungle" style="width:50%" id="EMR_pr_IGD_btnTriaseHijau"><b>Hijau</b></a>
+                    <a type="button" class="btn bg-yellow-crusta bg-font-yellow-crusta" style="width:50%" id="EMR_pr_IGD_btnTriaseKuning"><b>Kuning</b></a>
+                  </div>
+                  <div class="btn-group btn-group btn-group-justified" style="width:100%; height:100px">
+                    <a type="button" class="btn bg-red bg-font-red" style="width:50%" id="EMR_pr_IGD_btnTriaseMerah"><b>Merah</b></a>
+                    <a type="button" class="btn bg-grey-gallery bg-font-yellow-casablanca" style="width:50%" id="EMR_pr_IGD_btnTriaseHitam"><b>Hitam</b></a>
+                  </div>
+                </div>
+                <input type="text" class="form-control collapse" id="EMR_pr_IGD_statTriase2" value="white">
+                <div class="col-md-12">
+                  <div class="portlet light bordered">
+                    <div class="portlet-title tabbable-line">
+                      <center>
+                        <div class="caption">
+                          <span class="" id="EMR_pr_IGD_PernyataanKurangTriase"></span>
+                          <center>
+                            <a class="btn white col-md-12" name="EMR_pr_IGD_btnTriaseHasilQuestion" value="Belum ada" id="EMR_pr_IGD_btnTriaseHasilQuestion" style="height:90px"> <h1> <b> Triase : <span id="EMR_pr_IGD_HasilTriase"> Belum ada </span></b></h1></a>
+                          </center>
+                        </div>
+                      </center>
+                    </div>
+                  </div>
+                </div>
+              </center>
+            </div>
+            <div class="modal-footer">
+              <center>
+                <div class="btn-group btn-group btn-group-justified" style="width:50%">
+                    <a class="btn green active" style="width:100%" id="EMR_pr_IGD_btnSimpanTriase"><i class="fa fa-edit"> Simpan</i></a>
+                </div>
+              </center>
             </div>
           </div>
         </div>
@@ -2546,8 +3751,9 @@
             <div class="modal-header bg-blue bg-font-blue">
                 <h4 class="blue modal-title"><center><b>Data Berhasil Disimpan</b></center></h4>
             </div>
-            <div class="modal-body">
-              <h4> Terimakasih Atas Kerjasama Anda </H4>
+            <div class="modal-body"><center>
+              <img src="<?php echo base_url().'assets/pages/img/check.gif'?>" style="width:480px">
+              <h5> Terimakasih Atas Kerjasama Anda </h5></center>
             </div>
             <div class="modal-footer">
               <center>

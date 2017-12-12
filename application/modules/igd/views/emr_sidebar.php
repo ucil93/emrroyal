@@ -38,44 +38,6 @@
                       <span style="font-size:12px"><b>
                         <a class="bg-font-red" data-toggle="modal" href="#ModalLihatAlergi"> Memiliki Alergi Obat </a>
                       </b></span><br>
-
-                      <!--<div id="ModalLihatAlergi" class="modal fade modalInput" tabindex="-1" data-backdrop="static" data-keyboard="false">
-                          <div class="modal-dialog">
-                              <div class="modal-content">
-                                  <div class="modal-header">
-                                    <div class="col-md-6">
-                                      <div class="btn-group btn-group btn-group-justified">
-                                        <div class="col-md-6">
-                                          <button disable type="button" class="btn white">
-                                            <span style="font-size:8px; color:#BFBFBF"><b>Nomer Rekam Medik :</b></span><br>
-                                            <span style="font-size:14px" name><b><?php echo $norm?></b></span>
-                                          </button>
-                                        </div>
-                                        <div class="col-md-6">
-                                          <button disable type="button" class="btn white">
-                                            <span style="font-size:8px; color:#BFBFBF"><b>Nama Pasien :</b></span><br>
-                                            <span style="font-size:14px"><b><?php echo $nama?></b></span><br>
-                                          </button>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="bg-blue bg-font-blue col-md-6">
-                                      <h4><center><b>Daftar Alergi Obat Pasien</b></center></h4>
-                                    </div>
-                                  </div>
-                                  <div class="modal-body">
-                                    <div class="row">
-                                      <div class="col-md-12">
-                                        <span style="font-size:14px;"><b><?php echo $alergiobat ?></b></span><br>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="modal-footer">
-                                    <button type="button" data-dismiss="modal" class="btn dark btn-outline">Close</button>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>-->
                       <div id="ModalLihatAlergi" class="modal fade modalInput" tabindex="-1" data-backdrop="static" data-keyboard="false">
                         <div class="row">
                           <div class="col-md-6">

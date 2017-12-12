@@ -26,7 +26,7 @@
                   $("#ubahpassword").fadeTo(10000, 5000).slideUp(2000, function(){
                        $("#ubahpassword").modal('hide');
                   });
-                  window.location.href = base_url + "dashboard";
+                  window.location.href = base_url + "dashboard_igd";
                 }
                 else if (msg == 'NO1')
                 {

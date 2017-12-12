@@ -58,27 +58,27 @@ class dashboard_igd extends CI_Controller {
       }
       else
       {
-					$second_db 			= $this->load->database('second', TRUE);
+					$second_db = $this->load->database('second', TRUE);
 
 					$pass_lama = $this->input->post('passwordlama');
 					$pass_baru = $this->input->post('passwordbaru');
 					$ulangi_pass_baru = $this->input->post('passwordbaru2');
 
-					$user = $this->session->userdata("username");
+					$user = $this->session->userdata("id_pengguna");
 
-					$login['user1'] = $user;
-					$login['PASS2'] = $pass_lama;
-					$cek = $second_db->get_where('TBLuser', $login);
+					$login['UserID'] = $user;
+					$login['Password'] = sha1($pass_lama);
+					$cek = $second_db->get_where('User', $login);
 					if($pass_baru == $ulangi_pass_baru)
 					{
 						if($cek->num_rows()>0)
 						{
 							$data = array(
-								'PASS2' => $pass_baru,
+								'Password' => sha1($pass_baru),
 							);
 
-							$second_db->where('user1', $user);
-							$second_db->update('TBLuser', $data);
+							$second_db->where('UserID', $user);
+							$second_db->update('User', $data);
 							echo "YES";
 						}
 						else
@@ -95,7 +95,7 @@ class dashboard_igd extends CI_Controller {
 		else
 		{
 			$this->session->sess_destroy();
-			redirect("login");
+			$this->load->view('login/login');
 		}
   }
 
@@ -115,6 +115,7 @@ class dashboard_igd extends CI_Controller {
 		date_default_timezone_set('Asia/Jakarta');
 		if($this->session->userdata("logged_in")!="")
 		{
+
 			$tgltdy = 'GD-';
 			$tgltdy .= date('d');
 			$tgltdy .= date('m');
@@ -124,12 +125,15 @@ class dashboard_igd extends CI_Controller {
 
 			$per1['NAMA_ALIAS'] = $this->input->post("IGD_namaAlias");
 			$per1['TTL_ALIAS'] = $this->input->post("IGD_tahunAlias");
+			$per1['TGL_MASUK'] = $this->input->post("IGD_tglmasuk");
+			$per1['STATUS'] = "Aktif";
 
 			$id_pemeriksaan = $this->kode_inc_IGD($kode);
 			$per['ID_PEMERIKSAAN'] = $id_pemeriksaan;
 			$per1['ID_PEMERIKSAAN'] = $id_pemeriksaan;
 
 			$this->db->insert("EMR_UTAMA_PERIKSA",$per);
+			$this->db->insert("EMR_HASIL_PERIKSA_UMUM",$per);
 			$this->db->insert("EMR_IGD_MRX",$per1);
 
 			echo "TERUJI";

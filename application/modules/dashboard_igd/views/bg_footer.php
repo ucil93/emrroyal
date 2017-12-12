@@ -128,12 +128,12 @@
 
         <!-- Script Data Master -->
         <script src="<?php echo base_url(); ?>assets/scripts/header.js" type="text/javascript" ></script>
-        <script src="<?php echo base_url(); ?>assets/scripts/asesmen_awal.js" type="text/javascript" ></script>
+        <!--<script src="<?php echo base_url(); ?>assets/scripts/asesmen_awal.js" type="text/javascript" ></script>-->
 
         <script src="<?php echo base_url(); ?>assets/scripts/igd_dokter.js" type="text/javascript" ></script>
         <script src="<?php echo base_url(); ?>assets/scripts/igd.js" type="text/javascript" ></script>
         <script src="<?php echo base_url(); ?>assets/scripts/dashboard_igd.js" type="text/javascript" ></script>
-        <script src="<?php echo base_url(); ?>assets/scripts/emr_sidebar.js" type="text/javascript" ></script>
+        <!--<script src="<?php echo base_url(); ?>assets/scripts/emr_sidebar.js" type="text/javascript" ></script>-->
 
     <script type="text/javascript">
         var base_url = "<?php echo base_url(); ?>";

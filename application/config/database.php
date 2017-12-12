@@ -70,16 +70,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | The $query_builder variables lets you determine whether or not to load
 | the query builder class.
 */
-/*
+
 $active_group = 'default';
 $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => '192.168.10.1',
-	'username' => 'sa',
-	'password' => 'p@ssw0rd',
-	'database' => 'RSPGENTRY',
+	'hostname' => 'UCIL',
+	'username' => '',
+	'password' => '',
+	'database' => 'ROYAL_EMR',
 	'dbdriver' => 'sqlsrv',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
@@ -98,10 +98,10 @@ $db['default'] = array(
 
 $db['second'] = array(
 	'dsn'	=> '',
-	'hostname' => '192.168.10.1',
-	'username' => 'sa',
-	'password' => 'p@ssw0rd',
-	'database' => 'ROLERSPGENTRY',
+	'hostname' => 'UCIL',
+	'username' => '',
+	'password' => '',
+	'database' => 'ROYAL',
 	'dbdriver' => 'sqlsrv',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
@@ -118,12 +118,12 @@ $db['second'] = array(
 	'save_queries' => TRUE
 );
 
-$db['three'] = array(
+/*$db['second'] = array(
 	'dsn'	=> '',
-	'hostname' => '192.168.10.1',
+	'hostname' => '192.168.80.11\sqlsvr2008',
 	'username' => 'sa',
-	'password' => 'p@ssw0rd',
-	'database' => 'SHARELIS',
+	'password' => 'royal123!',
+	'database' => 'WORKSHOP',
 	'dbdriver' => 'sqlsrv',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
@@ -139,94 +139,3 @@ $db['three'] = array(
 	'failover' => array(),
 	'save_queries' => TRUE
 );*/
-
-$active_group = 'default';
-$query_builder = TRUE;
-
-$db['default'] = array(
-	'dsn'	=> '',
-	'hostname' => 'UCIL',
-	'username' => '',
-	'password' => '',
-	'database' => 'RSPGENTRY',
-	'dbdriver' => 'sqlsrv',
-	'dbprefix' => '',
-	'pconnect' => FALSE,
-	'db_debug' => (ENVIRONMENT !== 'production'),
-	'cache_on' => FALSE,
-	'cachedir' => '',
-	'char_set' => 'utf8',
-	'dbcollat' => 'utf8_general_ci',
-	'swap_pre' => '',
-	'encrypt' => FALSE,
-	'compress' => FALSE,
-	'stricton' => FALSE,
-	'failover' => array(),
-	'save_queries' => TRUE
-);
-
-$db['second'] = array(
-	'dsn'	=> '',
-	'hostname' => 'UCIL',
-	'username' => '',
-	'password' => '',
-	'database' => 'ROYAL',
-	'dbdriver' => 'sqlsrv',
-	'dbprefix' => '',
-	'pconnect' => FALSE,
-	'db_debug' => (ENVIRONMENT !== 'production'),
-	'cache_on' => FALSE,
-	'cachedir' => '',
-	'char_set' => 'utf8',
-	'dbcollat' => 'utf8_general_ci',
-	'swap_pre' => '',
-	'encrypt' => FALSE,
-	'compress' => FALSE,
-	'stricton' => FALSE,
-	'failover' => array(),
-	'save_queries' => TRUE
-);
-
-$db['royaldb'] = array(
-	'dsn'	=> '',
-	'hostname' => 'UCIL',
-	'username' => '',
-	'password' => '',
-	'database' => 'ROYAL',
-	'dbdriver' => 'sqlsrv',
-	'dbprefix' => '',
-	'pconnect' => FALSE,
-	'db_debug' => (ENVIRONMENT !== 'production'),
-	'cache_on' => FALSE,
-	'cachedir' => '',
-	'char_set' => 'utf8',
-	'dbcollat' => 'utf8_general_ci',
-	'swap_pre' => '',
-	'encrypt' => FALSE,
-	'compress' => FALSE,
-	'stricton' => FALSE,
-	'failover' => array(),
-	'save_queries' => TRUE
-);
-
-$db['three'] = array(
-	'dsn'	=> '',
-	'hostname' => 'UCIL',
-	'username' => '',
-	'password' => '',
-	'database' => 'SHARELIS',
-	'dbdriver' => 'sqlsrv',
-	'dbprefix' => '',
-	'pconnect' => FALSE,
-	'db_debug' => (ENVIRONMENT !== 'production'),
-	'cache_on' => FALSE,
-	'cachedir' => '',
-	'char_set' => 'utf8',
-	'dbcollat' => 'utf8_general_ci',
-	'swap_pre' => '',
-	'encrypt' => FALSE,
-	'compress' => FALSE,
-	'stricton' => FALSE,
-	'failover' => array(),
-	'save_queries' => TRUE
-);
