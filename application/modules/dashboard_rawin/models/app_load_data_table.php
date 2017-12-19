@@ -8,9 +8,9 @@ class app_load_data_table extends CI_Model {
 		$second_db = $this->load->database('second', TRUE);
 
 		$query  = $second_db->query("SELECT *
-											FROM rd_reg INNER JOIN
-                      PAsien ON rd_reg.norm = Pasien.norm
-											WHERE rd_reg.tgldatang = '2017-08-01'");
+											FROM ri_reg INNER JOIN
+                      PAsien ON ri_reg.norm = Pasien.norm
+											WHERE ri_reg.tglmasuk = '2016-01-27'");
 		return $query->result();
 	}
 

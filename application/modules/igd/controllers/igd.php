@@ -222,6 +222,9 @@ class igd extends CI_Controller {
 
 			$d['noreg'] = $reg->noreg;
 			$d['noreg2'] = substr($reg->noreg, 2, 8);
+			$normcoba = $reg->norm;
+			$text = str_replace('-', '', $normcoba);
+			$d['normcoba'] = trim($text);
 			$d['norm'] = $reg->norm;
 			$d['nama'] = $pas->nama;
 			$d['alamat'] = $pas->jalan;
@@ -1615,7 +1618,7 @@ class igd extends CI_Controller {
 		date_default_timezone_set('Asia/Jakarta');
 	  $second_db = $this->load->database('second', TRUE);
 
-	  $tampung_no_bukti = $second_db->query("select MAX(nobukti) AS no_bukti from md_dttransaksiRD where noreg ='$noreg_p2'")->row();
+	  $tampung_no_bukti = $second_db->query("select MAX(nobukti) AS no_bukti from rd_hdtransaksi where noreg ='$noreg_p2'")->row();
 	  $tampung_no_bukti_2 = $tampung_no_bukti->no_bukti;
 
 		$workhd = array(
@@ -1650,7 +1653,7 @@ class igd extends CI_Controller {
 		date_default_timezone_set('Asia/Jakarta');
 	  $second_db = $this->load->database('second', TRUE);
 
-	  $tampung_no_bukti = $second_db->query("select MAX(nobukti) AS no_bukti from md_dttransaksiRD where noreg ='$noreg_p2'")->row();
+	  $tampung_no_bukti = $second_db->query("select MAX(nobukti) AS no_bukti from rd_hdtransaksi where noreg ='$noreg_p2'")->row();
 	  $tampung_no_bukti_2 = $tampung_no_bukti->no_bukti;
 
 		$workhd = array(
@@ -1705,7 +1708,7 @@ class igd extends CI_Controller {
 	      'KdLayan' => $EMR_dr_IGD_P2_radiologi_checkbox_simpan[$i],
 	      'Resep' => ' ',
 	      'KdStatus' => '01',
-	      'TglRealisasi' => date('d-M-Y'),
+	      'TglRealisasi' => NULL,
 	      'NoAppointment' => ' ',
 	      'UsrInsert' => $user_id,
 	      'UsrUpdate' => $user_id,
@@ -1732,7 +1735,7 @@ class igd extends CI_Controller {
 	    'KdLayan' => $EMR_dr_IGD_P2_radiologi_lain_simpan,
 	    'Resep' => ' ',
 	    'KdStatus' => '01',
-	    'TglRealisasi' => date('d-M-Y'),
+	    'TglRealisasi' => NULL,
 	    'NoAppointment' => ' ',
 	    'UsrInsert' => $user_id,
 	    'UsrUpdate' => $user_id,
@@ -1759,7 +1762,7 @@ class igd extends CI_Controller {
 	    'KdLayan' => $EMR_dr_IGD_P2_Gigi_Satuan_simpan,
 	    'Resep' => ' ',
 	    'KdStatus' => '01',
-	    'TglRealisasi' => date('d-M-Y'),
+	    'TglRealisasi' => NULL,
 	    'NoAppointment' => ' ',
 	    'UsrInsert' => $user_id,
 	    'UsrUpdate' => $user_id,
@@ -1804,7 +1807,7 @@ class igd extends CI_Controller {
 	      'KdLayan' => $EMR_dr_IGD_P2_radiologi_checkbox_simpan[$i],
 	      'Resep' => ' ',
 	      'KdStatus' => '01',
-	      'TglRealisasi' => date('d-M-Y'),
+	      'TglRealisasi' => NULL,
 	      'NoAppointment' => ' ',
 	      'UsrInsert' => $user_id,
 	      'UsrUpdate' => $user_id,
@@ -1831,7 +1834,7 @@ class igd extends CI_Controller {
 	    'KdLayan' => $EMR_dr_IGD_P2_radiologi_lain_simpan,
 	    'Resep' => ' ',
 	    'KdStatus' => '01',
-	    'TglRealisasi' => date('d-M-Y'),
+	    'TglRealisasi' => NULL,
 	    'NoAppointment' => ' ',
 	    'UsrInsert' => $user_id,
 	    'UsrUpdate' => $user_id,
@@ -1876,7 +1879,7 @@ class igd extends CI_Controller {
 	      'KdLayan' => $EMR_dr_IGD_P2_radiologi_checkbox_simpan[$i],
 	      'Resep' => ' ',
 	      'KdStatus' => '01',
-	      'TglRealisasi' => date('d-M-Y'),
+	      'TglRealisasi' => NULL,
 	      'NoAppointment' => ' ',
 	      'UsrInsert' => $user_id,
 	      'UsrUpdate' => $user_id,
@@ -1903,7 +1906,7 @@ class igd extends CI_Controller {
 	    'KdLayan' => $EMR_dr_IGD_P2_Gigi_Satuan_simpan,
 	    'Resep' => ' ',
 	    'KdStatus' => '01',
-	    'TglRealisasi' => date('d-M-Y'),
+	    'TglRealisasi' => NULL,
 	    'NoAppointment' => ' ',
 	    'UsrInsert' => $user_id,
 	    'UsrUpdate' => $user_id,
@@ -1948,7 +1951,7 @@ class igd extends CI_Controller {
 	      'KdLayan' => $EMR_dr_IGD_P2_radiologi_checkbox_simpan[$i],
 	      'Resep' => ' ',
 	      'KdStatus' => '01',
-	      'TglRealisasi' => date('d-M-Y'),
+	      'TglRealisasi' => NULL,
 	      'NoAppointment' => ' ',
 	      'UsrInsert' => $user_id,
 	      'UsrUpdate' => $user_id,
@@ -1993,7 +1996,7 @@ class igd extends CI_Controller {
 	      'KdLayan' => $EMR_dr_IGD_P2_laboratorium_checkbox_simpan[$i],
 	      'Resep' => ' ',
 	      'KdStatus' => '01',
-	      'TglRealisasi' => date('d-M-Y'),
+	      'TglRealisasi' => NULL,
 	      'NoAppointment' => ' ',
 	      'UsrInsert' => $user_id,
 	      'UsrUpdate' => $user_id,
@@ -2020,7 +2023,7 @@ class igd extends CI_Controller {
 	    'KdLayan' => $EMR_dr_IGD_P2_laboratorium_lain_simpan,
 	    'Resep' => ' ',
 	    'KdStatus' => '01',
-	    'TglRealisasi' => date('d-M-Y'),
+	    'TglRealisasi' => NULL,
 	    'NoAppointment' => ' ',
 	    'UsrInsert' => $user_id,
 	    'UsrUpdate' => $user_id,
@@ -2065,7 +2068,7 @@ class igd extends CI_Controller {
 	      'KdLayan' => $EMR_dr_IGD_P2_laboratorium_checkbox_simpan[$i],
 	      'Resep' => ' ',
 	      'KdStatus' => '01',
-	      'TglRealisasi' => date('d-M-Y'),
+	      'TglRealisasi' => NULL,
 	      'NoAppointment' => ' ',
 	      'UsrInsert' => $user_id,
 	      'UsrUpdate' => $user_id,
@@ -2149,7 +2152,7 @@ class igd extends CI_Controller {
 					'KdLayan' => $EMR_dr_IGD_P2_laboratorium_lain_simpan,
 					'Resep' => ' ',
 					'KdStatus' => '01',
-					'TglRealisasi' => date('d-M-Y'),
+					'TglRealisasi' => NULL,
 					'NoAppointment' => ' ',
 					'UsrInsert' => $user_id,
 					'UsrUpdate' => $user_id,
@@ -2284,7 +2287,7 @@ class igd extends CI_Controller {
 						'KdLayan' => $EMR_dr_IGD_P2_radiologi_lain_simpan,
 						'Resep' => ' ',
 						'KdStatus' => '01',
-						'TglRealisasi' => date('d-M-Y'),
+						'TglRealisasi' => NULL,
 						'NoAppointment' => ' ',
 						'UsrInsert' => $user_id,
 						'UsrUpdate' => $user_id,
@@ -2308,7 +2311,7 @@ class igd extends CI_Controller {
 						'KdLayan' => $EMR_dr_IGD_P2_Gigi_Satuan_simpan,
 						'Resep' => ' ',
 						'KdStatus' => '01',
-						'TglRealisasi' => date('d-M-Y'),
+						'TglRealisasi' => NULL,
 						'NoAppointment' => ' ',
 						'UsrInsert' => $user_id,
 						'UsrUpdate' => $user_id,
@@ -2342,7 +2345,7 @@ class igd extends CI_Controller {
 						'KdLayan' => $EMR_dr_IGD_P2_radiologi_lain_simpan,
 						'Resep' => ' ',
 						'KdStatus' => '01',
-						'TglRealisasi' => date('d-M-Y'),
+						'TglRealisasi' => NULL,
 						'NoAppointment' => ' ',
 						'UsrInsert' => $user_id,
 						'UsrUpdate' => $user_id,
@@ -2377,7 +2380,7 @@ class igd extends CI_Controller {
 					'KdLayan' => $EMR_dr_IGD_P2_Gigi_Satuan_simpan,
 					'Resep' => ' ',
 					'KdStatus' => '01',
-					'TglRealisasi' => date('d-M-Y'),
+					'TglRealisasi' => NULL,
 					'NoAppointment' => ' ',
 					'UsrInsert' => $user_id,
 					'UsrUpdate' => $user_id,
@@ -2942,7 +2945,7 @@ class igd extends CI_Controller {
 		date_default_timezone_set('Asia/Jakarta');
 	  $second_db = $this->load->database('second', TRUE);
 
-	  $tampung_no_bukti = $second_db->query("select MAX(nobukti) AS no_bukti from md_dttransaksiRD where noreg ='$noreg_p4'")->row();
+	  $tampung_no_bukti = $second_db->query("select MAX(nobukti) AS no_bukti from rd_hdtransaksi where noreg ='$noreg_p4'")->row();
 	  $tampung_no_bukti_2 = $tampung_no_bukti->no_bukti;
 
 		$workhd = array(
@@ -2963,10 +2966,10 @@ class igd extends CI_Controller {
 			'TglInsert' => date('d-M-Y H:i:s'),
 			'Tglupdate' => date('d-M-Y H:i:s'),
 			'IsServiced' => '',
-			'kd_lokasilayan' => '',
+			'kd_lokasilayan' => NULL,
 			'IsDoneByNurse' => '',
 			'IsCito' => '',
-			'JamRencanaRealisasi' => ''
+			'JamRencanaRealisasi' => NULL
 		);
 
 		$second_db->insert("md_WorkListHD",$workhd);
@@ -2977,7 +2980,7 @@ class igd extends CI_Controller {
 		date_default_timezone_set('Asia/Jakarta');
 		if($this->session->userdata("logged_in")!="")
 		{
-			/*$second_db = $this->load->database('second', TRUE);
+			$second_db = $this->load->database('second', TRUE);
 
 			$Id_pemeriksaan_P4 = $this->input->post('IGD_idpemeriksaan');
 
@@ -3043,7 +3046,7 @@ class igd extends CI_Controller {
 				'KdLayan' => 'FAR01.1',
 				'Resep' => ' ',
 				'KdStatus' => '01',
-				'TglRealisasi' => date('d-M-Y'),
+				'TglRealisasi' => NULL,
 				'NoAppointment' => ' ',
 				'UsrInsert' => $user_id,
 				'UsrUpdate' => $user_id,
@@ -3051,7 +3054,7 @@ class igd extends CI_Controller {
 				'Tglupdate' => date('d-M-Y H:i:s'),
 				'AutoBayar' => 'False',
 				'Tutup' => 'False',
-				'KdTipeResep' => 'False',
+				'KdTipeResep' => '',
 				'IsByNurse' => 'False',
 				'Cito' => 'False',
 				'HarusBayar' => 'False',
@@ -3059,9 +3062,9 @@ class igd extends CI_Controller {
 				'PrintCount' => 0,
 			);
 
-			$second_db->insert("md_WorkListDT",$workdt);*/
+			$second_db->insert("md_WorkListDT",$workdt);
 
-			
+
 			echo "TERUJI";
 		}
 		else

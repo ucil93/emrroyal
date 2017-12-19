@@ -39,6 +39,10 @@ class app_user_login_model extends CI_Model {
 			{
 				redirect("dashboard_laboratorium");
 			}
+			else if ($this->session->userdata('level') == "RANAP")
+			{
+				redirect("dashboard_rawin");
+			}
 			else
 			{
 				redirect("dashboard_igd");

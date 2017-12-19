@@ -165,7 +165,6 @@
         <!--<input type="hidden" id="EMR_dr_IGD_NORM_2" name="EMR_dr_IGD_NORM_2" value="<?php echo $norm?>">
         <input type="hidden" id="EMR_dr_IGD_NOREG_2" name="EMR_dr_IGD_NOREG_2" value="<?php echo $noreg?>">
         <input type="hidden" id="EMR_dr_IGD_NOREG_Tampung_2" name="EMR_dr_IGD_NOREG_Tampung_2" value="<?php echo $noreg2?>">-->
-
         <div class="collapse" id="EMR_dr_IGD_P1_Halaman">
           <div class="row">
             <div class="col-md-12">
@@ -2811,6 +2810,10 @@
                       <div class="portlet-body">
                         <div class="tab-content">
                           <div class="row" style="display: block; margin-top: 0em; margin-bottom: 0em;">
+                            <?php
+                            $cekD2 = $this->db->query("select * from EMR_DETAIL_DIAGNOSIS where ID_PEMERIKSAAN = '$cekidpemeriksaan' and STATUS2_DIAGNOSIS = 'Diagnosis Kerja'")->num_rows();
+                            $getD2 = $this->db->query("select * from EMR_DETAIL_DIAGNOSIS where ID_PEMERIKSAAN = '$cekidpemeriksaan' and STATUS2_DIAGNOSIS = 'Diagnosis Kerja'");
+                            ?>
                             <div class="row md-checkbox-inline">
                               <div class="col-md-12 md-checkbox">
                                 <div class="row">
@@ -2829,6 +2832,146 @@
                                   <br>
                                 </div>
                               </div>
+                              <!--<?php
+                              if($cekD2 == 0)
+                              {
+                                ?>
+                                <div id="EMR_dr_IGD_P2_RadiologiModal" class="modal fade modalInput" tabindex="-1" data-backdrop="static" data-width="40%" data-keyboard="false" style="width:40%">
+                                  <div class="modal-content">
+                                    <div class="modal-header bg-blue bg-font-blue">
+                                        <h4 class="blue modal-title"><center><b></b></center></h4>
+                                    </div>
+                                    <div class="modal-body">
+                                      <h4> Anda Belum Mengisi Diagnosis Kerja, Silahkan Isi Diagnosis Kerja Terlebih Dahulu!!! </H4>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <center>
+                                        <div class="btn-group btn-group btn-group-justified" style="width:50%">
+                                          <a type="button" class="btn blue" data-dismiss="modal" style="width:100%">OK</a>
+                                        </div>
+                                      </center>
+                                    </div>
+                                  </div>
+                                </div>
+                                <?php
+                              }
+                              else
+                              {
+                                ?>
+                                <div id="EMR_dr_IGD_P2_RadiologiModal" class="modal container fade" tabindex="-1"  data-backdrop="static" data-keyboard="false">
+                                    <div class="modal-header">
+                                      <div class="col-md-12">
+                                        <div class="btn-group btn-group btn-group-justified" style="width:100%">
+                                          <button disable type="button" class="btn white" style="height:55px; width:30%">
+                                            <span style="font-size:8px; color:#BFBFBF"><b>Nomer Rekam Medik :</b></span><br>
+                                            <span style="font-size:14px"><b><?php echo $norm?></b></span>
+                                          </button>
+                                          <button disable type="button" class="btn white" style="height:55px; width:40%">
+                                            <span style="font-size:8px; color:#BFBFBF"><b>Nama Pasien :</b></span><br>
+                                            <span style="font-size:14px"><b><?php echo $nama?></b></span><br>
+                                          </button>
+                                          <button disable type="button" class="btn white" style="height:55px; width:30%">
+                                            <span style="font-size:20px"><b>Pilih Radiologi</b></span>
+                                          </button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="modal-body">
+                                      <div class="form-group">
+                                        <div class="row" style="display: block; margin-top: 0em; margin-bottom: 0em;">
+                                          <div class="col-md-12">
+                                            Diagnosis Kerja : </br>
+                                            <?php for($lineD2_= 0 ; $lineD2_ < $cekD2 ; $lineD2_++)
+                                            {
+                                              echo $lineD2_+1 ?>. <?php echo $getD2->row($lineD2_)->DESKRIPSI_DIAGNOSIS; ?></br>
+                                            <?php
+                                            }
+                                            ?>
+                                            </br>
+                                          </div>
+                                        </div>
+                                        <?php
+                                        foreach($dataRadio as $row)
+                                        {
+                                          ?>
+                                          <div class="row">
+                                            <div class="col-md-12">
+                                              <label class="text-success bold"><u><?php echo $row->NM_GR_RADIO;?> </u></label></br>
+                                              <?php
+                                              $get = $this->db->query("select * FROM EMR_DT_RADIOLOGI WHERE KODE_GR_RADIO = '".$row->KODE_GR_RADIO."' AND STATUS_DT_RADIO='AKTIF' order by KODE_DT_RADIO ASC");
+
+                                              foreach($get->result() as $row)
+                                              {
+                                                  ?>
+                                                  <div class="col-md-4">
+                                                    <label class="mt-checkbox mt-checkbox-outline">
+                                                    <input type="checkbox" id="EMR_dr_IGD_P2_radiologi_checkbox" name="EMR_dr_IGD_P2_radiologi_checkbox[]" value="<?php echo $row->KODE_DT_RADIO;?>">
+                                                    <?php
+                                                      echo $row->NM_DT_RADIO;
+                                                    ?>
+                                                    <span></span>
+                                                    </label>
+                                                  </div>
+                                                  <?php
+                                              }
+                                              ?>
+
+                                            </div>
+                                          </div>
+                                          <?php
+                                        }
+                                        ?>
+                                        <label class="text-success bold"><u>RADIOLOGI LAIN</u></label>
+                                        </br>
+                                        <div class="col-md-4">
+                                          <label class="mt-checkbox mt-checkbox-outline">
+                                          <input type="checkbox" id="EMR_dr_IGD_P2_radiologi_lain" name="EMR_dr_IGD_P2_radiologi_lain" value="DTR_0000">
+                                          Lain-Lain
+                                          <span></span>
+                                          </label>
+                                          <div class="form-group collapse" id="EMR_dr_IGD_P2_radiologi_lain1">
+                                              <div class="form-group form-md-line-input">
+                                                  <div class="input-icon right" style="display: block; margin-top: 0em; margin-bottom: -1em;">
+                                                      <input type="text" id="EMR_dr_IGD_P2_radiologi_lain2" name="EMR_dr_IGD_P2_radiologi_lain2" class="form-control">
+                                                      <label for="form_control">Radiologi Lain</label>
+                                                      <span class="help-block">Masukkan Radiologi</span>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                          <label class="mt-checkbox mt-checkbox-outline">
+                                          <input type="checkbox" id="EMR_dr_IGD_P2_Gigi_Satuan" name="EMR_dr_IGD_P2_Gigi_Satuan" value="DTR_G000">
+                                          Gigi Satuan
+                                          <span></span>
+                                          </label>
+                                          <div class="form-group collapse" id="EMR_dr_IGD_P2_Gigi_Satuan1">
+                                              <div class="form-group form-md-line-input">
+                                                  <div class="input-icon right" style="display: block; margin-top: 0em; margin-bottom: -1em;">
+                                                      <input type="text" id="EMR_dr_IGD_P2_Gigi_Satuan2" name="EMR_dr_IGD_P2_Gigi_Satuan2" class="form-control">
+                                                      <label for="form_control">Gigi Satuan</label>
+                                                      <span class="help-block">Masukkan Gigi Satuan</span>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="modal-footer" style="display:block; text-align: left;">
+                                        <p>
+                                            CATATAN :</br>
+                                            *&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: Puasa 4 - 6 jam sebelum pemeriksaan (diijinkan minum air putih)</br>
+                                            **&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: Minum 3 - 4 gelas air, 30 menit sebelum pemeriksaan untuk kehamilan trimester I, dan jangan buang air kecil dahulu</br>
+                                            ***&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: Minum 3 - 4 gelas air, 30 menit sebelum pemeriksaan dan jangan buang air kecil dahulu</br>
+                                        </p>
+                                        <div id="alert-msg-EMR_dr_IGD_P2_isianRadiologi"></div>
+                                        <button type="button" class="btn btn-default" id="EMR_dr_IGD_P2_reset_radio" data-dismiss="modal">Batal</button>
+                                        <button type="button" class="btn green" id="EMR_dr_IGD_P2_ok_radio" >Oke</button>
+                                    </div>
+                                </div>
+                                <?php
+                              }
+                              ?>-->
                               <div id="EMR_dr_IGD_P2_RadiologiModal" class="modal container fade" tabindex="-1"  data-backdrop="static" data-keyboard="false">
                                   <div class="modal-header">
                                     <div class="col-md-12">
@@ -2849,72 +2992,84 @@
                                   </div>
                                   <div class="modal-body">
                                     <div class="form-group">
-                                    <?php
-                                    foreach($dataRadio as $row)
-                                    {
-                                      ?>
-                                      <div class="row">
+                                      <div class="row" style="display: block; margin-top: 0em; margin-bottom: 0em;">
                                         <div class="col-md-12">
-                                          <label class="text-success bold"><u><?php echo $row->NM_GR_RADIO;?> </u></label></br>
-                                          <?php
-                                          $get = $this->db->query("select * FROM EMR_DT_RADIOLOGI WHERE KODE_GR_RADIO = '".$row->KODE_GR_RADIO."' AND STATUS_DT_RADIO='AKTIF' order by KODE_DT_RADIO ASC");
-
-                                          foreach($get->result() as $row)
+                                          Diagnosis Kerja : </br>
+                                          <?php for($lineD2_= 0 ; $lineD2_ < $cekD2 ; $lineD2_++)
                                           {
-                                              ?>
-                                              <div class="col-md-4">
-                                                <label class="mt-checkbox mt-checkbox-outline">
-                                                <input type="checkbox" id="EMR_dr_IGD_P2_radiologi_checkbox" name="EMR_dr_IGD_P2_radiologi_checkbox[]" value="<?php echo $row->KODE_DT_RADIO;?>">
-                                                <?php
-                                                  echo $row->NM_DT_RADIO;
-                                                ?>
-                                                <span></span>
-                                                </label>
-                                              </div>
-                                              <?php
+                                            echo $lineD2_+1 ?>. <?php echo $getD2->row($lineD2_)->DESKRIPSI_DIAGNOSIS; ?></br>
+                                          <?php
                                           }
                                           ?>
-
+                                          </br>
                                         </div>
                                       </div>
                                       <?php
-                                    }
-                                    ?>
-                                    <label class="text-success bold"><u>RADIOLOGI LAIN</u></label>
-                                    </br>
-                                    <div class="col-md-4">
-                                      <label class="mt-checkbox mt-checkbox-outline">
-                                      <input type="checkbox" id="EMR_dr_IGD_P2_radiologi_lain" name="EMR_dr_IGD_P2_radiologi_lain" value="DTR_0000">
-                                      Lain-Lain
-                                      <span></span>
-                                      </label>
-                                      <div class="form-group collapse" id="EMR_dr_IGD_P2_radiologi_lain1">
-                                          <div class="form-group form-md-line-input">
-                                              <div class="input-icon right" style="display: block; margin-top: 0em; margin-bottom: -1em;">
-                                                  <input type="text" id="EMR_dr_IGD_P2_radiologi_lain2" name="EMR_dr_IGD_P2_radiologi_lain2" class="form-control">
-                                                  <label for="form_control">Radiologi Lain</label>
-                                                  <span class="help-block">Masukkan Radiologi</span>
-                                              </div>
+                                      foreach($dataRadio as $row)
+                                      {
+                                        ?>
+                                        <div class="row">
+                                          <div class="col-md-12">
+                                            <label class="text-success bold"><u><?php echo $row->NM_GR_RADIO;?> </u></label></br>
+                                            <?php
+                                            $get = $this->db->query("select * FROM EMR_DT_RADIOLOGI WHERE KODE_GR_RADIO = '".$row->KODE_GR_RADIO."' AND STATUS_DT_RADIO='AKTIF' order by KODE_DT_RADIO ASC");
+
+                                            foreach($get->result() as $row)
+                                            {
+                                                ?>
+                                                <div class="col-md-4">
+                                                  <label class="mt-checkbox mt-checkbox-outline">
+                                                  <input type="checkbox" id="EMR_dr_IGD_P2_radiologi_checkbox" name="EMR_dr_IGD_P2_radiologi_checkbox[]" value="<?php echo $row->KODE_DT_RADIO;?>">
+                                                  <?php
+                                                    echo $row->NM_DT_RADIO;
+                                                  ?>
+                                                  <span></span>
+                                                  </label>
+                                                </div>
+                                                <?php
+                                            }
+                                            ?>
+
                                           </div>
-                                      </div>
-                                    </div>
-                                  <div class="col-md-4">
-                                    <label class="mt-checkbox mt-checkbox-outline">
-                                    <input type="checkbox" id="EMR_dr_IGD_P2_Gigi_Satuan" name="EMR_dr_IGD_P2_Gigi_Satuan" value="DTR_G000">
-                                    Gigi Satuan
-                                    <span></span>
-                                    </label>
-                                    <div class="form-group collapse" id="EMR_dr_IGD_P2_Gigi_Satuan1">
-                                        <div class="form-group form-md-line-input">
-                                            <div class="input-icon right" style="display: block; margin-top: 0em; margin-bottom: -1em;">
-                                                <input type="text" id="EMR_dr_IGD_P2_Gigi_Satuan2" name="EMR_dr_IGD_P2_Gigi_Satuan2" class="form-control">
-                                                <label for="form_control">Gigi Satuan</label>
-                                                <span class="help-block">Masukkan Gigi Satuan</span>
+                                        </div>
+                                        <?php
+                                      }
+                                      ?>
+                                      <label class="text-success bold"><u>RADIOLOGI LAIN</u></label>
+                                      </br>
+                                      <div class="col-md-4">
+                                        <label class="mt-checkbox mt-checkbox-outline">
+                                        <input type="checkbox" id="EMR_dr_IGD_P2_radiologi_lain" name="EMR_dr_IGD_P2_radiologi_lain" value="DTR_0000">
+                                        Lain-Lain
+                                        <span></span>
+                                        </label>
+                                        <div class="form-group collapse" id="EMR_dr_IGD_P2_radiologi_lain1">
+                                            <div class="form-group form-md-line-input">
+                                                <div class="input-icon right" style="display: block; margin-top: 0em; margin-bottom: -1em;">
+                                                    <input type="text" id="EMR_dr_IGD_P2_radiologi_lain2" name="EMR_dr_IGD_P2_radiologi_lain2" class="form-control">
+                                                    <label for="form_control">Radiologi Lain</label>
+                                                    <span class="help-block">Masukkan Radiologi</span>
+                                                </div>
                                             </div>
                                         </div>
+                                      </div>
+                                      <div class="col-md-4">
+                                        <label class="mt-checkbox mt-checkbox-outline">
+                                        <input type="checkbox" id="EMR_dr_IGD_P2_Gigi_Satuan" name="EMR_dr_IGD_P2_Gigi_Satuan" value="DTR_G000">
+                                        Gigi Satuan
+                                        <span></span>
+                                        </label>
+                                        <div class="form-group collapse" id="EMR_dr_IGD_P2_Gigi_Satuan1">
+                                            <div class="form-group form-md-line-input">
+                                                <div class="input-icon right" style="display: block; margin-top: 0em; margin-bottom: -1em;">
+                                                    <input type="text" id="EMR_dr_IGD_P2_Gigi_Satuan2" name="EMR_dr_IGD_P2_Gigi_Satuan2" class="form-control">
+                                                    <label for="form_control">Gigi Satuan</label>
+                                                    <span class="help-block">Masukkan Gigi Satuan</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                      </div>
                                     </div>
-                                  </div>
-                                  </div>
                                   </div>
                                   <div class="modal-footer" style="display:block; text-align: left;">
                                       <p>
@@ -2946,6 +3101,124 @@
                                   <br>
                                 </div>
                               </div>
+                              <!--<?php
+                              if($cekD2 == 0)
+                              {
+                                ?>
+                                <div id="EMR_dr_IGD_P2_LaboratModal" class="modal fade modalInput" tabindex="-1" data-backdrop="static" data-width="40%" data-keyboard="false" style="width:40%">
+                                  <div class="modal-content">
+                                    <div class="modal-header bg-blue bg-font-blue">
+                                        <h4 class="blue modal-title"><center><b></b></center></h4>
+                                    </div>
+                                    <div class="modal-body">
+                                      <h4> Anda Belum Mengisi Diagnosis Kerja, Silahkan Isi Diagnosis Kerja Terlebih Dahulu!!! </H4>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <center>
+                                        <div class="btn-group btn-group btn-group-justified" style="width:50%">
+                                          <a type="button" class="btn blue" data-dismiss="modal" style="width:100%">OK</a>
+                                        </div>
+                                      </center>
+                                    </div>
+                                  </div>
+                                </div>
+                                <?php
+                              }
+                              else
+                              {
+                                ?>
+                                <div id="EMR_dr_IGD_P2_LaboratModal" class="modal container fade" tabindex="-1"  data-backdrop="static" data-keyboard="false">
+                                  <div class="modal-header">
+                                    <div class="col-md-12">
+                                      <div class="btn-group btn-group btn-group-justified" style="width:100%">
+                                        <button disable type="button" class="btn white" style="height:55px; width:30%">
+                                          <span style="font-size:8px; color:#BFBFBF"><b>Nomer Rekam Medik :</b></span><br>
+                                          <span style="font-size:14px"><b><?php echo $norm?></b></span>
+                                        </button>
+                                        <button disable type="button" class="btn white" style="height:55px; width:40%">
+                                          <span style="font-size:8px; color:#BFBFBF"><b>Nama Pasien :</b></span><br>
+                                          <span style="font-size:14px"><b><?php echo $nama?></b></span><br>
+                                        </button>
+                                        <button disable type="button" class="btn white" style="height:55px; width:30%">
+                                          <span style="font-size:20px"><b>Pilih Laboratorium</b></span>
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                    <div class="modal-body">
+                                      <div class="form-group">
+                                        <div class="row" style="display: block; margin-top: 0em; margin-bottom: 0em;">
+                                          <div class="col-md-12">
+                                            Diagnosis Kerja : </br>
+                                            <?php for($lineD2_= 0 ; $lineD2_ < $cekD2 ; $lineD2_++)
+                                            {
+                                              echo $lineD2_+1 ?>. <?php echo $getD2->row($lineD2_)->DESKRIPSI_DIAGNOSIS; ?></br>
+                                            <?php
+                                            }
+                                            ?>
+                                            </br>
+                                          </div>
+                                        </div>
+                                        <?php
+                                        foreach($dataLaboratorium as $row)
+                                        {
+                                          ?>
+                                          <div class="row">
+                                            <div class="col-md-12">
+                                              <label class="text-success bold"><u><?php echo $row->NM_GR_LABORATORIUM;?> </u></label></br>
+                                              <?php
+                                              $get = $this->db->query("select * FROM EMR_DT_LABORATORIUM WHERE KODE_GR_LABORATORIUM = '".$row->KODE_GR_LABORATORIUM."' AND STATUS_DT_LABORAT='AKTIF' order by KODE_DT_LABORATORIUM ASC");
+
+                                              foreach($get->result() as $row)
+                                              {
+                                                  ?>
+                                                  <div class="col-md-4">
+                                                    <label class="mt-checkbox mt-checkbox-outline">
+                                                    <input type="checkbox" id="EMR_dr_IGD_P2_laboratorium_checkbox" name="EMR_dr_IGD_P2_laboratorium_checkbox[]" value="<?php echo $row->KODE_DT_LABORATORIUM;?>">
+                                                    <?php
+                                                      echo $row->NM_DT_LABORATORIUM;
+                                                    ?>
+                                                    <span></span>
+                                                    </label>
+                                                  </div>
+                                                  <?php
+                                              }
+                                              ?>
+
+                                            </div>
+                                          </div>
+                                          <?php
+                                        }
+                                        ?>
+                                        <label class="text-success bold"><u>LABORATORIUM LAIN</u></label>
+                                        </br>
+                                        <div class="col-md-4">
+                                          <label class="mt-checkbox mt-checkbox-outline">
+                                          <input type="checkbox" id="EMR_dr_IGD_P2_laboratorium_lain" name="EMR_dr_IGD_P2_laboratorium_lain" value="DTL_0000">
+                                          Lain-Lain
+                                          <span></span>
+                                          </label>
+                                          <div class="form-group collapse" id="EMR_dr_IGD_P2_laboratorium_lain1">
+                                              <div class="form-group form-md-line-input">
+                                                  <div class="input-icon right" style="display: block; margin-top: 0em; margin-bottom: -1em;">
+                                                      <input type="text" id="EMR_dr_IGD_P2_laboratorium_lain2" name="EMR_dr_IGD_P2_laboratorium_lain2" class="form-control">
+                                                      <label for="form_control">Laboratorium Lain</label>
+                                                      <span class="help-block">Masukkan Laboratorium</span>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="modal-footer" style="display:block; text-align: left;">
+                                        <div id="alert-msg-EMR_dr_IGD_P2_isianLaborat"></div>
+                                        <button type="button" class="btn btn-default" id="EMR_dr_IGD_P2_reset_laboratorium" data-dismiss="modal">Batal</button>
+                                        <button type="button" class="btn green" id="EMR_dr_IGD_P2_ok_laboratorium" >Oke</button>
+                                    </div>
+                                </div>
+                                <?php
+                              }
+                              ?>-->
                               <div id="EMR_dr_IGD_P2_LaboratModal" class="modal container fade" tabindex="-1"  data-backdrop="static" data-keyboard="false">
                                 <div class="modal-header">
                                   <div class="col-md-12">
@@ -2966,6 +3239,18 @@
                                 </div>
                                   <div class="modal-body">
                                     <div class="form-group">
+                                      <div class="row" style="display: block; margin-top: 0em; margin-bottom: 0em;">
+                                        <div class="col-md-12">
+                                          Diagnosis Kerja : </br>
+                                          <?php for($lineD2_= 0 ; $lineD2_ < $cekD2 ; $lineD2_++)
+                                          {
+                                            echo $lineD2_+1 ?>. <?php echo $getD2->row($lineD2_)->DESKRIPSI_DIAGNOSIS; ?></br>
+                                          <?php
+                                          }
+                                          ?>
+                                          </br>
+                                        </div>
+                                      </div>
                                       <?php
                                       foreach($dataLaboratorium as $row)
                                       {
@@ -3059,17 +3344,24 @@
                               <?php
                               $cekD1 = $this->db->query("select * from EMR_DETAIL_DIAGNOSIS where ID_PEMERIKSAAN = '$cekidpemeriksaan' and STATUS2_DIAGNOSIS = 'Diagnosis Kerja'")->num_rows();
                               $getD1 = $this->db->query("select * from EMR_DETAIL_DIAGNOSIS where ID_PEMERIKSAAN = '$cekidpemeriksaan' and STATUS2_DIAGNOSIS = 'Diagnosis Kerja'");
-                              if($cekD1 != 0){?>
-                              <div class="row" style="display: block; margin-top: 0em; margin-bottom: 0em;">
-                                <div class="col-md-12">
-                                  Diagnosis Kerja yang sudah tersimpan : </br>
-                                  <?php for($lineD1_= 0 ; $lineD1_ < $cekD1 ; $lineD1_++)
-                                  {
-                                    echo $lineD1_+1 ?>. <?php echo $getD1->row($lineD1_)->DESKRIPSI_DIAGNOSIS; ?></br>
-                                  <?php }?></br>
+                              if($cekD1 != 0)
+                              {
+                                ?>
+                                <div class="row" style="display: block; margin-top: 0em; margin-bottom: 0em;">
+                                  <div class="col-md-12">
+                                    Diagnosis Kerja yang sudah tersimpan : </br>
+                                    <?php for($lineD1_= 0 ; $lineD1_ < $cekD1 ; $lineD1_++)
+                                    {
+                                      echo $lineD1_+1 ?>. <?php echo $getD1->row($lineD1_)->DESKRIPSI_DIAGNOSIS; ?></br>
+                                    <?php
+                                    }
+                                    ?>
+                                    </br>
+                                  </div>
                                 </div>
-                              </div>
-                              <?php } ?>
+                                <?php
+                              }
+                              ?>
                               <div class="row" style="display: block; margin-top: 0em; margin-bottom: 0em;">
                                 <div id="EMR_dr_IGD_P3_TemplateDiagnosisKerja"></div>
                                 <div class="col-md-1" id="EMR_dr_IGD_P3_TambahDiagnosisKerja"></div>
@@ -3741,6 +4033,20 @@
                       </div>
                     </div>
                   </div>
+                  <!--<a type="button" class="btn green col-md-12" id="EMR_dr_IGD_P4_btnsimpan" style="width:100%">SIMPAN</a><br/><br/>
+                  Silahkan Pilih Printer :
+                  <?php
+                  $getprt = printer_list(PRINTER_ENUM_LOCAL);
+                  //$getprt = PRINTER_ENUM_LOCAL;
+                  $printers = serialize($getprt);
+                  $printers = unserialize($printers);
+                  //Menampilkan List Printer
+                  echo '<select name="printer" id="printer">';
+                  foreach ($printers as $PrintDest)
+                      echo "<option value='" . $PrintDest["NAME"] . "'>" . explode(",", $PrintDest["DESCRIPTION"])[1] . "</option>";
+                  echo '</select>';
+                  ?>
+                  <br>-->
                   <a type="button" class="btn green col-md-12" id="EMR_dr_IGD_P4_btnsimpan" style="width:100%">SIMPAN</a><br/><br/>
                 </div>
               </div>
@@ -4872,7 +5178,7 @@
         <div id="EMR_dr_IGD_FrmRPerawat">
           <div class="portlet light portlet-fit bordered">
             <div class="portlet-title">
-              <span><b>Sub Menu IGD Perawat :</b></span>
+              <span><b>Sub Menu IGD Dokter :</b></span>
             </div>
             <input type="text" class="form-control collapse" id="EMR_dr_IGD_statverHal" name="EMR_dr_IGD_statverHal" value="P1">
             <div class="row portlet-body" id="">
@@ -4888,9 +5194,41 @@
                 <a type="button" class="btn grey col-md-12" id="EMR_dr_IGD_P1_btnmenuX" style="width:100%"><i class="fa fa-search pull-left"></i> Information</a><br/><br/>
               <?php }
               if($cekinMenu->MenuD_2 != "DONE")
-              {?>
-                <a type="button" class="btn green col-md-12" id="EMR_dr_IGD_P2_btnmenu" style="width:100%"><i class="fa fa-pencil-square-o pull-left"></i> Information (Penunjang)</a><br/><br/>
-              <?php }
+              {
+                $cekD2 = $this->db->query("select * from EMR_DETAIL_DIAGNOSIS where ID_PEMERIKSAAN = '$cekidpemeriksaan' and STATUS2_DIAGNOSIS = 'Diagnosis Kerja'")->num_rows();
+                $getD2 = $this->db->query("select * from EMR_DETAIL_DIAGNOSIS where ID_PEMERIKSAAN = '$cekidpemeriksaan' and STATUS2_DIAGNOSIS = 'Diagnosis Kerja'");
+
+                if($cekD2 == 0)
+                {
+                    ?>
+                    <!--<a class="btn green col-md-12" href="EMR_dr_IGD_P2_btnmenuHarus" data-toggle="modal" style="width:100%"><i class="fa fa-pencil-square-o pull-left"></i> Information (Penunjang)</a><br/><br/>-->
+                    <a class="btn green col-md-12" href="#EMR_dr_IGD_P2_btnmenuHarus" data-toggle="modal" style="width:100%"><i class="fa fa-pencil-square-o pull-left"></i> Information (Penunjang) </a><br/><br/>
+                    <div id="EMR_dr_IGD_P2_btnmenuHarus" class="modal fade modalInput" tabindex="-1" data-backdrop="static" data-width="40%" data-keyboard="false" style="width:40%">
+                      <div class="modal-content">
+                        <div class="modal-header bg-red bg-font-red">
+                            <h4 class="modal-title"><center><b>PERINGATAN</b></center></h4>
+                        </div>
+                        <div class="modal-body">
+                          <h4> Anda Belum Mengisi Diagnosis Kerja, Silahkan Isi Diagnosis Kerja Terlebih Dahulu!!! </H4>
+                        </div>
+                        <div class="modal-footer">
+                          <center>
+                            <div class="btn-group btn-group btn-group-justified" style="width:50%">
+                              <a type="button" class="btn red" data-dismiss="modal" style="width:100%">OK</a>
+                            </div>
+                          </center>
+                        </div>
+                      </div>
+                    </div>
+                    <?php
+                  }
+                  else
+                  {
+                    ?>
+                      <a type="button" class="btn green col-md-12" id="EMR_dr_IGD_P2_btnmenu" style="width:100%"><i class="fa fa-pencil-square-o pull-left"></i> Information (Penunjang)</a><br/><br/>
+                    <?php
+                  }
+              }
               else { ?>
                 <a type="button" class="btn grey col-md-12" id="EMR_dr_IGD_P2_btnmenuX" style="width:100%"><i class="fa fa-search pull-left"></i> Information (Penunjang)</a><br/><br/>
               <?php }

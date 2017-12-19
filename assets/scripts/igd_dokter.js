@@ -6172,10 +6172,14 @@ $('#EMR_dr_IGD_P4_btnsimpan').click(function() {
     EMR_dr_IGD_P4_ObatRacikKetPakai2_simpan:EMR_dr_IGD_P4_ObatRacikKetPakai2_simpan,
     EMR_dr_IGD_P4_ObatRacikLain_simpan:EMR_dr_IGD_P4_ObatRacikLain_simpan,
   };
+  /*var form_data = {
+    printer : $('#printer').val(),
+  };*/
   $.ajax({
     url: base_url + "igd/btnsimpanIGD_dr_P4",
     type: 'POST',
-    data: form_data,
+    data : form_data,
+    //data: form_data,
     success: function(msg)
     {
       if(msg == 'TERUJI')

@@ -778,6 +778,17 @@ var P3_halaman3 = 'Ya';
 var P3_halaman4 = 'Ya';
 var P3_halaman5 = 'Ya';
 var P3_halaman6 = 'Ya';
+var halSN = 1;
+
+var tindakSN = 0;
+var sn1 = '';
+var sn1a = '';
+var sn1b = '';
+var sn2 = '';
+var sn3 = '';
+var sn4 = '';
+var sn5 = '';
+var sn6 = '';
 
 $('#EMR_pr_IGD_P3_btnmenu').click(function() {
   document.getElementById('EMR_pr_IGD_P3_btnmenu').disabled = true;
